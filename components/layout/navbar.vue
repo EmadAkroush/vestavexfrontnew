@@ -120,7 +120,7 @@ const countCart = computed(() => cart.count)
 // تعریف items به عنوان یک آرایه واکنش‌پذیر
 const items = ref([
   {
-    label: "home",
+    label: "Home",
     route: "/",
   },
   {

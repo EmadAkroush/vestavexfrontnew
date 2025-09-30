@@ -20,10 +20,7 @@
     <div class="secmain">
       <HomeBrands></HomeBrands>
       <!-- <HomeSpecialproducts></HomeSpecialproducts> -->
-      <HomeView></HomeView>
-      <HomeSearchcar></HomeSearchcar>
-      <HomeNewarticle></HomeNewarticle>
-      <HomeWhychoosus></HomeWhychoosus>
+
     </div>
   </div>
 </template>

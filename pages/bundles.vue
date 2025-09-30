@@ -32,20 +32,22 @@
           >
             <!-- Title + Subtitle -->
             <div>
-              <h2 class="text-lg font-bold">Investment Plan</h2>
-              <p class="text-sm text-gray-200">Subtitle here</p>
+              <h2 class="text-lg font-bold">{{ item.title }}</h2>
+              <p class="text-sm text-gray-200"> minimum Withdrawal: <span class="font-semibold"> {{ item.minimumwithdrawal }} </span>  </p>
             </div>
 
             <!-- Content -->
             <div>
               <p class="text-sm mb-2">
-                Invested: <span class="font-semibold">$1000</span>
+                Invested: <span class="font-semibold"> {{ item.investedDown }} -  {{ item.investedUp }} </span>
               </p>
               <p class="text-sm mb-2">
-                Expected Return: <span class="font-semibold">$4200</span>
+                 earn: <span class="font-semibold"> {{ item.earn }} </span>
               </p>
-              <p class="text-sm">Progress: 40%</p>
-              <ProgressBar :value="40" class="h-2 mt-1" />
+              <p class="text-sm">maxcap: {{ item.maxcap }}%</p>
+             
+               <ProgressBar :value="normalize(item.maxcap)"> {{ item.maxcap }}% </ProgressBar>
+              
             </div>
 
             <!-- Actions -->
@@ -55,7 +57,7 @@
                 class="p-button-sm p-button-outlined w-full"
               />
               <Button
-                label="Upgrade"
+                label="Investment Deposit"
                 class="p-button-sm p-button-success w-full"
               />
             </div>
@@ -95,49 +97,62 @@ export default {
     return {
       bundlesItems: [
         {
-          title: "بسته اقتصادی",
-          subtitle: "مناسب برای تعمیرات اساسی",
-          invested: "$500",
-          expectedReturn: "$1500",
-          progress: 30,
+          title: "Bronze",
+          minimumwithdrawal: "$50",
+          investedDown: "$50",
+          investedUp: "$249",
+          earn: "3% per month",
+          maxcap: 300,
         },
         {
-          title: "بسته استاندارد",
-          subtitle: "مناسب برای نگهداری منظم",
-          invested: "$1000",
-          expectedReturn: "$3000",
-          progress: 50,
+          title: "Silver",
+          minimumwithdrawal: "$50",
+          investedDown: "$250",
+          investedUp: "$499",
+          earn: "4% per month",
+          maxcap: 340,
         },
         {
-          title: "بسته پریمیوم",
-          subtitle: "مناسب برای عملکرد بهینه",
-          invested: "$2000",
-          expectedReturn: "$6000",
-          progress: 70,
+          title: "Gold",
+          minimumwithdrawal: "$50",
+          investedDown: "$500",
+          investedUp: "$999",
+          earn: "5% per month",
+          maxcap: 380,
         },
         {
-          title: "بسته اقتصادی",
-          subtitle: "مناسب برای تعمیرات اساسی",
-          invested: "$500",
-          expectedReturn: "$1500",
-          progress: 30,
+          title: "Platinum",
+          minimumwithdrawal: "$50",
+          investedDown: "$1,000",
+          investedUp: "$2,499",
+          earn: "6% per month",
+          maxcap: 420,
         },
         {
-          title: "بسته استاندارد",
-          subtitle: "مناسب برای نگهداری منظم",
-          invested: "$1000",
-          expectedReturn: "$3000",
-          progress: 50,
+          title: "Diamond",
+          minimumwithdrawal: "$50",
+          investedDown: "$2,500",
+          investedUp: "4,999",
+          earn: "7% per month",
+          maxcap: 460,
         },
         {
-          title: "بسته پریمیوم",
-          subtitle: "مناسب برای عملکرد بهینه",
-          invested: "$2000",
-          expectedReturn: "$6000",
-          progress: 70,
+          title: "Titanium",
+          minimumwithdrawal: "$50",
+          investedDown: "$5,000",
+          investedUp: "and more",
+          earn: "8% per month",
+          maxcap: 500,
         },
       ],
     };
   },
+  methods: {
+    normalize(value) {
+
+      return value/10; // clamp between 0–100
+    },
+  },
 };
 </script>
+
