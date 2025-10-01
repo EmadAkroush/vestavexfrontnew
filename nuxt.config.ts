@@ -23,7 +23,7 @@ export default defineNuxtConfig({
           lang: 'en',
         },
         link: [
-          { rel: 'icon', type: 'image/x-icon', href: './logo.svg.png' },
+          { rel: 'icon', type: 'image/x-icon', href: './Photo_1747641514372-3.png' },
         ]
       },
     },

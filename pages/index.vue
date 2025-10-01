@@ -9,10 +9,15 @@
         />
       </Head>
       <div class="Htext">
-        <p class=" toppoint">vestavex</p>
+        <p class="toppoint">vestavex</p>
         <h1 class="">
           Smart investment platform with network-driven profit growth
         </h1>
+        <Button
+          label="sign up now and start investing"
+          class="p-button-sm p-button-success w-68 mt-4"
+          icon="mdi mdi-arrow-left"
+        />
       </div>
 
       <!-- <img src="/public/bg.jpg" class="headimg" alt="" /> -->
@@ -20,7 +25,6 @@
     <div class="secmain">
       <HomeBrands></HomeBrands>
       <!-- <HomeSpecialproducts></HomeSpecialproducts> -->
-
     </div>
   </div>
 </template>
@@ -132,9 +136,8 @@ export default {
   background-image: url(../public/bg.jpg);
   background-size: cover;
   border-radius: 0 0 30px 30px;
-  .Htext{
+  .Htext {
     color: #405ff2;
-    
   }
 
   .inputmobile {

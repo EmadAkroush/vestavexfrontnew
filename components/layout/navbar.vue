@@ -4,7 +4,7 @@
       <template #start>
         <div class="flex items-center w-0 sm:w-20">
           <img
-            src="/public/home/logo.svg.png"
+            src="/public/Photo_1747641514372-3.png"
             alt=""
             style="width: 40px; height: 40px"
             class="sm:block hidden"

@@ -12,26 +12,23 @@
         <nuxt-link to="/">
           <span style="color: #405ff2"> home / </span>
         </nuxt-link>
-       
+        <span>support</span>
       </div>
-      <div>
-        <h1> 
-            <InputText type="text" v-model="value" />
-        </h1>
-        <p>
-          Welcome to our investment platform — a smart and transparent system
-          designed to help you grow your wealth through structured investment
-          plans and a powerful network-based reward system. Our platform offers
-          a variety of investment bundles with monthly returns, portfolio
-          management, and easy fund management options such as deposit and
-          withdrawal. With innovative features like the VX Plan, binary
-          commissions, and the 10x growth rule, we empower our community to
-          achieve sustainable financial growth while building strong network
-          connections. We are committed to providing a secure, user-friendly
-          environment where every investor can track progress, maximize
-          earnings, and access real-time support. Together, we create
-          opportunities for financial freedom and long-term success.
-        </p>
+      <div class="flex flex-col mt-6">
+        <div class="flex flex-col">
+          <p>topic</p>
+          <InputText class="mt-2" type="text" v-model="value" />
+        </div>
+        <div class="flex flex-col mt-4">
+          <p>description</p>
+          <Textarea v-model="value" rows="10" cols="30" />
+        </div>
+        <div class="flex justify-end mt-6">
+          <Button
+            label="send"
+            class="p-button-sm p-button-success w-28 "
+          />
+        </div>
       </div>
     </div>
     <div class="sec2"></div>
@@ -39,23 +36,21 @@
 </template>
 <script>
 export default {
-  data(){
-    
-  }
-}
+  data() {},
+};
 </script>
 <style lang="scss">
 .aboutus {
   background-color: #f9fbfc;
   .sec1 {
-    padding: 10px 80px;
+    padding: 10px 80px 0 80px;
   }
   .arow {
     width: 14px;
     height: 14px;
   }
   .sec2 {
-    margin-top: 200px;
+    margin-top: 100px;
     background-image: url("/public/SL-0212121-40670-68.jpg");
     background-size: cover;
     width: 100%;
