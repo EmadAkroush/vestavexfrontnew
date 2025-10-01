@@ -12,10 +12,12 @@
         <nuxt-link to="/">
           <span style="color: #405ff2"> home / </span>
         </nuxt-link>
-        <span>aboute us</span>
+       
       </div>
       <div>
-        <h1>aboute us</h1>
+        <h1> 
+            <InputText type="text" v-model="value" />
+        </h1>
         <p>
           Welcome to our investment platform — a smart and transparent system
           designed to help you grow your wealth through structured investment
@@ -35,6 +37,13 @@
     <div class="sec2"></div>
   </div>
 </template>
+<script>
+export default {
+  data(){
+    
+  }
+}
+</script>
 <style lang="scss">
 .aboutus {
   background-color: #f9fbfc;

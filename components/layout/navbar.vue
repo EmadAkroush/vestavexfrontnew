@@ -133,11 +133,11 @@ const items = ref([
   },
   {
     label: "Aboute Us",
-    route: "/",
+    route: "/abouteus",
   },
   {
     label: "Support",
-    route: "/abouteus",
+    route: "/support",
   },
 ]);
 
