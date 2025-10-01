@@ -85,7 +85,7 @@
   .mainbundles {
     padding: 10px 10px;
     .Bcard {
-      width: 300px;
+      width: 350px;
       height: 280px;
     }
   }

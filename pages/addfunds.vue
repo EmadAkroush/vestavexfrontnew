@@ -71,6 +71,9 @@
 @media only screen and (max-width: 650px) {
   .aboutus {
     padding: 10px 10px;
+    .sec1 {
+      padding: 10px;
+    }
   }
 }
 </style>

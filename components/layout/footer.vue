@@ -76,7 +76,7 @@
 }
 @media only screen and (max-width: 650px) {
   .footer {
-    margin: 10px 10px;
+    margin: 0 10px 10px 10px;
   }
   .under-footer {
     padding: 10px;

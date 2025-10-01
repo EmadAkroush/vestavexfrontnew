@@ -81,7 +81,11 @@
 }
 @media only screen and (max-width: 650px) {
   .aboutus {
-    padding: 10px 10px;
+    padding: 0;
+    margin-bottom: 0;
+    .sec1 {
+      padding: 10px;
+    }
     .sec2 {
       margin-top: 50px;
     }

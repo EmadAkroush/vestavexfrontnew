@@ -9,34 +9,7 @@
             style="width: 40px; height: 40px"
             class="sm:block hidden"
           />
-          <div class="mr-10 sm:mr-0">
-            <nuxt-link to="/account" >
-              <div class="flex ml-3">
-                <!-- <Badge
-                  value="8"
-                  size="small"
-                  severity="success"
-                  style="position: relative; top: 10px; right: 10px"
-                ></Badge> -->
-                <i
-                  class="mdi mdi-account-circle-outline"
-                  style="font-size: 40px"
-                />
-              </div>
-            </nuxt-link>
-            <!-- <nuxt-link to="/login" >
-              <div
-                class="btn flex items-center justify-center sm:ml-8"
-                style="width: max-content"
-              >
-                <i
-                  class="mdi mdi-login ml-1"
-                  style="font-size: 22px; margin-top: 2px"
-                />
-                <sapn> ورود|ثبت نام </sapn>
-              </div>
-            </nuxt-link> -->
-          </div>
+      
         </div>
       </template>
 
@@ -70,6 +43,24 @@
         </a>
       </template>
       <template #end>
+            <div class="mr-0 sm:mr-0">
+            <nuxt-link to="/account" >
+              <div class="flex mr-4 ">
+                <!-- <Badge
+                  value="8"
+                  size="small"
+                  severity="success"
+                  style="position: relative; top: 10px; right: 10px"
+                ></Badge> -->
+                <i
+                  class="mdi mdi-account-circle-outline"
+                  style="font-size: 40px"
+                />
+                
+              </div>
+            </nuxt-link>
+         
+          </div>
 
       </template>
     </Menubar>
@@ -90,10 +81,7 @@
     font-size: 16px;
   }
   font-size: 18px;
-  .p-menubar-end {
-    margin-right: auto;
-    margin-left: 0;
-  }
+
   .p-menubar-root-list {
     justify-content: center;
     width: 100%;
