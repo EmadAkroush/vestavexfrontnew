@@ -1,6 +1,7 @@
 <template>
   <div class="brans text-center">
-    <p class="text-primary mb-12" style="font-size: 24px">Features</p>
+    <p class="topic mb-12" style="font-size: 24px";>Features</p>
+  
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
       <div class="Bcard relative rounded-2xl overflow-hidden shadow-lg">
         <!-- Background Image -->
@@ -16,7 +17,7 @@
         >
           <!-- Title + Subtitle -->
           <div>
-            <h2 class="text-lg font-bold">Lorem ipsum:</h2>
+            <h2 class="text-lg font-bold cardtopic">Lorem ipsum:</h2>
             <p class="text-sm text-gray-200">
               <span class="font-semibold"> </span>
             </p>
@@ -50,7 +51,7 @@
         >
           <!-- Title + Subtitle -->
           <div>
-            <h2 class="text-lg font-bold">Lorem ipsum:</h2>
+            <h2 class="text-lg font-bold cardtopic">Lorem ipsum:</h2>
             <p class="text-sm text-gray-200">
               <span class="font-semibold"> </span>
             </p>
@@ -84,7 +85,7 @@
         >
           <!-- Title + Subtitle -->
           <div>
-            <h2 class="text-lg font-bold">Lorem ipsum:</h2>
+            <h2 class="text-lg font-bold cardtopic">Lorem ipsum:</h2>
             <p class="text-sm text-gray-200">
               <span class="font-semibold"> </span>
             </p>
@@ -118,7 +119,7 @@
         >
           <!-- Title + Subtitle -->
           <div>
-            <h2 class="text-lg font-bold">Lorem ipsum:</h2>
+            <h2 class="text-lg font-bold cardtopic">Lorem ipsum:</h2>
             <p class="text-sm text-gray-200">
               <span class="font-semibold"> </span>
             </p>
@@ -144,6 +145,12 @@
 <style lang="scss">
 .brans {
   margin: 160px 80px;
+  .topic {
+    color: #0b6d20 ;
+  }
+  .cardtopic {
+    color: #10b981;
+  }
   .Bcard {
     width: 300px;
     height: 280px;

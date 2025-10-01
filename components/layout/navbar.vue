@@ -82,11 +82,11 @@
     padding: 1rem 1rem 1rem 1.5rem;
   }
   .btn {
-    border: 1px solid #405ff2;
+    border: 1px solid #0b6d20;
     width: 100%;
     padding: 0 4px;
     border-radius: 8px;
-    color: #405ff2;
+    color: #0b6d20;
     font-size: 16px;
   }
   font-size: 18px;
@@ -129,7 +129,7 @@ const items = ref([
   },
   {
     label: "Add Funds",
-    route: "/blogs",
+    route: "/addfunds",
   },
   {
     label: "Aboute Us",

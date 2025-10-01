@@ -21,13 +21,13 @@ html {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #405FF2;
+  background: #22c55e;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #405FF2;
+  background: #0b6d20;
 }
 
 @font-face {

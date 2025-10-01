@@ -10,7 +10,7 @@
     <div class="sec1">
       <div class="mt-4">
         <nuxt-link to="/">
-          <span style="color: #405ff2"> home / </span>
+          <span style="color: #0b6d20"> home / </span>
         </nuxt-link>
         <span>support</span>
       </div>

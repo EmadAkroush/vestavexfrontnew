@@ -53,13 +53,14 @@
 <style lang="scss">
 .footer {
 
+
   padding: 10px 80px;
   li {
     line-height: 40px;
   }
   .one {
     font-size: 20px;
-    color: gray;
+    color: #0b6d20;
   }
   .icon-footer {
     width: 200px;
@@ -70,6 +71,7 @@
 .under-footer {
   padding: 10px 80px;
   border-top: 1px solid #e1e1e1;
+  color: #0b6d20;
 
 }
 @media only screen and (max-width: 650px) {

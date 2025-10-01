@@ -5,7 +5,7 @@
         <Title>vestavex</Title>
         <Meta
           name="description"
-          content="شرکت پارس اتوپارت با بیش از 20 سال تجربه در صنعت فروش قطعات خودرو، به عنوان یکی از پیشگامان این حوزه در شیراز شناخته می‌شود. ما با هدف تأمین نیازهای مشتریان و ارائه بهترین خدمات، فعالیت خود را آغاز کرده‌ایم و همواره در تلاشیم تا رضایت شما را جلب کنیم"
+          content=""
         />
       </Head>
       <div class="Htext">
@@ -15,7 +15,7 @@
         </h1>
         <Button
           label="sign up now and start investing"
-          class="p-button-sm p-button-success w-68 mt-4"
+          class="homebtn p-button-sm p-button-success w-68 mt-4"
           icon="mdi mdi-arrow-left"
         />
       </div>
@@ -124,6 +124,9 @@ export default {
 </script>
 
 <style lang="scss">
+.toppoint {
+  color: #10b981;
+}
 .secmain {
   box-sizing: border-box;
 }
@@ -136,8 +139,10 @@ export default {
   background-image: url(../public/bg.jpg);
   background-size: cover;
   border-radius: 0 0 30px 30px;
+
   .Htext {
-    color: #405ff2;
+    color: white;
+
   }
 
   .inputmobile {
