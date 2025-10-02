@@ -1,6 +1,6 @@
 <template>
   <div class="brans text-center">
-    <p class="topic mb-12" style="font-size: 24px" ;>Features</p>
+    <p class="topic mb-12" style="font-size: 24px" >Features</p>
 
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
       <div class="Bcard relative rounded-2xl overflow-hidden shadow-lg">
@@ -140,7 +140,7 @@
 </template>
 <style lang="scss">
 .brans {
-  margin: 160px 80px;
+  padding: 160px 80px;
   .topic {
     color: #0b6d20;
   }
@@ -154,7 +154,7 @@
 }
 @media only screen and (max-width: 650px) {
   .brans {
-    margin: 20px 10px;
+    padding: 20px 10px;
     .Bcard {
       width: 100%;
       height: 280px;

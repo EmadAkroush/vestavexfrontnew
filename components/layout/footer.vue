@@ -6,10 +6,10 @@
           <ul>
             <li class="one">vestavex</li>
             <nuxt-link to="/"> <li> Home </li></nuxt-link>
-            <nuxt-link to="/product"> <li> Bundles </li></nuxt-link>
-            <nuxt-link to="/blogs"> <li> Add Funds </li></nuxt-link>
-            <nuxt-link to="/"> <li> About Us </li></nuxt-link>
-            <nuxt-link to="/abouteus"> <li> </li></nuxt-link>
+            <nuxt-link to="/bundles"> <li> Bundles </li></nuxt-link>
+            <nuxt-link to="/addfunds"> <li> Add Funds </li></nuxt-link>
+            <nuxt-link to="/abouteus"> <li> About Us </li></nuxt-link>
+            <nuxt-link to="/support"> <li> support </li></nuxt-link>
           </ul>
         </div>
         <div>
@@ -76,7 +76,7 @@
 }
 @media only screen and (max-width: 650px) {
   .footer {
-    margin: 0 10px 10px 10px;
+  
   }
   .under-footer {
     padding: 10px;

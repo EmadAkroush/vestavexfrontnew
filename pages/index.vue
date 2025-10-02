@@ -20,11 +20,9 @@
         />
       </div>
 
-      <!-- <img src="/public/bg.jpg" class="headimg" alt="" /> -->
     </div>
     <div class="secmain">
       <HomeBrands></HomeBrands>
-      <!-- <HomeSpecialproducts></HomeSpecialproducts> -->
     </div>
   </div>
 </template>
@@ -126,6 +124,7 @@ export default {
 <style lang="scss">
 .toppoint {
   color: #10b981;
+  padding-top: 60px;
 }
 .secmain {
   box-sizing: border-box;
@@ -139,65 +138,15 @@ export default {
   background-image: url(../public/bg.jpg);
   background-size: cover;
   border-radius: 0 0 30px 30px;
+  overflow-x: hidden;
 
   .Htext {
     color: white;
 
   }
 
-  .inputmobile {
-    display: none;
-    width: 62.5%;
-    height: 75px;
-    background-color: white;
-    margin: 40px auto;
-    border-radius: 80px;
-    .search {
-      border: none;
-      border-left: 2px solid #e9e9e9;
-      border-radius: 0;
-      width: 22%;
-      text-align: right;
-      box-shadow: none;
-    }
 
-    .search-icon {
-      background-color: #405ff2;
-      width: 50px;
-      height: 50px;
-      margin-right: 16px;
-      border-radius: 50%;
-    }
-  }
-  .toppoint {
-    padding-top: 80px;
-  }
-  .inputsearch {
-    width: 62.5%;
-    height: 75px;
-    background-color: white;
-    margin: 40px auto;
-    border-radius: 80px;
-    .search {
-      border: none;
-      border-left: 2px solid #e9e9e9;
-      border-radius: 0;
-      width: 22%;
-      text-align: right;
-      box-shadow: none;
-    }
-
-    .search-icon {
-      background-color: #405ff2;
-      width: 50px;
-      height: 50px;
-      margin-right: 16px;
-      border-radius: 50%;
-    }
-  }
-  .headimg {
-    margin: auto;
-  }
+ 
 
   h1 {
     font-size: 34px;
@@ -214,34 +163,7 @@ export default {
     }
     box-sizing: border-box;
     padding: 0 10px;
-    .inputmobile {
-      .search-icon {
-        background-color: #405ff2;
-        width: 40px;
-        height: 40px;
-        margin-right: 16px;
-        border-radius: 50%;
-        margin-top: 10px;
-      }
-      display: block;
-      width: 100%;
-      height: 200px;
-      border-radius: 20px;
-      margin: 10px 0;
-      .search {
-        width: 100%;
-      }
-    }
-    .inputsearch {
-      display: none;
-      width: 100%;
-      height: 250px;
-      border-radius: 0;
-      margin: 0;
-      .search {
-        width: 100%;
-      }
-    }
+
   }
 }
 </style>

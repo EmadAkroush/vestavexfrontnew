@@ -68,7 +68,7 @@
 </template>
 <style lang="scss">
 .my-menu {
-  
+  box-sizing: border-box;
   .navbarshop {
     padding: 1rem 1rem 1rem 1.5rem;
   }

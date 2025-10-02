@@ -2,12 +2,12 @@
   <div class="account">
     <div>
       <nuxt-link to="/">
-        <span style="color: #405ff2"> صفحه اصلی / </span>
+        <span style="color: #0b6d20"> home/ </span>
       </nuxt-link>
-      <span> حساب کاربری </span>
+      <span> account </span>
     </div>
     <div>
-      <h1>حساب کاربری</h1>
+      <h1>account</h1>
     </div>
     <div class="maincard grid grid-cols-1 sm:grid-cols-12 gap-4 sm:my-12 my-4">
       <div class="sm:col-span-3">
@@ -15,182 +15,143 @@
           class="max-w-xs mx-auto p-4 bg-white rounded-lg text-center border border-gray-200"
         >
           <div class="font-semibold">
-            {{ authUser.name ? authUser.name : "بدون نام" }}
+            <!-- {{ authUser.name ? authUser.name : "بدون نام" }} -->
           </div>
-          <div class="text-gray-700 mt-4">{{ authUser.cellphone }}</div>
+          <!-- <div class="text-gray-700 mt-4">{{ authUser.cellphone }}</div> -->
           <div class="divide-y mt-4">
-            <div class="py-2 flex justify-start items-center">
-              <i
-                class="mdi mdi-cart text-blue-500 mr-2"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-blue-500 cursor-pointer mr-3">سفارشات</span>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'performance' }"
+              @click="setActive('performance')"
+            >
+              <i class="mdi mdi-cart mr-2" style="font-size: 25px"></i>
+              <span class="cursor-pointer mr-3">performance</span>
             </div>
-            <div class="py-2 flex justify-start items-center">
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
+              @click="setActive('Portfolio')"
+            >
               <i
                 class="mdi mdi-account-outline text-gray-700 mr-2"
                 style="font-size: 25px"
               ></i>
-              <span class="text-gray-700 cursor-pointer mr-3">حساب کاربری</span>
+              <span class="text-gray-700 cursor-pointer mr-3"> Portfolio</span>
             </div>
-            <div class="py-2 flex justify-start items-center">
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'myBundles' }"
+              @click="setActive('myBundles')"
+            >
+              <i
+                class="mdi mdi-account-outline text-gray-700 mr-2"
+                style="font-size: 25px"
+              ></i>
+              <span class="text-gray-700 cursor-pointer mr-3"> myBundles</span>
+            </div>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'Cashout' }"
+              @click="setActive('Cashout')"
+            >
+              <i
+                class="mdi mdi-account-outline text-gray-700 mr-2"
+                style="font-size: 25px"
+              ></i>
+              <span class="text-gray-700 cursor-pointer mr-3"> Cashout</span>
+            </div>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'History' }"
+              @click="setActive('History')"
+            >
+              <i
+                class="mdi mdi-account-outline text-gray-700 mr-2"
+                style="font-size: 25px"
+              ></i>
+              <span class="text-gray-700 cursor-pointer mr-3"> History</span>
+            </div>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'VX Plan' }"
+              @click="setActive('VX Plan')"
+            >
+              <i
+                class="mdi mdi-account-outline text-gray-700 mr-2"
+                style="font-size: 25px"
+              ></i>
+              <span class="text-gray-700 cursor-pointer mr-3"> VX Plan</span>
+            </div>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'Setting' }"
+              @click="setActive('Setting')"
+            >
+              <i
+                class="mdi mdi-account-outline text-gray-700 mr-2"
+                style="font-size: 25px"
+              ></i>
+              <span class="text-gray-700 cursor-pointer mr-3"> Setting</span>
+            </div>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'Support' }"
+              @click="setActive('Support')"
+            >
+              <i
+                class="mdi mdi-account-outline text-gray-700 mr-2"
+                style="font-size: 25px"
+              ></i>
+              <span class="text-gray-700 cursor-pointer mr-3"> Support</span>
+            </div>
+            <div
+              class="py-2 flex justify-start items-center"
+              :class="{ 'icon-color font-bold': activeItem === 'logout' }"
+              @click="setActive('logout')"
+            >
               <i
                 class="mdi mdi-logout text-gray-700 mr-2"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3" @click="logout()"
-                >خروج</span
+                >logout</span
               >
             </div>
           </div>
         </div>
       </div>
       <div class="sm:col-span-9">
-        <div class="sm:p-6 bg-white">
-          <h2 class="text-right text-2xl font-bold mb-8">تاریخچه سفارشات</h2>
-          <div>
-            <Tabs value="0" :scrollable="true">
-              <TabList>
-                <Tab value="0" class="flex items-center">
-                  <p>در انتطار تایید</p>
-                  <!-- <div
-                    style="width: 25px; height: 25px; border-radius: 4px"
-                    class="fold mr-3"
-                  >
-                    20
-                  </div> -->
-                  </Tab
-                >
-                <Tab value="1" class="flex items-center"
-                  >  ارسال شده 
-                  <!-- <div
-                    style="width: 25px; height: 25px; border-radius: 4px"
-                    class="fold mr-3"
-                  >
-                    20
-                  </div> -->
-                  </Tab
-                >
-             
-                <Tab value="2" class="flex items-center"
-                  >لغو شده
-                  <!-- <div
-                    style="width: 25px; height: 25px; border-radius: 4px"
-                    class="fold mr-3"
-                  >
-                    20
-                  </div> -->
-                  </Tab
-                >
-              </TabList>
-              <TabPanels>
-                <TabPanel value="0">
-               
-                  <div >
-                    <div v-if="product && product.length">
-                    <div  v-for="(itemout, indexout) in product" :key="indexout">
-                   
-                      <div class="mt-4"  v-if="itemout.status == 'در حال پردازش'">
-                       {{ itemout.created_at }}
-                      <div class="grid gap-3 sm:grid-cols-3 grid-cols-1 mt-6">
-
-                        <div v-for="(item, index) in itemout.order_items" :key="index">
-                        <CardShop  :productdata="item"></CardShop>
-                        </div>
-                      </div>
-                      </div>
-
-                      </div>
-                    </div>
-                    <div v-else class="text-center text-gray-500">
-                      هیچ سفارشی برای نمایش وجود ندارد.
-                    </div>
-                  </div>
-           
-                  <Paginator
-                    :rows="10"
-                    :totalRecords="120"
-                    :rowsPerPageOptions="[10, 20, 30]"
-                    class="mt-8"
-                  ></Paginator>
-                </TabPanel>
-                <TabPanel value="1">
-                  <div >
-                    <div v-if="product && product.length">
-                    <div  v-for="(itemout, indexout) in product" :key="indexout">
-                   
-                      <div class="mt-4"  v-if="itemout.status == 'ارسال شده'">
-                       {{ itemout.created_at }}
-                      <div class="grid gap-3 sm:grid-cols-3 grid-cols-1 mt-6">
-
-                        <div v-for="(item, index) in itemout.order_items" :key="index">
-                        <CardShop  :productdata="item"></CardShop>
-                        </div>
-                      </div>
-                      </div>
-
-                      </div>
-                    </div>
-                    <div v-else class="text-center text-gray-500">
-                      هیچ سفارشی برای نمایش وجود ندارد.
-                    </div>
-                  </div>
-           
-                  <Paginator
-                    :rows="10"
-                    :totalRecords="120"
-                    :rowsPerPageOptions="[10, 20, 30]"
-                    class="mt-8"
-                  ></Paginator>
-                </TabPanel>
-                <TabPanel value="2">
-                  <div >
-                    <div v-if="product && product.length">
-                    <div  v-for="(itemout, indexout) in product" :key="indexout">
-                   
-                      <div class="mt-4"  v-if="itemout.status == 'کنسل شده'">
-                       {{ itemout.created_at }}
-                      <div class="grid gap-3 sm:grid-cols-3 grid-cols-1 mt-6">
-
-                        <div v-for="(item, index) in itemout.order_items" :key="index">
-                        <CardShop  :productdata="item"></CardShop>
-                        </div>
-                      </div>
-                      </div>
-
-                      </div>
-                    </div>
-                    <div v-else class="text-center text-gray-500">
-                      هیچ سفارشی برای نمایش وجود ندارد.
-                    </div>
-                  </div>
-           
-                  <Paginator
-                    :rows="10"
-                    :totalRecords="120"
-                    :rowsPerPageOptions="[10, 20, 30]"
-                    class="mt-8"
-                  ></Paginator>
-                </TabPanel>
-           
-           
-              
-              </TabPanels>
-            </Tabs>
-          </div>
-        </div>
+        <div class="sm:p-6 bg-white">tytyu</div>
       </div>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      activeItem: null,
+    };
+  },
+  methods: {
+    setActive(item) {
+      this.activeItem = item;
+    },
+    logout() {
+      console.log("خروج انجام شد");
+    },
+  },
+};
+</script>
+
 <script setup>
-definePageMeta({
-  middleware: "auth",
-});
+// definePageMeta({
+//   middleware: "auth",
+// });
 const product = ref();
 
-const { authUser } = useAuth();
+// const { authUser } = useAuth();
 
 async function getproduct(par) {
   try {
@@ -224,6 +185,9 @@ onBeforeMount(() => {
 
 <style lang="scss">
 .account {
+  .icon-color {
+    color: #0b6d20;
+  }
   .p-tablist-next-button {
     transform: rotate(180deg);
   }
@@ -249,10 +213,10 @@ onBeforeMount(() => {
     white-space: nowrap;
   }
   .p-tab-active {
-    color: #405ff2;
-    border-color: #405ff2 !important;
+    color: #0b6d20;
+    border-color: #0b6d20 !important;
     .fold {
-      background-color: #405ff2;
+      background-color: #0b6d20;
     }
   }
   .fold {

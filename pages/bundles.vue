@@ -1,10 +1,10 @@
 <template>
   <div class="mainbundles">
     <Head>
-      <Title>خرید مطمئن قطعات خودرو با بهترین قیمت پارس اتوپارت</Title>
+      <Title>  </Title>
       <Meta
         name="description"
-        content="پارس اتو پارتمرجع تخصصی فروش قطعات یدکی خودرو، ارائه‌دهنده قطعات اصل و باکیفیت برای انواع خودروها. تضمین اصالت کالا، ارسال سریع و بهترین قیمت بازار."
+        content=""
       />
     </Head>
     <div class="mt-4">

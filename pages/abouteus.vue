@@ -84,7 +84,7 @@
     padding: 0;
     margin-bottom: 0;
     .sec1 {
-      padding: 10px;
+      padding: 10px !important;
     }
     .sec2 {
       margin-top: 50px;
