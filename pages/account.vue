@@ -79,11 +79,7 @@ import AccountSetting from '@/components/account/setting.vue'
 const menuItems = [
   { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
   { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
-  {
-    key: "mybundles",
-    label: "My Bundles",
-    icon: "mdi mdi-package-variant-closed",
-  },
+
   { key: "cashout", label: "Cashout", icon: "mdi mdi-cash-minus" },
   { key: "history", label: "History", icon: "mdi mdi-history" },
   { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
