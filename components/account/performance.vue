@@ -1,14 +1,14 @@
 <template>
-  <div class="brans">
-      
+  <div class="performance">
+      performance
   </div>
 </template>
 <style lang="scss">
-.brans {
-
+.performance {
+  color: red;
 }
 @media only screen and (max-width: 650px) {
-  .brans {
+  .performance {
   
   }
 }

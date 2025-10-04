@@ -20,116 +20,25 @@
           <!-- <div class="text-gray-700 mt-4">{{ authUser.cellphone }}</div> -->
           <div class="divide-y mt-4">
             <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'performance' }"
-              @click="setActive('performance')"
+              v-for="item in menuItems"
+              :key="item.key"
+              class="py-2 flex justify-start items-center cursor-pointer"
+              :class="{ 'icon-color font-bold': activeItem === item.key }"
+              @click="setActive(item.key)"
             >
-              <i class="mdi mdi-chart-bar    mr-2" style="font-size: 25px"></i>
-              <span class="cursor-pointer mr-3">performance</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-              @click="setActive('Portfolio')"
-            >
-              <i
-                class="mdi mdi-currency-usd   text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> Portfolio</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'myBundles' }"
-              @click="setActive('myBundles')"
-            >
-              <i
-                class="mdi mdi-package-variant-closed text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> myBundles</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'Cashout' }"
-              @click="setActive('Cashout')"
-            >
-              <i
-                class="mdi mdi-cash-minus  text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> Cashout</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'History' }"
-              @click="setActive('History')"
-            >
-              <i
-                class="mdi mdi-history  text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> History</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'VX Plan' }"
-              @click="setActive('VX Plan')"
-            >
-              <i
-                class="mdi mdi-family-tree  text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> VX Plan</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'Setting' }"
-              @click="setActive('Setting')"
-            >
-              <i
-                class="mdi mdi-account-cog-outline text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> Setting</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'Support' }"
-              @click="setActive('Support')"
-            >
-              <i
-                class="mdi mdi-ticket-outline text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3"> Support</span>
-            </div>
-            <div
-              class="py-2 flex justify-start items-center"
-              :class="{ 'icon-color font-bold': activeItem === 'logout' }"
-              @click="setActive('logout')"
-            >
-              <i
-                class="mdi mdi-logout text-gray-700 mr-2"
-                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
-                style="font-size: 25px"
-              ></i>
-              <span class="text-gray-700 cursor-pointer mr-3" @click="logout()"
-                >logout</span
-              >
+              <i :class="item.icon + ' mr-2'" style="font-size: 25px"></i>
+              <span class="text-gray-700 cursor-pointer mr-3">{{
+                item.label
+              }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="sm:col-span-9">
-        <div class="sm:p-6 bg-white">tytyu</div>
+        <div class="sm:p-6 bg-white">
+          <!-- نمایش داینامیک کامپوننت -->
+          <component :is="currentComponent" />
+        </div>
       </div>
     </div>
   </div>
@@ -154,41 +63,96 @@ export default {
 </script>
 
 <script setup>
+import AccountPerformance from '@/components/account/performance.vue'
+import AccountPortfolio from '@/components/account/portfolio.vue'
+import AccountMybundles from '@/components/account/mybundles.vue'
+import AccountCashout from '@/components/account/cashout.vue'
+import AccountHistory from '@/components/account/history.vue'
+import AccountSetting from '@/components/account/setting.vue'
+
+
+
+
 // definePageMeta({
 //   middleware: "auth",
 // });
+const menuItems = [
+  { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
+  { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
+  {
+    key: "mybundles",
+    label: "My Bundles",
+    icon: "mdi mdi-package-variant-closed",
+  },
+  { key: "cashout", label: "Cashout", icon: "mdi mdi-cash-minus" },
+  { key: "history", label: "History", icon: "mdi mdi-history" },
+  { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
+  { key: "setting", label: "Setting", icon: "mdi mdi-account-cog-outline" },
+  { key: "logout", label: "Logout", icon: "mdi mdi-logout" },
+];
+
+const activeItem = ref("performance");
+const setActive = (key) => (activeItem.value = key);
+
+const currentComponent = computed(() => {
+  switch (activeItem.value) {
+    case "performance":
+      return AccountPerformance;
+    case "portfolio":
+      return AccountPortfolio;
+    case "mybundles":
+      return AccountMybundles;
+    case "cashout":
+      return AccountCashout;
+    case "history":
+      return AccountHistory;
+    case "accounthistory":
+      return AccountVxPlan;
+    case "setting":
+      return AccountSetting;
+    case "support":
+      return AccountSupport;
+    case "logout":
+      return {
+        template: `<div><p class="text-red-500">You have been logged out.</p></div>`,
+      };
+    default:
+      return { template: `<div>Select an item from the menu.</div>` };
+  }
+});
+
 const product = ref();
 
 // const { authUser } = useAuth();
 
-async function getproduct(par) {
-  try {
-    let data = await $fetch("/api/account");
-    product.value = toRaw(data.data.orders);
-    console.log("product.value", product.value);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    // this.product = toRaw(this.product);
-    console.log("pr", toRaw(this.product));
-  }
-}
+// async function getproduct(par) {
+//   try {
+//     let data = await $fetch("/api/account");
+//     product.value = toRaw(data.data.orders);
+//     console.log("product.value", product.value);
+//   } catch (error) {
+//     console.log(error);
+//   } finally {
+//     // this.product = toRaw(this.product);
+//     console.log("pr", toRaw(this.product));
+//   }
+// }
 
-async function logout() {
-  const headers = useRequestHeaders(["cookie"]);
+// async function logout() {
+//   const headers = useRequestHeaders(["cookie"]);
 
-  await useFetch("/api/auth/logout", {
-    method: "POST",
-    headers,
-  });
+//   await useFetch("/api/auth/logout", {
+//     method: "POST",
+//     headers,
+//   });
 
-  authUser.value = null;
-  return navigateTo("/");
-}
+//   authUser.value = null;
+//   return navigateTo("/");
+// }
 
-onBeforeMount(() => {
-  getproduct();
-});
+// onBeforeMount(() => {
+//   getproduct();
+// });
 </script>
 
 <style lang="scss">
