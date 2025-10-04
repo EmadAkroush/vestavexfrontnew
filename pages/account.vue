@@ -24,7 +24,7 @@
               :class="{ 'icon-color font-bold': activeItem === 'performance' }"
               @click="setActive('performance')"
             >
-              <i class="mdi mdi-cart mr-2" style="font-size: 25px"></i>
+              <i class="mdi mdi-chart-bar    mr-2" style="font-size: 25px"></i>
               <span class="cursor-pointer mr-3">performance</span>
             </div>
             <div
@@ -33,7 +33,8 @@
               @click="setActive('Portfolio')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-currency-usd   text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> Portfolio</span>
@@ -44,7 +45,8 @@
               @click="setActive('myBundles')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-package-variant-closed text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> myBundles</span>
@@ -55,7 +57,8 @@
               @click="setActive('Cashout')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-cash-minus  text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> Cashout</span>
@@ -66,7 +69,8 @@
               @click="setActive('History')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-history  text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> History</span>
@@ -77,7 +81,8 @@
               @click="setActive('VX Plan')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-family-tree  text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> VX Plan</span>
@@ -88,7 +93,8 @@
               @click="setActive('Setting')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-account-cog-outline text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> Setting</span>
@@ -99,7 +105,8 @@
               @click="setActive('Support')"
             >
               <i
-                class="mdi mdi-account-outline text-gray-700 mr-2"
+                class="mdi mdi-ticket-outline text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3"> Support</span>
@@ -111,6 +118,7 @@
             >
               <i
                 class="mdi mdi-logout text-gray-700 mr-2"
+                :class="{ 'icon-color font-bold': activeItem === 'Portfolio' }"
                 style="font-size: 25px"
               ></i>
               <span class="text-gray-700 cursor-pointer mr-3" @click="logout()"
