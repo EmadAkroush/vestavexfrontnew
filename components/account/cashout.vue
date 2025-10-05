@@ -1,5 +1,5 @@
 <template>
-  <div class=" space-y-6  mx-auto">
+  <div class="2rt space-y-6  mx-auto">
     <!-- Header -->
     <h2 class="text-xl font-bold mb-4">Cashout</h2>
 
@@ -54,14 +54,14 @@
             <span class="font-medium">Crypto (USDT, BTC)</span>
           </div>
 
-          <div
+          <!-- <div
             class="border p-4 rounded-md cursor-pointer flex items-center gap-2"
             :class="method === 'bank' ? 'border-green-500 bg-green-50' : 'border-gray-200'"
             @click="method = 'bank'"
           >
             <i class="pi pi-credit-card text-blue-500 text-xl"></i>
             <span class="font-medium">Bank Transfer</span>
-          </div>
+          </div> -->
         </div>
       </template>
     </Card>
