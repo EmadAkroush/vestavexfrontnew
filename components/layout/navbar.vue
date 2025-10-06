@@ -98,12 +98,12 @@
 }
 </style>
 <script setup>
-import { useCartStore } from "../store/cart"
-const cart = useCartStore();
+// import { useCartStore } from "../store/cart"
+// const cart = useCartStore();
 
-// اجرای composable و واکنش‌پذیر سازی authUser
-const { authUser } = useAuth();
-const countCart = computed(() => cart.count)
+// // اجرای composable و واکنش‌پذیر سازی authUser
+// const { authUser } = useAuth();
+// const countCart = computed(() => cart.count)
 
 // تعریف items به عنوان یک آرایه واکنش‌پذیر
 const items = ref([

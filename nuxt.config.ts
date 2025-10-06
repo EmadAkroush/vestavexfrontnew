@@ -1,54 +1,56 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-import Aura from "@primevue/themes/aura";
+import * as path from "path";
+// Wrong
 
 export default defineNuxtConfig({
-  devtools: { enabled: false },
-  modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module", "nuxt-swiper", "@pinia/nuxt",  'pinia-plugin-persistedstate/nuxt' , '@nuxtjs/sitemap', ],
+  modules: ["@primevue/nuxt-module"],
+  css: [
+    "@/assets/styles/tailwind.css",
+    "@/assets/styles/base.css",
+    "@mdi/font/css/materialdesignicons.min.css",
+    'primevue/resources/primevue.min.css',
+    'primevue/resources/themes/saga-blue/theme.css'
+  ],
 
-  // routeRules: {
-  //   "/some-url": {
-  //     // Temporary redirect using a 307 status code
-  //     redirect: "https://nuxt.com/docs/guide/concepts/rendering#route-rules",
-  //   },
-  // },
-  site: { 
-    url: 'https://parsautoparts.ir', 
-    name: 'vestavex' ,
-    }, 
+  build: {
+  transpile: ['primevue'],
+},
+
   
-    app: {
-      head: {
-        title: 'vestavex', // default fallback title
-        htmlAttrs: {
-          lang: 'en',
-        },
-        link: [
-          { rel: 'icon', type: 'image/x-icon', href: './Photo_1747641514372-3.png' },
-        ]
+  primevue: {
+    options: { theme: "none" },
+  },
+  site: {
+    url: "https://parsautoparts.ir",
+    name: "vestavex",
+  },
+
+  app: {
+    head: {
+      title: "vestavex", // default fallback title
+      htmlAttrs: {
+        lang: "en",
       },
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "./Photo_1747641514372-3.png",
+        },
+      ],
     },
-  
+  },
 
   runtimeConfig: {
-      public: {
-          apiBase: 'https://parseback.liara.run'
-      }
-      
+    public: {
+      apiBase: "https://parseback.liara.run",
+    },
   },
 
-  css: [
-      '@mdi/font/css/materialdesignicons.min.css',
-    ],
-
-  primevue: {
-      options: {
-          theme: {
-              preset: Aura,
-          },
-          ripple: true,
-      },
-      autoImport: true,
+  postcss: {
+    plugins: {
+      "postcss-import": {},
+      tailwindcss: {},
+      autoprefixer: {},
+    },
   },
-
-  compatibilityDate: "2025-01-25",
 });

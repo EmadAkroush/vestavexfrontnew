@@ -65,10 +65,10 @@ export default {
 <script setup>
 import AccountPerformance from '@/components/account/performance.vue'
 import AccountPortfolio from '@/components/account/portfolio.vue'
-import AccountMybundles from '@/components/account/mybundles.vue'
 import AccountCashout from '@/components/account/cashout.vue'
 import AccountHistory from '@/components/account/history.vue'
 import AccountSetting from '@/components/account/setting.vue'
+import AccountVxPlan from '@/components/account/vxplan.vue'
 
 
 
@@ -79,7 +79,6 @@ import AccountSetting from '@/components/account/setting.vue'
 const menuItems = [
   { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
   { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
-
   { key: "cashout", label: "Cashout", icon: "mdi mdi-cash-minus" },
   { key: "history", label: "History", icon: "mdi mdi-history" },
   { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
@@ -96,13 +95,11 @@ const currentComponent = computed(() => {
       return AccountPerformance;
     case "portfolio":
       return AccountPortfolio;
-    case "mybundles":
-      return AccountMybundles;
     case "cashout":
       return AccountCashout;
     case "history":
       return AccountHistory;
-    case "accounthistory":
+    case "vxplan":
       return AccountVxPlan;
     case "setting":
       return AccountSetting;

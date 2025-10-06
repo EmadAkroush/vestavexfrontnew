@@ -32,7 +32,7 @@ html {
 
 @font-face {
   font-family: numregular;
-  src: url(././public/font/IRANSansXFaNum-Regular.woff2);
+  src: url(././public/font/static/Roboto-Medium.ttf);
 }
 body {
   font-family: numregular;
