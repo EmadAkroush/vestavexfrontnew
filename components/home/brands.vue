@@ -140,7 +140,7 @@
 </template>
 <style lang="scss">
 .brans {
-  padding: 160px 80px;
+  padding: 50px 80px;
   .topic {
     color: #0b6d20;
   }

@@ -15,6 +15,7 @@
 
       <!-- Menu Items -->
       <template #item="{ item, props }">
+        <!-- اگر route دارد -->
         <router-link
           v-if="item.route"
           v-slot="{ href, navigate }"
@@ -33,13 +34,25 @@
           </a>
         </router-link>
 
+        <!-- اگر آدرس مستقیم دارد -->
         <a
-          v-else
+          v-else-if="item.url"
           v-ripple
           :href="item.url"
           :target="item.target"
           v-bind="props.action"
           class="flex items-center"
+        >
+          <i :class="item.icon" class="text-xl mr-2"></i>
+          <span>{{ item.label }}</span>
+        </a>
+
+        <!-- اگر عملکرد خاص دارد (مثل Logout) -->
+        <a
+          v-else-if="item.command"
+          v-ripple
+          class="flex items-center text-red-600 hover:text-red-700"
+          @click="item.command"
         >
           <i :class="item.icon" class="text-xl mr-2"></i>
           <span>{{ item.label }}</span>
@@ -61,31 +74,44 @@
 </template>
 
 <script setup>
+const logout = () => {
+  // اینجا می‌تونی هر عملکرد خروجی داشته باشی (پاک کردن توکن، مسیر جدید، ...)
+  alert('You have been logged out!')
+  // مثلا:
+  // localStorage.removeItem('token')
+  // navigateTo('/login')
+}
+
 const items = ref([
   {
     label: "Home",
     route: "/",
-    icon: "mdi mdi-home-outline", // خانه
+    icon: "mdi mdi-home-outline",
   },
   {
     label: "Bundles",
     route: "/bundles",
-    icon: "mdi mdi-package-variant-closed", // پکیج‌ها
+    icon: "mdi mdi-package-variant-closed",
   },
   {
     label: "Add Funds",
     route: "/addfunds",
-    icon: "mdi mdi-wallet-plus-outline", // افزودن موجودی
+    icon: "mdi mdi-wallet-plus-outline",
   },
   {
     label: "About Us",
     route: "/abouteus",
-    icon: "mdi mdi-information-outline", // درباره ما
+    icon: "mdi mdi-information-outline",
   },
   {
     label: "Support",
     route: "/support",
-    icon: "mdi mdi-lifebuoy", // پشتیبانی
+    icon: "mdi mdi-lifebuoy",
+  },
+  {
+    label: "Logout",
+    icon: "mdi mdi-logout",
+    command: logout, // عمل خروج
   },
 ]);
 </script>
@@ -115,6 +141,14 @@ const items = ref([
 
   a:hover i.mdi {
     color: #14a33b;
+  }
+
+  /* رنگ متفاوت برای Logout */
+  a.text-red-600 i.mdi {
+    color: #e11d48;
+  }
+  a.text-red-600:hover i.mdi {
+    color: #b91c1c;
   }
 }
 
