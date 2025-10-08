@@ -1,146 +1,146 @@
 <template>
-  <div class="account">
+  <div class="account-container min-h-screen bg-gray-50 flex flex-col">
     <!-- Breadcrumb -->
-    <div class="mb-4 text-sm">
-      <nuxt-link to="/" class="text-green-700 font-semibold">Home /</nuxt-link>
+    <div class="px-6 sm:px-20 pt-6 text-sm text-gray-600">
+      <nuxt-link to="/" class="text-green-700 font-semibold hover:underline">Home /</nuxt-link>
       <span> Account </span>
     </div>
 
-    <h1 class="text-2xl font-bold mb-4">Account</h1>
+    <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 px-6 sm:px-20 py-6">
+      <!-- ===== Sidebar (Desktop) ===== -->
+      <aside
+        class="hidden sm:flex sm:flex-col sm:col-span-3 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sticky top-8 h-fit"
+      >
+        <div class="text-center mb-6">
+          <div
+            class="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-700 text-3xl font-bold"
+          >
+            VX
+          </div>
+          <h2 class="mt-3 font-semibold text-gray-800">My Account</h2>
+          <p class="text-xs text-gray-500">Smart Investment Member</p>
+        </div>
 
-    <div class="maincard grid grid-cols-1 sm:grid-cols-12 gap-4 sm:my-12 my-4">
-      <!-- Sidebar for Desktop -->
-      <div class="hidden sm:block sm:col-span-3">
-        <div class="max-w-xs mx-auto p-4 bg-white rounded-lg text-center border border-gray-200">
-          <div class="divide-y mt-4">
-            <div
-              v-for="item in menuItems"
-              :key="item.key"
-              class="py-2 flex justify-start items-center cursor-pointer"
-              :class="{ 'icon-color font-bold': activeItem === item.key }"
-              @click="setActive(item.key)"
-            >
-              <i :class="item.icon + ' mr-2 text-xl'"></i>
-              <span class="text-gray-700 cursor-pointer mr-3">{{ item.label }}</span>
-            </div>
+        <div class="divide-y divide-gray-100">
+          <div
+            v-for="item in menuItems"
+            :key="item.key"
+            @click="setActive(item.key)"
+            class="flex items-center px-4 py-3 rounded-lg cursor-pointer transition-all"
+            :class="{
+              'bg-green-50 text-green-700 font-semibold border-l-4 border-green-500 shadow-sm': activeItem === item.key,
+              'text-gray-600 hover:bg-gray-100': activeItem !== item.key
+            }"
+          >
+            <i :class="item.icon + ' text-xl mr-3'"></i>
+            <span>{{ item.label }}</span>
+          </div>
 
-            <!-- Logout (Desktop Only) -->
-            <!-- <div
-              class="py-2 flex justify-start items-center cursor-pointer text-red-500 hover:text-red-600"
-              @click="logout"
-            >
-              <i class="mdi mdi-logout mr-2 text-xl"></i>
-              <span>Logout</span>
-            </div> -->
+          <div
+            class="flex items-center px-4 py-3 text-red-500 cursor-pointer hover:bg-red-50 mt-2 rounded-lg"
+            @click="logout"
+          >
+            <i class="mdi mdi-logout text-xl mr-3"></i>
+            <span>Logout</span>
           </div>
         </div>
-      </div>
+      </aside>
 
-      <!-- Main Content -->
-      <div class="sm:col-span-9">
-        <div class="sm:p-6 bg-white rounded-lg shadow-sm min-h-[60vh]">
-          <component :is="currentComponent" />
-        </div>
-      </div>
+      <!-- ===== Main Content ===== -->
+      <main class="sm:col-span-9 bg-white rounded-2xl shadow-sm p-4 sm:p-6 relative overflow-hidden">
+        <transition name="fade-slide" mode="out-in">
+          <component :is="currentComponent" :key="activeItem" />
+        </transition>
+      </main>
     </div>
 
-    <!-- Bottom Navigation (Mobile) -->
-    <div
-      class="sm:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-around items-center py-2 shadow-lg z-50"
+    <!-- ===== Mobile Navigation ===== -->
+    <nav
+      class="sm:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200 flex justify-around items-center py-2 shadow-[0_-2px_10px_rgba(0,0,0,0.08)] z-50"
     >
       <div
         v-for="item in menuItems"
         :key="item.key"
-        class="flex flex-col items-center cursor-pointer text-gray-600"
+        class="flex flex-col items-center cursor-pointer text-gray-500 transition-all"
         :class="{ 'text-green-700 font-semibold': activeItem === item.key }"
         @click="setActive(item.key)"
       >
-        <i :class="item.icon" class="text-2xl"></i>
-        <span class="text-xs mt-1">{{ item.label }}</span>
+        <i :class="item.icon" class="text-2xl mb-1"></i>
+        <span class="text-xs">{{ item.label }}</span>
       </div>
-    </div>
+    </nav>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from "vue"
 
-// ===== Import Components =====
-import AccountPerformance from '@/components/account/performance.vue'
-import AccountPortfolio from '@/components/account/portfolio.vue'
-import AccountCashout from '@/components/account/cashout.vue'
-import AccountHistory from '@/components/account/history.vue'
-import AccountSetting from '@/components/account/setting.vue'
-import AccountVxPlan from '@/components/account/vxplan.vue'
+// ==== Import Components ====
+import AccountPerformance from "@/components/account/performance.vue"
+import AccountPortfolio from "@/components/account/portfolio.vue"
+import AccountCashout from "@/components/account/cashout.vue"
+import AccountHistory from "@/components/account/history.vue"
+import AccountSetting from "@/components/account/setting.vue"
+import AccountVxPlan from "@/components/account/vxplan.vue"
 
-// ===== Menu Items =====
+// ==== Menu Items ====
 const menuItems = ref([
-  { key: 'performance', label: 'Performance', icon: 'mdi mdi-chart-bar' },
-  { key: 'portfolio', label: 'Portfolio', icon: 'mdi mdi-currency-usd' },
-  { key: 'cashout', label: 'Cashout', icon: 'mdi mdi-cash-minus' },
-  { key: 'history', label: 'History', icon: 'mdi mdi-history' },
-  { key: 'vxplan', label: 'VX Plan', icon: 'mdi mdi-family-tree' },
-  { key: 'setting', label: 'Setting', icon: 'mdi mdi-account-cog-outline' },
-
+  { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
+  { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
+  { key: "cashout", label: "Cashout", icon: "mdi mdi-cash-minus" },
+  { key: "history", label: "History", icon: "mdi mdi-history" },
+  { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
+  { key: "setting", label: "Setting", icon: "mdi mdi-account-cog-outline" },
 ])
 
-// ===== Active Item =====
-const activeItem = ref('performance')
+const activeItem = ref("performance")
+
 const setActive = (key) => {
   activeItem.value = key
+  window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
-// ===== Dynamic Component Switch =====
 const currentComponent = computed(() => {
   switch (activeItem.value) {
-    case 'performance':
+    case "performance":
       return AccountPerformance
-    case 'portfolio':
+    case "portfolio":
       return AccountPortfolio
-    case 'cashout':
+    case "cashout":
       return AccountCashout
-    case 'history':
+    case "history":
       return AccountHistory
-    case 'vxplan':
+    case "vxplan":
       return AccountVxPlan
-    case 'setting':
+    case "setting":
       return AccountSetting
     default:
       return {
-        template: `<div class="text-center text-gray-500 py-10">Select an item from the menu.</div>`,
+        template: `<div class="text-center text-gray-400 py-20">Select an item from the menu.</div>`,
       }
   }
 })
 
-// ===== Logout Function =====
 const logout = () => {
-  alert('You have been logged out.')
+  if (confirm("Are you sure you want to log out?")) {
+    alert("You have been logged out successfully.")
+  }
 }
 </script>
 
-<style lang="scss">
-.account {
-  .icon-color {
-    color: #0b6d20;
+<style lang="scss" scoped>
+.account-container {
+  .fade-slide-enter-active,
+  .fade-slide-leave-active {
+    transition: all 0.4s ease;
   }
-
-  h1 {
-    font-size: 30px;
-    margin-top: 10px;
+  .fade-slide-enter-from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-
-  box-sizing: border-box;
-  padding: 10px 80px;
-
-  // smooth transition when active item changes
-  .text-green-700 {
-    transition: color 0.2s ease;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .account {
-    padding: 10px 10px;
+  .fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 }
 </style>
