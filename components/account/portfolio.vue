@@ -4,7 +4,7 @@
     <div class="text-center">
       <h1 class="text-3xl font-bold text-green-700">My Investment Portfolio</h1>
       <p class="text-gray-600 mt-2">
-        Track your investment performance, analyze your bundles, and optimize returns.
+        Track your bundles, monitor profits, and manage your investments efficiently.
       </p>
     </div>
 
@@ -81,6 +81,27 @@
               </div>
             </div>
           </template>
+
+          <template #footer>
+            <div class="flex flex-wrap gap-2">
+              <Button
+                label="Details"
+                icon="mdi mdi-eye-outline"
+                class="p-button-sm p-button-outlined"
+                @click="openPlanModal(item)"
+              />
+              <Button
+                label="Renew"
+                icon="mdi mdi-refresh"
+                class="p-button-sm p-button-success"
+              />
+              <Button
+                label="Upgrade"
+                icon="mdi mdi-arrow-up-bold"
+                class="p-button-sm p-button-warning"
+              />
+            </div>
+          </template>
         </Card>
       </div>
     </div>
@@ -92,7 +113,6 @@
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        <!-- Pie Chart -->
         <Chart
           type="pie"
           :data="pieData"
@@ -100,8 +120,6 @@
           class="max-h-80"
           @select="onPieSelect"
         />
-
-        <!-- Analytics Summary -->
         <div>
           <ul class="space-y-3">
             <li
@@ -115,10 +133,6 @@
               <span class="font-bold text-green-600">${{ item.amount }}</span>
             </li>
           </ul>
-          <div class="mt-4 text-sm text-gray-600">
-            <p><span class="font-semibold">Total Bundles:</span> {{ portfolio.length }}</p>
-            <p><span class="font-semibold">Total Invested:</span> ${{ totalInvested }}</p>
-          </div>
         </div>
       </div>
 
@@ -136,7 +150,8 @@
             <div
               v-for="(item, i) in selectedDetails"
               :key="i"
-              class="p-3 rounded-lg bg-white shadow-sm border"
+              class="p-3 rounded-lg bg-white shadow-sm border cursor-pointer hover:border-green-500 transition"
+              @click="openPlanModal(item)"
             >
               <p class="text-sm text-gray-700">Invested: <span class="font-semibold text-green-700">${{ item.amount }}</span></p>
               <p class="text-sm text-gray-700">Profit Rate: <span class="font-semibold">{{ item.profit }}%</span></p>
@@ -147,6 +162,28 @@
         </div>
       </transition>
     </div>
+
+    <!-- ===== Modal: Plan Details ===== -->
+    <Dialog v-model:visible="showModal" modal header="Plan Details" class="max-w-lg w-full">
+      <div class="space-y-3">
+        <h3 class="text-xl font-bold text-green-700">{{ modalData.type }}</h3>
+        <p class="text-sm text-gray-600">
+          Duration: <span class="font-semibold">{{ modalData.start }} → {{ modalData.end }}</span>
+        </p>
+        <p>Invested Amount: <span class="font-semibold text-green-700">${{ modalData.amount }}</span></p>
+        <p>Profit Rate: <span class="font-semibold">{{ modalData.profit }}% / month</span></p>
+        <p>Progress: <span class="font-semibold">{{ modalData.progress }}%</span></p>
+
+        <ProgressBar :value="modalData.progress" class="mt-3" />
+      </div>
+
+      <template #footer>
+        <div class="flex justify-between w-full">
+          <Button label="Withdraw" icon="mdi mdi-cash-minus" class="p-button-danger" />
+          <Button label="Reinvest" icon="mdi mdi-repeat" class="p-button-success" />
+        </div>
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -155,6 +192,8 @@ import { ref, computed } from "vue"
 import Card from "primevue/card"
 import Chart from "primevue/chart"
 import ProgressBar from "primevue/progressbar"
+import Dialog from "primevue/dialog"
+import Button from "primevue/button"
 
 const portfolio = [
   { type: "Bronze Plan", amount: 500, profit: 6, progress: 40, start: "2025-01-01", end: "2025-06-01" },
@@ -163,13 +202,10 @@ const portfolio = [
 ]
 
 const totalInvested = computed(() => portfolio.reduce((a, b) => a + b.amount, 0))
-const totalProfit = computed(() =>
-  portfolio.reduce((a, b) => a + (b.amount * b.profit) / 100, 0)
-)
-const totalReturns = computed(() =>
-  portfolio.reduce((a, b) => a + (b.amount + (b.amount * b.profit) / 100), 0)
-)
+const totalProfit = computed(() => portfolio.reduce((a, b) => a + (b.amount * b.profit) / 100, 0))
+const totalReturns = computed(() => totalInvested.value + totalProfit.value)
 
+// === Charts ===
 const chartData = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
   datasets: [
@@ -183,7 +219,6 @@ const chartData = {
     },
   ],
 }
-
 const chartOptions = {
   plugins: { legend: { display: false } },
   scales: {
@@ -192,36 +227,34 @@ const chartOptions = {
   },
 }
 
-// === Pie Chart (Interactive) ===
+// === Pie Chart ===
 const pieData = {
   labels: ["Bronze Plan", "Silver Plan", "Gold Plan"],
-  datasets: [
-    {
-      data: [500, 1000, 1500],
-      backgroundColor: ["#f59e0b", "#3b82f6", "#10b981"],
-    },
-  ],
+  datasets: [{ data: [500, 1000, 1500], backgroundColor: ["#f59e0b", "#3b82f6", "#10b981"] }],
 }
-
 const pieOptions = {
   plugins: {
     legend: { position: "bottom" },
-    tooltip: {
-      callbacks: {
-        label: (context) => `${context.label}: $${context.formattedValue}`,
-      },
-    },
+    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: $${ctx.formattedValue}` } },
   },
 }
 
+// === Interactive Section ===
 const selectedPlan = ref(null)
 const selectedDetails = computed(() =>
   selectedPlan.value ? portfolio.filter((p) => p.type === selectedPlan.value) : null
 )
-
-const onPieSelect = (event) => {
-  const label = pieData.labels[event.element.index]
+const onPieSelect = (e) => {
+  const label = pieData.labels[e.element.index]
   selectedPlan.value = label
+}
+
+// === Modal ===
+const showModal = ref(false)
+const modalData = ref({})
+const openPlanModal = (item) => {
+  modalData.value = item
+  showModal.value = true
 }
 </script>
 
