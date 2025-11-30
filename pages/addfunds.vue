@@ -1,172 +1,147 @@
 <template>
-  <section class="addfunds min-h-screen bg-gray-50 py-16 px-4 sm:px-12">
-    <div class="max-w-2xl mx-auto">
-      <!-- Breadcrumb -->
-      <!-- <div class="text-sm text-gray-500 mb-6">
-        <nuxt-link to="/" class="text-green-700 hover:underline">Home</nuxt-link> /
-        <span class="text-gray-600">Add Funds</span>
-      </div> -->
+  <section class="addfunds-wrapper relative min-h-screen overflow-hidden">
 
-      <!-- Header -->
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold text-green-700 mb-3">Add Funds</h2>
-        <p class="text-gray-600 max-w-md mx-auto">
-          Deposit funds securely using blockchain payment methods.  
-          Minimum deposit is <span class="font-semibold">$50</span>.
-        </p>
-      </div>
+    <!--  Glow background  -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
-      <!-- Custom Stepper -->
-      <div class="flex justify-between items-center mb-10 relative">
+    <!-- HEADER -->
+    <header class="text-center pt-14 relative z-10">
+      <p class="eyebrow">VESTAVEX</p>
+      <h2 class="title">Add Funds</h2>
+      <p class="subtitle">
+        Secure blockchain deposits with real-time verification.
+      </p>
+    </header>
+
+    <!-- MAIN CARD -->
+    <div class="main-card relative z-10 mx-auto mt-12 max-w-2xl glass-card">
+
+      <!-- STEPPER -->
+      <div class="stepper">
         <div
           v-for="(step, index) in steps"
           :key="index"
-          class="flex-1 text-center"
+          class="step"
         >
-          <div class="flex flex-col items-center relative">
-            <!-- Circle -->
-            <div
-              class="w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300"
-              :class="{
-                'bg-green-600 text-white': currentStep >= index + 1,
-                'bg-gray-200 text-gray-500': currentStep < index + 1,
-              }"
-            >
-              <i :class="step.icon" class="text-lg"></i>
-            </div>
-            <p
-              class="mt-2 text-sm font-medium"
-              :class="{
-                'text-green-700': currentStep >= index + 1,
-                'text-gray-500': currentStep < index + 1,
-              }"
-            >
-              {{ step.label }}
-            </p>
-
-            <!-- Connector line -->
-            <div
-              v-if="index < steps.length - 1"
-              class="absolute top-5 left-[calc(50%+20px)] w-full h-0.5"
-              :class="currentStep > index + 1 ? 'bg-green-500' : 'bg-gray-300'"
-            ></div>
+          <div
+            class="circle"
+            :class="currentStep >= index + 1 ? 'active' : ''"
+          >
+            <i :class="step.icon"></i>
           </div>
+          <p :class="currentStep >= index + 1 ? 'label active' : 'label'">
+            {{ step.label }}
+          </p>
+
+          <!-- line -->
+          <div
+            v-if="index < steps.length - 1"
+            class="line"
+            :class="currentStep > index + 1 ? 'active' : ''"
+          ></div>
         </div>
       </div>
 
-      <!-- Step 1: Select Network -->
-      <div v-if="currentStep === 1" class="bg-white rounded-2xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <i class="mdi mdi-wallet-outline text-green-600 text-2xl"></i>
-          Select Network & Amount
-        </h3>
+      <!-- STEP 1 -->
+      <div v-if="currentStep === 1" class="step-body">
+        <h3 class="step-title"><i class="mdi mdi-wallet-outline"></i> Select Network & Amount</h3>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="network-grid">
           <div
             v-for="network in networks"
             :key="network.name"
             @click="selected = network"
-            class="cursor-pointer flex flex-col items-center p-4 border rounded-xl transition-all hover:shadow-md"
-            :class="selected?.name === network.name ? 'border-green-500 bg-green-50' : 'border-gray-200'"
+            class="network-card"
+            :class="selected?.name === network.name ? 'active' : ''"
           >
-            <img :src="network.icon" alt="logo" class="w-10 h-10 mb-2" />
-            <p class="text-sm font-semibold text-gray-700">{{ network.name }}</p>
+            <img :src="network.icon" class="net-logo" />
+            <p>{{ network.name }}</p>
           </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-2">Amount (USD)</label>
-          <input
-            v-model="amount"
-            type="number"
-            min="50"
-            class="w-full border rounded-lg p-2 mb-6"
-            placeholder="Enter amount (min $50)"
-          />
-        </div>
-
-        <Button
-          label="Continue"
-          icon="mdi mdi-arrow-right-bold"
-          class="w-full p-button-success"
-          :disabled="!selected || amount < 50"
-          @click="nextStep"
+        <label class="input-label">Amount (USD)</label>
+        <input
+          v-model="amount"
+          type="number"
+          min="50"
+          class="input-box"
+          placeholder="Enter amount (min $50)"
         />
+
+        <button class="btn-primary w-full" :disabled="!selected || amount < 50" @click="nextStep">
+          Continue <i class="mdi mdi-arrow-right-bold"></i>
+        </button>
       </div>
 
-      <!-- Step 2: Payment Confirmation -->
-      <div v-else-if="currentStep === 2" class="bg-white rounded-2xl shadow-lg p-6 text-center">
-        <div class="flex flex-col items-center">
-          <img :src="selected.icon" alt="crypto logo" class="w-14 h-14 mb-4" />
-          <h3 class="text-xl font-semibold mb-2">{{ selected.name }} Payment</h3>
-          <p class="text-gray-600 mb-4">
-            Send exactly <span class="font-bold text-green-700">${{ amount }}</span> to this wallet:
-          </p>
+      <!-- STEP 2 -->
+      <div v-else-if="currentStep === 2" class="step-body text-center">
+        <img :src="selected.icon" class="network-big" />
 
-          <div class="bg-gray-100 border border-gray-200 rounded-xl p-3 mb-4 select-all">
-            <p class="text-sm font-mono break-all text-gray-800">{{ generatedAddress }}</p>
-          </div>
+        <h3 class="step-title">{{ selected.name }} Payment</h3>
 
-          <Button
-            label="Copy Address"
-            icon="mdi mdi-content-copy"
-            class="w-full p-button-outlined mb-3"
-            @click="copyAddress"
-          />
-          <Button
-            label="I’ve Paid"
-            icon="mdi mdi-check-circle"
-            class="w-full p-button-success"
-            @click="nextStep"
-          />
+        <p class="info-text">
+          Send exactly <strong class="amount">${{ amount }}</strong> to the wallet below:
+        </p>
 
-          <p class="text-xs text-gray-500 mt-4">
-            Payment confirmation may take up to 5 minutes depending on network load.
-          </p>
+        <div class="address-box">
+          <p>{{ generatedAddress }}</p>
         </div>
+
+        <button class="btn-outline w-full mb-3" @click="copyAddress">
+          <i class="mdi mdi-content-copy"></i> Copy Address
+        </button>
+
+        <button class="btn-primary w-full" @click="nextStep">
+          I’ve Paid <i class="mdi mdi-check-circle"></i>
+        </button>
+
+        <p class="note">Confirmation may take up to 5 minutes.</p>
       </div>
 
-      <!-- Step 3: Payment Verification -->
-      <div v-else-if="currentStep === 3" class="bg-white rounded-2xl shadow-lg p-6 text-center">
-        <div class="flex flex-col items-center">
-          <i class="mdi mdi-timer-sand text-green-600 text-5xl mb-4"></i>
-          <h3 class="text-2xl font-semibold mb-3">Payment Verification</h3>
-          <p class="text-gray-600 mb-4">
-            Your payment of <span class="text-green-700 font-bold">${{ amount }}</span> via
-            <span class="font-semibold">{{ selected.name }}</span> is being verified.
-          </p>
-          <ProgressBar :value="progress" class="w-full mb-4"></ProgressBar>
-          <Button
-            v-if="progress >= 100"
-            label="Go to Dashboard"
-            icon="mdi mdi-arrow-right"
-            class="w-full p-button-success"
-            @click="goToDashboard"
-          />
-        </div>
+      <!-- STEP 3 -->
+      <div v-else class="step-body text-center">
+        <i class="mdi mdi-timer-sand text-5xl text-green-400"></i>
+        <h3 class="step-title">Payment Verification</h3>
+
+        <p class="info-text">
+          Verifying your <strong class="amount">${{ amount }}</strong> deposit via
+          <strong>{{ selected.name }}</strong>.
+        </p>
+
+        <ProgressBar :value="progress" class="w-full mb-4" />
+
+        <button
+          v-if="progress >= 100"
+          class="btn-primary w-full"
+          @click="goToDashboard"
+        >
+          Go to Dashboard <i class="mdi mdi-arrow-right"></i>
+        </button>
       </div>
+
     </div>
+
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import Button from "primevue/button";
+import { ref } from "vue";
 import ProgressBar from "primevue/progressbar";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
+
 const currentStep = ref(1);
 const selected = ref(null);
 const amount = ref(null);
 const progress = ref(0);
-
 const generatedAddress = ref("0xA1B2C3D4E5F678901234567890ABCDEF12345678");
 
 const steps = [
-  { label: "Select Network", icon: "mdi mdi-wallet-outline" },
+  { label: "Network", icon: "mdi mdi-wallet-outline" },
   { label: "Payment", icon: "mdi mdi-currency-usd" },
-  { label: "Verification", icon: "mdi mdi-shield-check-outline" },
+  { label: "Verify", icon: "mdi mdi-shield-check-outline" },
 ];
 
 const networks = [
@@ -177,26 +152,20 @@ const networks = [
 ];
 
 function nextStep() {
-  if (currentStep.value < 3) {
-    currentStep.value++;
-  }
-  if (currentStep.value === 3) startProgress();
-}
+  currentStep.value++;
 
-function startProgress() {
-  progress.value = 0;
-  const timer = setInterval(() => {
-    if (progress.value >= 100) {
-      clearInterval(timer);
-    } else {
-      progress.value += 10;
-    }
-  }, 500);
+  if (currentStep.value === 3) {
+    progress.value = 0;
+    const timer = setInterval(() => {
+      if (progress.value >= 100) clearInterval(timer);
+      else progress.value += 8;
+    }, 400);
+  }
 }
 
 function copyAddress() {
   navigator.clipboard.writeText(generatedAddress.value);
-  alert("✅ Wallet address copied to clipboard.");
+  alert("Wallet address copied.");
 }
 
 function goToDashboard() {
@@ -205,24 +174,226 @@ function goToDashboard() {
 </script>
 
 <style lang="scss" scoped>
-.addfunds {
-  background: linear-gradient(180deg, #f9fafb 0%, #eef1fb 100%);
-  h2 {
-    color: #0b6d20;
-  }
 
-  /* custom stepper line fix */
-  .relative::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    right: 5%;
-    height: 2px;
-    background: #d1d5db;
-    z-index: 0;
+/* ---------------- GLOBAL WRAPPER ---------------- */
+.addfunds-wrapper {
+  background: linear-gradient(180deg, #071114, #020404);
+  padding-bottom: 80px;
+  color: #dff7e8;
+}
+
+/* STATIC GLOWS (same style as Bundles page) */
+.glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  filter: blur(120px);
+  opacity: 0.2;
+  z-index: 0;
+}
+.glow-1 {
+  top: -80px;
+  left: -120px;
+  background: rgba(0, 255, 170, 0.25);
+}
+.glow-2 {
+  bottom: -120px;
+  right: -100px;
+  background: rgba(0, 180, 255, 0.2);
+}
+
+/* ---------------- HEADER ---------------- */
+.eyebrow {
+  color: #72fdd6;
+  letter-spacing: 0.28em;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+.title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #66ffd0, #a8fff4, #fffbe8);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.subtitle {
+  color: #a8dccb;
+  margin-top: 6px;
+}
+
+/* ---------------- GLASS MAIN CARD ---------------- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ---------------- STEPPER ---------------- */
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.step {
+  position: relative;
+  text-align: center;
+  flex: 1;
+}
+
+.circle {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7fdeca;
+  transition: 0.3s;
+}
+.circle.active {
+  background: linear-gradient(90deg, #00d99a, #00ffd0);
+  color: #001c12;
+  font-weight: 900;
+  border: none;
+}
+
+.label {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+.label.active {
+  opacity: 1;
+  color: #8fffe0;
+}
+
+.line {
+  position: absolute;
+  top: 22px;
+  left: calc(50% + 28px);
+  width: calc(100% - 56px);
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+}
+.line.active {
+  background: #00ffc3;
+}
+
+/* ---------------- STEP CONTENT ---------------- */
+.step-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #c8fff0;
+}
+
+/* network cards */
+.network-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.network-card {
+  padding: 14px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: 0.3s;
+  color: #bff6e5;
+}
+.network-card:hover {
+  background: rgba(255,255,255,0.12);
+}
+.network-card.active {
+  border-color: #00ffc3;
+  background: rgba(0,255,200,0.12);
+  color: #eafffa;
+}
+.net-logo {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 6px;
+}
+
+/* inputs */
+.input-label {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  color: #a3e3ce;
+}
+.input-box {
+  width: 100%;
+  padding: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: #eafff4;
+}
+
+/* wallet box */
+.address-box {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 12px;
+  border-radius: 10px;
+  font-family: monospace;
+  word-break: break-word;
+  margin-bottom: 12px;
+}
+
+/* text */
+.info-text {
+  color: #bdf7e4;
+  margin-bottom: 14px;
+}
+.amount {
+  color: #39ffb2;
+}
+
+/* buttons */
+.btn-primary {
+  background: linear-gradient(90deg, #00d99a, #00ffcf);
+  color: #001d13;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: 0.3s;
+}
+.btn-primary:hover {
+  transform: scale(1.02);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #00ffcf;
+  color: #00ffcf;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* note */
+.note {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-top: 8px;
+}
+
+/* mobile fixes */
+@media (max-width: 650px) {
+  .network-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
-
-
