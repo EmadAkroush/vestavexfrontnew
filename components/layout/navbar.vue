@@ -1,18 +1,22 @@
 <template>
-  <header class="navbar-wrapper sticky top-0 z-50 bg-white shadow-md backdrop-blur-md">
-    <div class="flex items-center justify-between px-4 sm:px-10 py-3">
-      <!-- ===== Left: Logo ===== -->
-      <div class="flex items-center space-x-3">
+  <header
+    class="navbar-wrapper sticky top-0 z-50 backdrop-blur-xl bg-white/10 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+  >
+    <div class="flex items-center justify-between px-6 sm:px-10 py-4">
+
+      <!-- LOGO -->
+      <div class="flex items-center gap-3">
         <img
           src="/public/Photo_1747641514372-3.png"
-          alt="Logo"
-          class="w-10 h-10 rounded-lg shadow-sm"
+          class="w-11 h-11 rounded-xl shadow-lg ring-1 ring-white/40"
         />
-        <span class="text-xl font-bold text-green-700 tracking-wide">Vestavex</span>
+        <span class="text-2xl font-extrabold bg-gradient-to-r from-green-300 to-green-600 text-transparent bg-clip-text tracking-wide">
+          Vestavex
+        </span>
       </div>
 
-      <!-- ===== Desktop Menu ===== -->
-      <nav class="hidden md:flex items-center space-x-6">
+      <!-- DESKTOP MENU -->
+      <nav class="hidden md:flex items-center gap-8">
         <router-link
           v-for="item in items"
           :key="item.label"
@@ -23,71 +27,75 @@
           <a
             :href="href"
             @click="item.command ? item.command() : navigate()"
-            class="flex items-center transition-all duration-200 px-2 py-1 rounded-lg"
+            class="relative text-[15px] font-medium transition-all duration-300 px-1 py-1"
             :class="[
               activeRoute === item.route
-                ? 'text-green-700 font-semibold border-b-2 border-green-600'
-                : item.command
-                ? 'text-red-500 hover:text-red-700'
-                : 'text-gray-700 hover:text-green-600',
+                ? 'text-green-400'
+                : 'text-gray-600 hover:text-green-300'
             ]"
           >
-            <i :class="[item.icon, 'text-xl mr-2']"></i>
-            <span>{{ item.label }}</span>
+            <span class="flex gap-2 items-center">
+              <i :class="[item.icon, 'text-lg opacity-90']"></i>
+              {{ item.label }}
+            </span>
+
+            <!-- ACTIVE INDICATOR -->
+            <span
+              v-if="activeRoute === item.route"
+              class="absolute bottom-[-6px] left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-green-400 to-green-600 shadow-lg"
+            ></span>
           </a>
         </router-link>
       </nav>
 
-      <!-- ===== Right: Profile Menu ===== -->
-      <div class="relative">
+      <!-- PROFILE DROPDOWN -->
+      <div class="relative hidden md:block">
         <button
           @click="profileOpen = !profileOpen"
-          class="flex items-center space-x-2 hover:bg-green-50 p-2 rounded-full transition-all"
+          class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 shadow-lg transition-all backdrop-blur-lg"
         >
-          <i class="mdi mdi-account-circle text-3xl text-green-700"></i>
-          <span class="hidden sm:inline text-sm font-medium text-gray-700">My Account</span>
-          <i class="mdi mdi-chevron-down text-gray-500 text-sm"></i>
+          <i class="mdi mdi-account-circle text-3xl text-green-400"></i>
+          <i class="mdi mdi-chevron-down text-gray-300"></i>
         </button>
 
-        <!-- Dropdown -->
         <transition name="fade">
           <div
             v-if="profileOpen"
-            class="absolute right-0 mt-3 w-44 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50"
+            class="absolute right-0 mt-3 w-48 bg-[#0d0d0d] border border-white/10 shadow-2xl rounded-2xl py-3 backdrop-blur-xl"
           >
             <nuxt-link
               to="/account"
-              class="block px-4 py-2 text-gray-700 hover:bg-green-50 transition"
+              class="px-4 py-2 block text-gray-200 hover:bg-white/10 rounded-lg transition flex items-center gap-2"
             >
-              <i class="mdi mdi-view-dashboard-outline mr-2 text-green-600"></i>
+              <i class="mdi mdi-view-dashboard-outline text-green-400"></i>
               Dashboard
             </nuxt-link>
-            <hr class="my-1 border-gray-200" />
+
             <button
               @click="logout"
-              class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition"
+              class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition flex items-center gap-2"
             >
-              <i class="mdi mdi-logout mr-2"></i>
+              <i class="mdi mdi-logout"></i>
               Logout
             </button>
           </div>
         </transition>
       </div>
 
-      <!-- ===== Mobile Menu Button ===== -->
+      <!-- MOBILE MENU BUTTON -->
       <button
-        class="md:hidden p-2 rounded-md text-gray-700 hover:bg-green-100"
+        class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-md transition"
         @click="mobileMenu = !mobileMenu"
       >
-        <i class="mdi mdi-menu text-2xl"></i>
+        <i class="mdi mdi-menu text-2xl text-gray-200"></i>
       </button>
     </div>
 
-    <!-- ===== Mobile Dropdown Menu ===== -->
+    <!-- MOBILE DROPDOWN -->
     <transition name="slide">
       <nav
         v-if="mobileMenu"
-        class="md:hidden bg-white border-t border-gray-200 px-4 py-3 space-y-2"
+        class="md:hidden bg-black/60 backdrop-blur-xl border-t border-white/10 px-4 py-5 space-y-2"
       >
         <router-link
           v-for="item in items"
@@ -98,17 +106,10 @@
         >
           <a
             :href="href"
-            @click="item.command ? item.command() : navigate(); mobileMenu = false"
-            class="flex items-center py-2 px-3 rounded-lg transition-all"
-            :class="[
-              activeRoute === item.route
-                ? 'bg-green-50 text-green-700 font-semibold'
-                : item.command
-                ? 'text-red-600 hover:bg-red-50'
-                : 'text-gray-700 hover:bg-green-50',
-            ]"
+            @click="navigate(); mobileMenu = false"
+            class="flex items-center gap-3 py-3 px-4 rounded-xl transition-all bg-white/5 text-gray-100 hover:bg-white/10"
           >
-            <i :class="[item.icon, 'text-lg mr-3']"></i>
+            <i :class="[item.icon, 'text-xl opacity-80']"></i>
             {{ item.label }}
           </a>
         </router-link>
@@ -117,34 +118,35 @@
   </header>
 </template>
 
+
 <script setup>
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed } from "vue"
+import { useRoute } from "vue-router"
 
 const route = useRoute()
 const activeRoute = computed(() => route.path)
+
 const profileOpen = ref(false)
 const mobileMenu = ref(false)
 
 const logout = () => {
-  alert('You have been logged out.')
-  // localStorage.removeItem('token')
-  // navigateTo('/login')
+  alert("Logged out")
 }
 
 const items = ref([
-  { label: 'Home', route: '/', icon: 'mdi mdi-home-outline' },
-  { label: 'Bundles', route: '/bundles', icon: 'mdi mdi-package-variant-closed' },
-  { label: 'Add Funds', route: '/addfunds', icon: 'mdi mdi-wallet-plus-outline' },
-  { label: 'About Us', route: '/abouteus', icon: 'mdi mdi-information-outline' },
-  { label: 'Support', route: '/support', icon: 'mdi mdi-lifebuoy' },
-  { label: 'Logout', icon: 'mdi mdi-logout', command: logout },
+  { label: "Home", route: "/", icon: "mdi mdi-home-outline" },
+  { label: "Bundles", route: "/bundles", icon: "mdi mdi-package-variant-closed" },
+  { label: "Add Funds", route: "/addfunds", icon: "mdi mdi-wallet-plus-outline" },
+  { label: "About Us", route: "/aboutus", icon: "mdi mdi-information-outline" },
+  { label: "Support", route: "/support", icon: "mdi mdi-lifebuoy" },
 ])
 </script>
 
+
 <style scoped lang="scss">
 .navbar-wrapper {
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .fade-enter-active,
@@ -154,7 +156,7 @@ const items = ref([
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-5px);
+  transform: translateY(-8px);
 }
 
 .slide-enter-active,
@@ -167,3 +169,4 @@ const items = ref([
   transform: translateY(-10px);
 }
 </style>
+

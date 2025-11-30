@@ -65,6 +65,9 @@
     /> -->
       </div>
     </section>
+    <!-- 🌌 3D Background -->
+
+
 
     <!-- FEATURE SECTION -->
     <section
@@ -89,37 +92,31 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <div
-            v-for="feature in features"
+            v-for="(feature, index) in features"
             :key="feature.title"
-            class="group relative p-8 rounded-3xl backdrop-blur-xl bg-white/40 shadow-lg border border-white/30 hover:bg-white/60 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
+            class="group relative p-8 rounded-3xl backdrop-blur-xl bg-white/40 shadow-lg border border-white/30 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
           >
-            <!-- animated background -->
-            <div class="animated-squares"></div>
+            <!-- Three.js Canvas -->
+            <div
+              class="three-bg absolute inset-0 z-0"
+              :id="'three-bg-' + index"
+            ></div>
 
-            <div class="relative">
-              <!-- Three.js Background -->
+            <!-- Card Content -->
+            <div class="relative z-10">
               <div
-                class="three-bg absolute inset-0 rounded-3xl overflow-hidden"
-              ></div>
-
-              <!-- content -->
-              <div class="relative z-10 p-6">
-                <div
-                  class="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/80 to-green-700/80 text-white text-5xl shadow-lg group-hover:scale-110 transition-transform duration-300 mx-auto mb-6"
-                >
-                  <i :class="feature.icon"></i>
-                </div>
-
-                <h3
-                  class="text-xl font-semibold text-gray-800 mb-3 text-center"
-                >
-                  {{ feature.title }}
-                </h3>
-
-                <p class="text-gray-600 text-center leading-relaxed">
-                  {{ feature.description }}
-                </p>
+                class="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/80 to-green-700/80 text-white text-5xl shadow-lg group-hover:scale-110 transition-transform duration-300 mx-auto mb-6"
+              >
+                <i :class="feature.icon"></i>
               </div>
+
+              <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">
+                {{ feature.title }}
+              </h3>
+
+              <p class="text-gray-600 text-center leading-relaxed">
+                {{ feature.description }}
+              </p>
             </div>
           </div>
         </div>
@@ -137,72 +134,70 @@
 import HomeBrands from "@/components/home/brands.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
-
 import * as THREE from "three";
 import { onMounted } from "vue";
 
+
+
 onMounted(() => {
-  const cards = document.querySelectorAll(".three-bg");
-
-  cards.forEach((card) => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      card.clientWidth / card.clientHeight,
-      0.1,
-      1000
-    );
-
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-    });
-
-    renderer.setSize(card.clientWidth, card.clientHeight);
-    card.appendChild(renderer.domElement);
-
-    camera.position.z = 6;
-
-    // ⭐ Add Floating Cubes
-    const cubes = [];
-    const geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-    const material = new THREE.MeshStandardMaterial({
-      color: new THREE.Color("#4ade80"),
-      emissive: "#22c55e",
-      emissiveIntensity: 0.7,
-      transparent: true,
-      opacity: 0.8,
-    });
-
-    for (let i = 0; i < 10; i++) {
-      const cube = new THREE.Mesh(geometry, material);
-      cube.position.x = (Math.random() - 0.5) * 6;
-      cube.position.y = (Math.random() - 0.5) * 4;
-      cube.position.z = (Math.random() - 0.5) * 2;
-      cubes.push(cube);
-      scene.add(cube);
-    }
-
-    // Light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-    scene.add(ambientLight);
-
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-
-      cubes.forEach((cube) => {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.008;
-        cube.position.y += Math.sin(Date.now() * 0.0005 + cube.position.x) * 0.002;
-      });
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  });
+  setTimeout(() => {
+    document.querySelectorAll(".three-bg").forEach((el) => initThreeBG(el));
+  }, 200);
 });
+
+function initThreeBG(container) {
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  camera.position.z = 3;
+
+  const renderer = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: true,
+  });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  // 🌟 Geometry + Material (floating squares)
+  const geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+  const material = new THREE.MeshStandardMaterial({
+    color: "#00ff88",
+    transparent: true,
+    opacity: 0.25,
+    metalness: 0.3,
+    roughness: 0.2,
+  });
+
+  const cubes = [];
+  for (let i = 0; i < 12; i++) {
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.x = (Math.random() - 0.5) * 2;
+    cube.position.y = (Math.random() - 0.5) * 2;
+    cube.position.z = (Math.random() - 0.5) * 1;
+    scene.add(cube);
+    cubes.push(cube);
+  }
+
+  // 💡 Lighting
+  const light = new THREE.PointLight(0x00ffcc, 7);
+  light.position.set(2, 2, 3);
+  scene.add(light);
+
+  const loop = () => {
+    cubes.forEach((c, index) => {
+      c.rotation.x += 0.01 + index * 0.0001;
+      c.rotation.y += 0.015 + index * 0.0001;
+      c.position.y += Math.sin(Date.now() * 0.005 + index) * 0.0005;
+    });
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+  };
+  loop();
+}
 
 
 const goToSignup = () => router.push("/signup");
@@ -248,6 +243,9 @@ const features = [
 ];
 </script>
 
+
+
+
 <style lang="scss">
 .animated-squares {
   position: absolute;
@@ -262,7 +260,6 @@ const features = [
   border-radius: 24px;
   opacity: 0.5;
 }
-
 
 .animated-squares::before {
   content: "";
@@ -371,6 +368,7 @@ const features = [
 .home {
   box-sizing: border-box;
   background-color: #eef1fb;
+  
 
   .secmain {
     box-sizing: border-box;

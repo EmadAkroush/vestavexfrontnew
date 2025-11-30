@@ -1,34 +1,35 @@
 <template>
-  <footer class="footer-container">
-    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-4 gap-10 text-gray-300">
-      <!-- Brand / Description -->
+  <footer class="relative bg-black text-gray-300 pt-16 pb-10 overflow-hidden">
+
+    <!-- 🔥 Animated gradient glow background -->
+    <div class="absolute inset-0 opacity-40 footer-animated-bg"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-4 gap-12">
+
+      <!-- Brand -->
       <div>
-        <h2 class="text-2xl font-bold text-green-500 mb-3">Vestavex</h2>
-        <p class="text-sm leading-relaxed text-gray-400">
-          A smart investment platform where technology meets network growth.
-          Invest securely, earn passively, and grow your team through the VX Plan.
+        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent drop-shadow-md">
+          Vestavex
+        </h2>
+        <p class="mt-3 text-gray-400 leading-relaxed text-sm">
+          A smart investment platform blending technology and network power.
+          Build your income with the VX system and intelligent scaling.
         </p>
 
-        <div class="flex items-center gap-3 mt-4">
-          <a href="#" aria-label="Telegram" class="hover:text-green-400 transition">
-            <i class="mdi mdi-telegram text-2xl"></i>
-          </a>
-          <a href="#" aria-label="Twitter" class="hover:text-green-400 transition">
-            <i class="mdi mdi-twitter text-2xl"></i>
-          </a>
-          <a href="#" aria-label="LinkedIn" class="hover:text-green-400 transition">
-            <i class="mdi mdi-linkedin text-2xl"></i>
-          </a>
-          <a href="#" aria-label="YouTube" class="hover:text-green-400 transition">
-            <i class="mdi mdi-youtube text-2xl"></i>
-          </a>
+        <!-- Social icons -->
+        <div class="flex items-center gap-4 mt-5">
+          <a href="#" class="footer-icon"><i class="mdi mdi-telegram"></i></a>
+          <a href="#" class="footer-icon"><i class="mdi mdi-twitter"></i></a>
+          <a href="#" class="footer-icon"><i class="mdi mdi-linkedin"></i></a>
+          <a href="#" class="footer-icon"><i class="mdi mdi-youtube"></i></a>
         </div>
       </div>
 
-      <!-- Navigation -->
+      <!-- Quick links -->
       <div>
-        <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
-        <ul class="space-y-2">
+        <h3 class="footer-title">Quick Links</h3>
+        <ul class="footer-list">
           <li><nuxt-link to="/" class="footer-link">Home</nuxt-link></li>
           <li><nuxt-link to="/bundles" class="footer-link">Bundles</nuxt-link></li>
           <li><nuxt-link to="/addfunds" class="footer-link">Add Funds</nuxt-link></li>
@@ -39,43 +40,45 @@
 
       <!-- Legal -->
       <div>
-        <h3 class="text-lg font-semibold text-white mb-4">Legal</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="footer-link">Privacy Policy</a></li>
-          <li><a href="#" class="footer-link">Terms of Service</a></li>
-          <li><a href="#" class="footer-link">AML & KYC Policy</a></li>
-          <li><a href="#" class="footer-link">Risk Disclosure</a></li>
+        <h3 class="footer-title">Legal</h3>
+        <ul class="footer-list">
+          <li><a class="footer-link">Privacy Policy</a></li>
+          <li><a class="footer-link">Terms of Service</a></li>
+          <li><a class="footer-link">AML & KYC Policy</a></li>
+          <li><a class="footer-link">Risk Disclosure</a></li>
         </ul>
       </div>
 
       <!-- Contact -->
       <div>
-        <h3 class="text-lg font-semibold text-white mb-4">Contact Us</h3>
-        <ul class="space-y-3">
-          <li class="flex items-center gap-3">
-            <i class="mdi mdi-email-outline text-green-500 text-xl"></i>
-            <a href="mailto:support@vestavex.com" class="footer-link">support@vestavex.com</a>
+        <h3 class="footer-title">Contact Us</h3>
+        <ul class="footer-list space-y-4">
+          <li class="footer-contact">
+            <i class="mdi mdi-email-outline text-green-400 text-xl"></i>
+            <a href="mailto:support@vestavex.com">support@vestavex.com</a>
           </li>
-          <li class="flex items-center gap-3">
-            <i class="mdi mdi-map-marker text-green-500 text-xl"></i>
+          <li class="footer-contact">
+            <i class="mdi mdi-map-marker text-green-400 text-xl"></i>
             <span>London, UK</span>
           </li>
-          <li class="flex items-center gap-3">
-            <i class="mdi mdi-phone text-green-500 text-xl"></i>
-            <a href="tel:+447712345678" class="footer-link">+44 7712 345678</a>
+          <li class="footer-contact">
+            <i class="mdi mdi-phone text-green-400 text-xl"></i>
+            <a href="tel:+447712345678">+44 7712 345678</a>
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- Bottom bar -->
-    <div class="border-t border-gray-700 mt-6 py-4 text-center text-gray-500 text-sm flex flex-col sm:flex-row justify-between items-center px-6">
-      <p>© {{ new Date().getFullYear() }} Vestavex. All Rights Reserved.</p>
-      <div class="flex gap-4 mt-2 sm:mt-0">
-        <a href="#" class="hover:text-green-400 transition">Privacy Policy</a>
-        <a href="#" class="hover:text-green-400 transition">Terms</a>
+    <!-- Divider -->
+    <div class="relative z-10 border-t border-white/10 mt-12 py-5 text-center flex flex-col sm:flex-row items-center justify-between px-6 text-sm text-gray-500">
+      <p>© {{ new Date().getFullYear() }} Vestavex. All rights reserved.</p>
+
+      <div class="flex gap-4 mt-3 sm:mt-0">
+        <a class="footer-link">Privacy Policy</a>
+        <a class="footer-link">Terms</a>
       </div>
     </div>
+
   </footer>
 </template>
 
@@ -84,6 +87,66 @@
 </script>
 
 <style lang="scss" scoped>
+
+.footer-title {
+  @apply text-white font-semibold text-lg mb-4 tracking-wide;
+}
+
+.footer-list {
+  @apply space-y-3;
+}
+
+.footer-link {
+  @apply text-gray-400 text-sm transition duration-200 cursor-pointer;
+}
+
+.footer-link:hover {
+  @apply text-green-400;
+}
+
+/* Contact row */
+.footer-contact {
+  @apply flex items-center gap-3 text-sm text-gray-300;
+}
+
+.footer-contact a:hover {
+  @apply text-green-400;
+}
+
+/* Social icon buttons */
+.footer-icon {
+  @apply text-gray-300 text-2xl transition-all duration-300;
+}
+
+.footer-icon:hover {
+  @apply text-green-400 scale-125 drop-shadow-[0_0_10px_rgba(34,197,94,0.7)];
+}
+
+/* 🔥 animated background */
+.footer-animated-bg {
+  background: radial-gradient(circle at 20% 30%, rgba(34,197,94,0.2), transparent),
+              radial-gradient(circle at 80% 70%, rgba(20,184,166,0.2), transparent);
+  animation: footerPulse 8s infinite ease-in-out alternate;
+}
+
+@keyframes footerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0.55;
+  }
+}
+
+/* Mobile tweaks */
+@media (max-width: 650px) {
+  .footer-link {
+    @apply block;
+  }
+}
+
 .footer-container {
   background-color: #0a0a0a;
   color: white;
