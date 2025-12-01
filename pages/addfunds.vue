@@ -1,6 +1,7 @@
 <template>
-  <section class="addfunds-wrapper relative min-h-screen overflow-hidden">
-
+  <section
+    class="addfunds-wrapper addfunds relative min-h-screen overflow-hidden"
+  >
     <!--  Glow background  -->
     <div class="glow glow-1"></div>
     <div class="glow glow-2"></div>
@@ -16,18 +17,10 @@
 
     <!-- MAIN CARD -->
     <div class="main-card relative z-10 mx-auto mt-12 max-w-2xl glass-card">
-
       <!-- STEPPER -->
       <div class="stepper">
-        <div
-          v-for="(step, index) in steps"
-          :key="index"
-          class="step"
-        >
-          <div
-            class="circle"
-            :class="currentStep >= index + 1 ? 'active' : ''"
-          >
+        <div v-for="(step, index) in steps" :key="index" class="step">
+          <div class="circle" :class="currentStep >= index + 1 ? 'active' : ''">
             <i :class="step.icon"></i>
           </div>
           <p :class="currentStep >= index + 1 ? 'label active' : 'label'">
@@ -45,7 +38,9 @@
 
       <!-- STEP 1 -->
       <div v-if="currentStep === 1" class="step-body">
-        <h3 class="step-title"><i class="mdi mdi-wallet-outline"></i> Select Network & Amount</h3>
+        <h3 class="step-title">
+          <i class="mdi mdi-wallet-outline"></i> Select Network & Amount
+        </h3>
 
         <div class="network-grid">
           <div
@@ -69,7 +64,11 @@
           placeholder="Enter amount (min $50)"
         />
 
-        <button class="btn-primary w-full" :disabled="!selected || amount < 50" @click="nextStep">
+        <button
+          class="btn-primary w-full"
+          :disabled="!selected || amount < 50"
+          @click="nextStep"
+        >
           Continue <i class="mdi mdi-arrow-right-bold"></i>
         </button>
       </div>
@@ -81,7 +80,8 @@
         <h3 class="step-title">{{ selected.name }} Payment</h3>
 
         <p class="info-text">
-          Send exactly <strong class="amount">${{ amount }}</strong> to the wallet below:
+          Send exactly <strong class="amount">${{ amount }}</strong> to the
+          wallet below:
         </p>
 
         <div class="address-box">
@@ -105,8 +105,9 @@
         <h3 class="step-title">Payment Verification</h3>
 
         <p class="info-text">
-          Verifying your <strong class="amount">${{ amount }}</strong> deposit via
-          <strong>{{ selected.name }}</strong>.
+          Verifying your <strong class="amount">${{ amount }}</strong> deposit
+          via <strong>{{ selected.name }}</strong
+          >.
         </p>
 
         <ProgressBar :value="progress" class="w-full mb-4" />
@@ -119,9 +120,7 @@
           Go to Dashboard <i class="mdi mdi-arrow-right"></i>
         </button>
       </div>
-
     </div>
-
   </section>
 </template>
 
@@ -145,9 +144,15 @@ const steps = [
 ];
 
 const networks = [
-  { name: "TRON (TRC20)", icon: "https://cryptologos.cc/logos/tron-trx-logo.png" },
+  {
+    name: "TRON (TRC20)",
+    icon: "https://cryptologos.cc/logos/tron-trx-logo.png",
+  },
   { name: "USDT", icon: "https://cryptologos.cc/logos/tether-usdt-logo.png" },
-  { name: "ETH (ERC20)", icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
+  {
+    name: "ETH (ERC20)",
+    icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
+  },
   { name: "BTC", icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png" },
 ];
 
@@ -174,10 +179,16 @@ function goToDashboard() {
 </script>
 
 <style lang="scss" scoped>
-
 /* ---------------- GLOBAL WRAPPER ---------------- */
 .addfunds-wrapper {
-  background: linear-gradient(180deg, #071114, #020404);
+  background: linear-gradient(
+    180deg,
+    #061a15 0%,
+    #03211c 35%,
+    #021412 70%,
+    #000807 100%
+  );
+
   padding-bottom: 80px;
   color: #dff7e8;
 }
@@ -227,8 +238,8 @@ function goToDashboard() {
   backdrop-filter: blur(18px);
   padding: 28px;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ---------------- STEPPER ---------------- */
@@ -250,8 +261,8 @@ function goToDashboard() {
   height: 46px;
   margin: 0 auto;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,7 +292,7 @@ function goToDashboard() {
   left: calc(50% + 28px);
   width: calc(100% - 56px);
   height: 3px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 .line.active {
   background: #00ffc3;
@@ -304,20 +315,20 @@ function goToDashboard() {
 }
 .network-card {
   padding: 14px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 14px;
   text-align: center;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
   transition: 0.3s;
   color: #bff6e5;
 }
 .network-card:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
 }
 .network-card.active {
   border-color: #00ffc3;
-  background: rgba(0,255,200,0.12);
+  background: rgba(0, 255, 200, 0.12);
   color: #eafffa;
 }
 .net-logo {
@@ -335,16 +346,16 @@ function goToDashboard() {
 .input-box {
   width: 100%;
   padding: 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   color: #eafff4;
 }
 
 /* wallet box */
 .address-box {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 12px;
   border-radius: 10px;
   font-family: monospace;
