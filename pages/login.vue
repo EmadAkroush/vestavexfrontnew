@@ -20,13 +20,13 @@
       <!-- Form -->
       <div class="space-y-5">
         
-        <!-- Phone -->
+        <!-- Email -->
         <div>
-          <label class="login-label">Mobile Number</label>
+          <label class="login-label">Email</label>
           <input
-            v-model="formData.cellphone"
-            type="text"
-            placeholder="09xxxxxxxxx"
+            v-model="formData.email"
+            type="email"
+            placeholder="example@mail.com"
             class="login-input"
           />
         </div>
@@ -53,11 +53,17 @@
         <button
           class="login-btn"
           :disabled="loading"
-          @click="register"
+          @click="login"
         >
           <span v-if="!loading">Login</span>
           <span v-else>Loading...</span>
         </button>
+
+        <!-- LINKS -->
+        <div class="flex items-center justify-between text-sm mt-4">
+          <nuxt-link to="/register" class="text-green-300 hover:text-green-200 transition">Create Account</nuxt-link>
+          <nuxt-link to="/forgot-password" class="text-green-300 hover:text-green-200 transition">Forgot Password?</nuxt-link>
+        </div>
 
       </div>
 
@@ -66,7 +72,6 @@
     <Toast />
   </section>
 </template>
-
 <style scoped lang="scss">
 
 /* BACKGROUND */
@@ -152,46 +157,39 @@
   }
 }
 </style>
-
-
 <script setup>
 definePageMeta({
   middleware: "guest",
 });
 
-const counter = ref(0);
-let interval = null;
-
 const loading = ref(false);
-const errors = ref([]);
 const errorsfront = ref([]);
 
 const formData = reactive({
-  cellphone: "",
+  email: "",
   password: "",
-  c_password: "",
 });
 
 function validateForm() {
   errorsfront.value = [];
 
-  if (!/^09\d{9}$/.test(formData.cellphone)) {
-    errorsfront.value.push("شماره موبایل باید با 09 شروع شود و 11 رقم باشد.");
+  if (!formData.email.includes("@")) {
+    errorsfront.value.push("Email is not valid.");
   }
 
   if (formData.password.length < 6) {
-    errorsfront.value.push("رمز عبور باید حداقل 6 کاراکتر باشد.");
+    errorsfront.value.push("Password must be at least 6 characters.");
   }
 
   return errorsfront.value.length === 0;
 }
 
-async function register() {
+async function login() {
   if (!validateForm()) return;
 
   try {
     loading.value = true;
-    const user = await $fetch("/api/auth/register", {
+    const user = await $fetch("/api/auth/login", {
       method: "POST",
       body: formData,
     });
@@ -200,16 +198,18 @@ async function register() {
 
     toast.add({
       severity: "success",
-      summary: "ورود موفق",
-      detail: "ورود با موفقیت انجام شد.",
+      summary: "Login Successful",
+      detail: "Welcome back!",
       life: 3000,
     });
 
     return navigateTo("/");
   } catch (error) {
-    errors.value = Object.values(error?.data?.data).flat();
+    errorsfront.value = Object.values(error?.data?.data || { error: ["Login failed"] }).flat();
   } finally {
     loading.value = false;
   }
 }
 </script>
+
+
