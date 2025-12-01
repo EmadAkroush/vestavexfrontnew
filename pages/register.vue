@@ -6,6 +6,13 @@
     <!-- Two-Column FULL WIDTH -->
     <div class="glass-container grid grid-cols-1 md:grid-cols-2 w-full min-h-screen relative z-10">
 
+
+      <!-- RIGHT — IMAGE FULL AREA -->
+      <div class="register-image hidden md:block">
+        <img src="/SL_0212121_40670_54.jpg" class="w-full h-full object-cover" />
+      </div>
+
+      
       <!-- LEFT — FORM CENTERED -->
       <div class="flex items-center justify-center px-10 py-12">
         <div class="w-full max-w-md">
@@ -89,26 +96,21 @@
         </div>
       </div>
 
-      <!-- RIGHT — IMAGE FULL AREA -->
-      <div class="register-image hidden md:block">
-        <img src="/" class="w-full h-full object-cover" />
-      </div>
-
     </div>
 
     <Toast />
   </section>
 </template>
 
-
 <script setup>
 definePageMeta({ middleware: "guest" });
 
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { reactive, ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
 const router = useRouter();
+const route = useRoute();
 const toast = useToast();
 
 const loading = ref(false);
@@ -123,6 +125,13 @@ const form = reactive({
   referral: "",
   password: "",
   c_password: "",
+});
+
+/* 🔥 Auto-fill referral code from query (?ref=XXXX) */
+onMounted(() => {
+  if (route.query.ref) {
+    form.referral = String(route.query.ref);
+  }
 });
 
 function validate() {
@@ -199,9 +208,6 @@ async function submit() {
   width: 100%;
   height: 100%;
 }
-
-
-
 
 .register-wrapper {
   background: linear-gradient(180deg, #071114 0%, #02110c 60%, #04110e 100%);
