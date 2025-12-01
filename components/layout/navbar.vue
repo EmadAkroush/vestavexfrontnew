@@ -48,7 +48,7 @@
         </router-link>
       </nav>
 
-      <!-- PROFILE DROPDOWN -->
+      <!-- PROFILE DROPDOWN (DESKTOP) -->
       <div class="relative hidden md:block">
         <button
           @click="profileOpen = !profileOpen"
@@ -97,6 +97,7 @@
         v-if="mobileMenu"
         class="md:hidden bg-black/60 backdrop-blur-xl border-t border-white/10 px-4 py-5 space-y-2"
       >
+        <!-- MENU ITEMS -->
         <router-link
           v-for="item in items"
           :key="item.label"
@@ -113,11 +114,30 @@
             {{ item.label }}
           </a>
         </router-link>
+
+        <!-- 🔥 PROFILE OPTIONS FOR MOBILE -->
+        <div class="pt-4 border-t border-white/10 flex flex-col gap-2">
+          <nuxt-link
+            to="/account"
+            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition text-gray-100"
+            @click="mobileMenu = false"
+          >
+            <i class="mdi mdi-view-dashboard-outline text-green-400 text-xl"></i>
+            Dashboard
+          </nuxt-link>
+
+          <button
+            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 transition text-red-300"
+            @click="logout"
+          >
+            <i class="mdi mdi-logout text-xl"></i>
+            Logout
+          </button>
+        </div>
       </nav>
     </transition>
   </header>
 </template>
-
 
 <script setup>
 import { ref, computed } from "vue"
@@ -142,9 +162,7 @@ const items = ref([
 ])
 </script>
 
-
 <style scoped lang="scss">
-
 
 .navbar-wrapper {
   backdrop-filter: blur(20px);
@@ -171,4 +189,3 @@ const items = ref([
   transform: translateY(-10px);
 }
 </style>
-
