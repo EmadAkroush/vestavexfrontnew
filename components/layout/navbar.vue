@@ -137,13 +137,15 @@ const items = ref([
   { label: "Home", route: "/", icon: "mdi mdi-home-outline" },
   { label: "Bundles", route: "/bundles", icon: "mdi mdi-package-variant-closed" },
   { label: "Add Funds", route: "/addfunds", icon: "mdi mdi-wallet-plus-outline" },
-  { label: "About Us", route: "/aboutus", icon: "mdi mdi-information-outline" },
+  { label: "About Us", route: "/abouteus", icon: "mdi mdi-information-outline" },
   { label: "Support", route: "/support", icon: "mdi mdi-lifebuoy" },
 ])
 </script>
 
 
 <style scoped lang="scss">
+
+
 .navbar-wrapper {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);

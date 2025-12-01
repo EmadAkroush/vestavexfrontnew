@@ -87,6 +87,33 @@
 </script>
 
 <style lang="scss" scoped>
+footer {
+  position: relative;
+}
+
+/* 🔥 Gradient Soft Light on Top */
+footer::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+
+  background: radial-gradient(
+      circle at 50% 0%,
+      rgba(34, 197, 94, 0.45),
+      rgba(16, 185, 129, 0.30) 35%,
+      rgba(20, 184, 166, 0.18) 60%,
+      transparent 85%
+  );
+
+  filter: blur(45px);
+  opacity: 0.9;
+
+  pointer-events: none;
+  z-index: 2;
+}
 
 .footer-title {
   @apply text-white font-semibold text-lg mb-4 tracking-wide;
