@@ -123,15 +123,11 @@
       </div>
     </section>
 
-    BRAND SLIDER
-    <!-- <section class="py-10 bg-gray-50 border-t">
-      <HomeBrands />
-    </section> -->
+
   </div>
 </template>
 
 <script setup>
-import HomeBrands from "@/components/home/brands.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import * as THREE from "three";
