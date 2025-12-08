@@ -11,7 +11,7 @@
     <div
       class="header-container relative z-10 max-w-6xl mx-auto text-center px-6"
     >
-      <p class="eyebrow">VESTAVEX</p>
+      <p class="eyebrow">VXBUSINESS</p>
       <h2 class="hero-title section-title">Investment Bundles</h2>
       <p class="hero-sub">
         Select a bundle and grow your portfolio with confidence. Glass cards,

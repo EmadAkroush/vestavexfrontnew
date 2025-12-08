@@ -8,7 +8,7 @@
 
     <!-- HEADER -->
     <header class="text-center pt-14 relative z-10">
-      <p class="eyebrow">VESTAVEX</p>
+      <p class="eyebrow">VXBUSINESS</p>
       <h2 class="title">Add Funds</h2>
       <p class="subtitle">
         Secure blockchain deposits with real-time verification.

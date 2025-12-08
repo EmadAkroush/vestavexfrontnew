@@ -21,7 +21,7 @@
           </h2>
 
           <p class="text-gray-300 text-center text-sm mb-6">
-            Register to access your Vestavex dashboard
+            Register to access your VXBUSINESS dashboard
           </p>
 
           <!-- form -->

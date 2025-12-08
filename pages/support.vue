@@ -103,7 +103,7 @@
           <ul class="space-y-4 text-gray-100">
             <li class="flex items-center gap-3">
               <i class="mdi mdi-email-outline text-2xl"></i>
-              <span>support@vestavex.com</span>
+              <span>support@VXBUSINESS.com</span>
             </li>
             <li class="flex items-center gap-3">
               <i class="mdi mdi-phone text-2xl"></i>

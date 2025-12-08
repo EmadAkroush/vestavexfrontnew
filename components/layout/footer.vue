@@ -10,7 +10,7 @@
       <!-- Brand -->
       <div>
         <h2 class="text-3xl font-extrabold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent drop-shadow-md">
-          Vestavex
+          VXBUSINESS
         </h2>
         <p class="mt-3 text-gray-400 leading-relaxed text-sm">
           A smart investment platform blending technology and network power.
@@ -55,7 +55,7 @@
         <ul class="footer-list space-y-4">
           <li class="footer-contact">
             <i class="mdi mdi-email-outline text-green-400 text-xl"></i>
-            <a href="mailto:support@vestavex.com">support@vestavex.com</a>
+            <a href="mailto:support@VXBUSINESS.com">support@VXBUSINESS.com</a>
           </li>
           <li class="footer-contact">
             <i class="mdi mdi-map-marker text-green-400 text-xl"></i>
@@ -71,7 +71,7 @@
 
     <!-- Divider -->
     <div class="relative z-10 border-t border-white/10 mt-12 py-5 text-center flex flex-col sm:flex-row items-center justify-between px-6 text-sm text-gray-500">
-      <p>© {{ new Date().getFullYear() }} Vestavex. All rights reserved.</p>
+      <p>© {{ new Date().getFullYear() }} VXBUSINESS. All rights reserved.</p>
 
       <div class="flex gap-4 mt-3 sm:mt-0">
         <a class="footer-link">Privacy Policy</a>

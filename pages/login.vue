@@ -14,7 +14,7 @@
 
       <!-- Subtitle -->
       <p class="text-gray-300 text-center text-sm mb-8">
-        Sign in to access your Vestavex account
+        Sign in to access your VXBUSINESS account
       </p>
 
       <!-- Form -->

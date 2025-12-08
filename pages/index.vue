@@ -1,10 +1,10 @@
 <template>
   <div class="home">
     <Head>
-      <Title>Vestavex — Smart Network Investment</Title>
+      <Title>VXBUSINESS — Smart Network Investment</Title>
       <Meta
         name="description"
-        content="Join Vestavex: a smart investment platform built for network growth and passive income."
+        content="Join VXBUSINESS: a smart investment platform built for network growth and passive income."
       />
     </Head>
 
@@ -33,7 +33,7 @@
         class="relative z-10 text-center max-w-3xl backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-10 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] animate-fadeIn"
       >
         <p class="uppercase tracking-[0.2em] text-green-400 font-semibold mb-3">
-          VESTAVEX
+          VXBUSINESS
         </p>
 
         <h1

@@ -9,7 +9,7 @@
         class="absolute inset-0 w-full h-full object-cover opacity-40"
       />
       <div class="relative z-10 text-white max-w-3xl mx-auto">
-        <h1 class="text-4xl sm:text-5xl font-bold mb-4">About <span class="text-green-300">Vestavex</span></h1>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4">About <span class="text-green-300">VXBUSINESS</span></h1>
         <p class="text-lg leading-relaxed">
           Empowering people to build wealth through innovation, transparency, and a trusted global network.
         </p>
@@ -20,7 +20,7 @@
     <div class="max-w-5xl mx-auto py-16 px-6 sm:px-12 text-center">
       <h2 class="text-3xl font-bold text-green-700 mb-6">Who We Are</h2>
       <p class="text-gray-600 leading-relaxed text-lg">
-        Vestavex is a next-generation investment ecosystem designed to provide sustainable growth opportunities
+        VXBUSINESS is a next-generation investment ecosystem designed to provide sustainable growth opportunities
         for individuals around the world. We combine smart technology, financial expertise, and a
         community-driven reward model to make investing transparent, secure, and accessible to everyone.
         Through our structured bundles and the innovative VX Plan, investors can earn monthly returns,
@@ -58,10 +58,10 @@
       </div>
     </div>
 
-    <!-- Why Choose Vestavex -->
+    <!-- Why Choose VXBUSINESS -->
     <div class="why-section bg-white py-16 px-6 sm:px-12">
       <div class="max-w-6xl mx-auto text-center mb-10">
-        <h2 class="text-3xl font-bold text-green-700 mb-4">Why Choose Vestavex</h2>
+        <h2 class="text-3xl font-bold text-green-700 mb-4">Why Choose VXBUSINESS</h2>
         <p class="text-gray-600 max-w-3xl mx-auto">
           We are more than just an investment platform — we are a financial partner for your future.
           Our system is designed to maximize growth, minimize risk, and empower every investor to succeed.
