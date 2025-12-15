@@ -8,16 +8,8 @@
     <div class="glow glow-right" aria-hidden="true"></div>
 
     <!-- header -->
-    <div
-      class="header-container relative z-10 max-w-6xl mx-auto text-center px-6"
-    >
-      <p class="eyebrow">VXBUSINESS</p>
-      <h2 class="hero-title section-title">Investment Bundles</h2>
-      <p class="hero-sub">
-        Select a bundle and grow your portfolio with confidence. Glass cards,
-        subtle 3D particles and smooth micro-interactions.
-      </p>
-    </div>
+      <BundlesHeader />
+
 
     <!-- grid -->
     <div class="grid-wrap relative z-10 max-w-7xl mx-auto px-6 mt-12">
@@ -478,49 +470,9 @@ onMounted(async () => {
   );
 }
 
-/* header */
-.header-container {
-  z-index: 10;
-  padding-top: 6px;
-}
-.eyebrow {
-  color: #7af3c7;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.hero-title {
-  font-size: 2.25rem;
-  line-height: 1.02;
-  font-weight: 800;
-  background: linear-gradient(90deg, #66ffd0, #9ef7ff, #fff7ea);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  background-size: 200% 100%;
-  animation: titleShift 6s linear infinite;
-  margin-bottom: 10px;
-  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
-}
-.hero-sub {
-  color: #9adfc9;
-  max-width: 850px;
-  margin: 0 auto;
-}
 
-/* title animation */
-@keyframes titleShift {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: 100% 0%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
-}
+
+
 
 /* grid */
 .grid-wrap {
@@ -639,9 +591,7 @@ onMounted(async () => {
 
 /* small screens */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 1.8rem;
-  }
+
   .bundle-card {
     min-height: 220px;
     padding: 14px;
