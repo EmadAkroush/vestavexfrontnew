@@ -90,6 +90,9 @@
                 <nuxt-link to="/login" class="text-green-300 font-semibold hover:underline ml-1">Login</nuxt-link>
                 •
                 <nuxt-link to="/forgot" class="text-green-300 font-semibold hover:underline ml-1">Forgot Password</nuxt-link>
+                •
+               <nuxt-link to="/verifyemail" class="text-green-300 font-semibold hover:underline ml-1">Verify Email</nuxt-link>
+
               </div>
             </div>
           </div>
@@ -168,29 +171,35 @@ async function submit() {
 
   try {
     loading.value = true;
-
     const payload = { ...form };
 
-    await $fetch("/api/auth/register", {
+    const data = await $fetch("/api/auth/register", {
       method: "POST",
       body: payload,
     });
 
+    console.log("REGISTER RESULT ===>", data);
+
     toast.add({
       severity: "success",
       summary: "Registered Successfully",
-      detail: "Your account has been created.",
+      detail: data.message || "Your account has been created.",
       life: 3000,
     });
-   
-    router.push("/verifyemail");
+
+    // small delay so toast appears
+    setTimeout(() => {
+      router.push("/verifyemail");
+    }, 400);
 
   } catch (err) {
+    console.log("REGISTER ERROR:", err);
     errorsFront.value = [err?.data?.message || "Registration error"];
   } finally {
     loading.value = false;
   }
 }
+
 </script>
 
 <style scoped lang="scss">
