@@ -182,8 +182,9 @@ async function submit() {
       detail: "Your account has been created.",
       life: 3000,
     });
+   
+    router.push("/verifyemail");
 
-    router.push("/");
   } catch (err) {
     errorsFront.value = [err?.data?.message || "Registration error"];
   } finally {
