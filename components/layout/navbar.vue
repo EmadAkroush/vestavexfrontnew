@@ -39,7 +39,6 @@
               {{ item.label }}
             </span>
 
-            <!-- ACTIVE INDICATOR -->
             <span
               v-if="activeRoute === item.route"
               class="absolute bottom-[-6px] left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-green-400 to-green-600 shadow-lg"
@@ -48,38 +47,48 @@
         </router-link>
       </nav>
 
-      <!-- PROFILE DROPDOWN (DESKTOP) -->
+      <!-- DESKTOP PROFILE / LOGIN -->
       <div class="relative hidden md:block">
         <button
-          @click="profileOpen = !profileOpen"
-          class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 shadow-lg transition-all backdrop-blur-lg"
+          v-if="!authUser"
+          class="px-4 py-2 rounded-xl bg-green-500/20 hover:bg-green-500/30 border border-green-400/40 shadow-lg text-green-300 transition"
+          @click="$router.push('/login')"
         >
-          <i class="mdi mdi-account-circle text-3xl text-green-400"></i>
-          <i class="mdi mdi-chevron-down text-gray-300"></i>
+          Login
         </button>
 
-        <transition name="fade">
-          <div
-            v-if="profileOpen"
-            class="absolute right-0 mt-3 w-48 bg-[#0d0d0d] border border-white/10 shadow-2xl rounded-2xl py-3 backdrop-blur-xl"
+        <template v-else>
+          <button
+            @click="profileOpen = !profileOpen"
+            class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 shadow-lg transition-all backdrop-blur-lg"
           >
-            <nuxt-link
-              to="/account"
-              class="px-4 py-2 block text-gray-200 hover:bg-white/10 rounded-lg transition flex items-center gap-2"
-            >
-              <i class="mdi mdi-view-dashboard-outline text-green-400"></i>
-              Dashboard
-            </nuxt-link>
+            <i class="mdi mdi-account-circle text-3xl text-green-400"></i>
+            <i class="mdi mdi-chevron-down text-gray-300"></i>
+          </button>
 
-            <button
-              @click="logout"
-              class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition flex items-center gap-2"
+          <transition name="fade">
+            <div
+              v-if="profileOpen"
+              class="absolute right-0 mt-3 w-48 bg-[#0d0d0d] border border-white/10 shadow-2xl rounded-2xl py-3 backdrop-blur-xl"
             >
-              <i class="mdi mdi-logout"></i>
-              Logout
-            </button>
-          </div>
-        </transition>
+              <nuxt-link
+                to="/account"
+                class="px-4 py-2 block text-gray-200 hover:bg-white/10 rounded-lg transition flex items-center gap-2"
+              >
+                <i class="mdi mdi-view-dashboard-outline text-green-400"></i>
+                Dashboard
+              </nuxt-link>
+
+              <button
+                @click="logout"
+                class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition flex items-center gap-2"
+              >
+                <i class="mdi mdi-logout"></i>
+                Logout
+              </button>
+            </div>
+          </transition>
+        </template>
       </div>
 
       <!-- MOBILE MENU BUTTON -->
@@ -97,7 +106,6 @@
         v-if="mobileMenu"
         class="md:hidden bg-black/60 backdrop-blur-xl border-t border-white/10 px-4 py-5 space-y-2"
       >
-        <!-- MENU ITEMS -->
         <router-link
           v-for="item in items"
           :key="item.label"
@@ -115,24 +123,36 @@
           </a>
         </router-link>
 
-        <!-- 🔥 PROFILE OPTIONS FOR MOBILE -->
         <div class="pt-4 border-t border-white/10 flex flex-col gap-2">
-          <nuxt-link
-            to="/account"
-            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition text-gray-100"
-            @click="mobileMenu = false"
-          >
-            <i class="mdi mdi-view-dashboard-outline text-green-400 text-xl"></i>
-            Dashboard
-          </nuxt-link>
-
+          <!-- MOBILE LOGIN -->
           <button
-            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 transition text-red-300"
-            @click="logout"
+            v-if="!authUser"
+            @click="$router.push('/login'); mobileMenu = false"
+            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-green-500/20 hover:bg-green-500/30 text-green-300"
           >
-            <i class="mdi mdi-logout text-xl"></i>
-            Logout
+            <i class="mdi mdi-login"></i>
+            Login
           </button>
+
+          <!-- MOBILE PROFILE -->
+          <template v-else>
+            <nuxt-link
+              to="/account"
+              class="flex items-center gap-3 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition text-gray-100"
+              @click="mobileMenu = false"
+            >
+              <i class="mdi mdi-view-dashboard-outline text-green-400 text-xl"></i>
+              Dashboard
+            </nuxt-link>
+
+            <button
+              class="flex items-center gap-3 py-3 px-4 rounded-xl bg-red-500/10 hover:bg-red-500/20 transition text-red-300"
+              @click="logout"
+            >
+              <i class="mdi mdi-logout text-xl"></i>
+              Logout
+            </button>
+          </template>
         </div>
       </nav>
     </transition>
@@ -143,6 +163,9 @@
 import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 
+// 👇 این authUser را از store یا API بگیر
+const authUser = ref(null) // اگر null باشد Login نمایش داده می‌شود
+
 const route = useRoute()
 const activeRoute = computed(() => route.path)
 
@@ -151,6 +174,7 @@ const mobileMenu = ref(false)
 
 const logout = () => {
   alert("Logged out")
+  authUser.value = null
 }
 
 const items = ref([
@@ -163,7 +187,6 @@ const items = ref([
 </script>
 
 <style scoped lang="scss">
-
 .navbar-wrapper {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);

@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const { public: { apiBase } } = useRuntimeConfig()
     
     try {
-        const data = await $fetch(`${apiBase}/auth/login` , {
+        const data = await $fetch(`${apiBase}/auth/verifyemail` , {
             method: 'POST',
             body: body,
             headers: {
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
             }
         })
         
-        setCookie(event, 'token', data.data.token, {
+        setCookie(event, 'token', data, {
             httpOnly: true,
             secure: true,
             maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
         })
 
         
-        return data.data.user;
+        return data;
     } catch (error) {
         return error
     }
