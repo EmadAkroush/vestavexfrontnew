@@ -8,33 +8,34 @@
         @mousemove="onCardPointer($event, $event.currentTarget)"
         @mouseleave="onCardLeave($event.currentTarget)"
       >
+
         <header class="card-head">
-          <div class="badge">{{ item.title }}</div>
-          <div class="earn">{{ item.earn }}</div>
+          <div class="badge">{{ item.name }}</div>
+          <div class="earn">{{ item.monthRate }}%</div>
         </header>
 
         <div class="card-body">
           <div class="row">
             <span>Invest range</span>
-            <strong>{{ item.investedDown }} — {{ item.investedUp }}</strong>
+            <strong>{{ item.range }} </strong>
           </div>
           <div class="row">
             <span>Min withdrawal</span>
-            <strong>{{ item.minimumwithdrawal }}</strong>
+            <strong> $50 </strong>
           </div>
           <div class="row">
             <span>Max cap</span>
-            <strong>{{ item.maxcap }}%</strong>
+            <strong>{{ item.maxCap }}%</strong>
           </div>
 
           <div class="progress-wrap">
             <div class="progress-bg">
               <div
                 class="progress-fill"
-                :style="{ width: normalize(item.maxcap) + '%' }"
+                :style="{ width: normalize(item.maxCap) + '%' }"
               />
             </div>
-            <div class="progress-label">{{ item.maxcap }}% cap</div>
+            <div class="progress-label">{{ item.maxCap }}% cap</div>
           </div>
         </div>
 

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     options: { theme: "none" },
   },
   site: {
-    url: "https://parsautoparts.ir",
+    url: "http://localhost:3000",
     name: "VXBUSINESS",
   },
 
@@ -42,7 +42,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: "https://parseback.liara.run",
+      apiBase: "http://localhost:3500",
     },
   },
 

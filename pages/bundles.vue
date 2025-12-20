@@ -13,7 +13,7 @@
     <!-- grid -->
 
     <BundlesGrid
-      :items="bundlesItems"
+      :items="bundles"
       @details="openDialog"
       @invest="openInvestDialog"
     />
@@ -145,12 +145,16 @@ const visibleInvest = ref(false);
 const selectedBundle = ref(null);
 const investAmount = ref(null);
 const selectedPayment = ref(null);
+const bundles = ref(null);
 
 const paymentMethods = [
   { label: "Crypto (USDT / BTC / ETH)", value: "crypto" },
   { label: "Card", value: "card" },
   { label: "Bank", value: "bank" },
 ];
+
+
+
 
 const bundlesItems = [
   {
@@ -203,6 +207,25 @@ const bundlesItems = [
   },
 ];
 
+
+onMounted(async () => {
+  try {
+    const data = await $fetch(`api/packages`);
+    bundles.value = data;
+    console.log("data" , bundles.value);
+    
+  } catch (err) {
+    console.error("❌ Failed to fetch plans:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load plans.",
+      life: 3000,
+    });
+  } finally {
+    loading.value = false;
+  }
+});
 function openDialog(item) {
   selectedBundle.value = item;
   visibleDetails.value = true;
