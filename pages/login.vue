@@ -1,14 +1,16 @@
 <template>
-  <section class="login-wrapper min-h-screen flex items-center justify-center relative overflow-hidden">
-
+  <section
+    class="login-wrapper min-h-screen flex items-center justify-center relative overflow-hidden"
+  >
     <!-- BG Gradient + Glow -->
     <div class="absolute inset-0 login-glow"></div>
 
     <!-- Glass Card -->
     <div class="glass-card w-full max-w-md mx-auto px-8 py-10 relative z-10">
-
       <!-- Title -->
-      <h2 class="text-center text-3xl font-bold bg-gradient-to-r from-green-300 to-teal-400 bg-clip-text text-transparent mb-6">
+      <h2
+        class="text-center text-3xl font-bold bg-gradient-to-r from-green-300 to-teal-400 bg-clip-text text-transparent mb-6"
+      >
         User Login
       </h2>
 
@@ -19,7 +21,6 @@
 
       <!-- Form -->
       <div class="space-y-5">
-        
         <!-- Email -->
         <div>
           <label class="login-label">Email</label>
@@ -43,37 +44,41 @@
         </div>
 
         <!-- Errors -->
-        <div v-if="errorsfront.length" class="text-red-400 text-sm leading-relaxed">
+        <div
+          v-if="errorsfront.length"
+          class="text-red-400 text-sm leading-relaxed"
+        >
           <ul>
-            <li v-for="(e,i) in errorsfront" :key="i">• {{ e }}</li>
+            <li v-for="(e, i) in errorsfront" :key="i">• {{ e }}</li>
           </ul>
         </div>
 
         <!-- Login button -->
-        <button
-          class="login-btn"
-          :disabled="loading"
-          @click="login"
-        >
+        <button class="login-btn" :disabled="loading" @click="login">
           <span v-if="!loading">Login</span>
           <span v-else>Loading...</span>
         </button>
 
         <!-- LINKS -->
         <div class="flex items-center justify-between text-sm mt-4">
-          <nuxt-link to="/register" class="text-green-300 hover:text-green-200 transition">Create Account</nuxt-link>
-          <nuxt-link to="/forgot-password" class="text-green-300 hover:text-green-200 transition">Forgot Password?</nuxt-link>
+          <nuxt-link
+            to="/register"
+            class="text-green-300 hover:text-green-200 transition"
+            >Create Account</nuxt-link
+          >
+          <nuxt-link
+            to="/forgot-password"
+            class="text-green-300 hover:text-green-200 transition"
+            >Forgot Password?</nuxt-link
+          >
         </div>
-
       </div>
-
     </div>
 
     <Toast />
   </section>
 </template>
 <style scoped lang="scss">
-
 /* BACKGROUND */
 .login-wrapper {
   background: linear-gradient(180deg, #071114 0%, #02110c 100%);
@@ -83,22 +88,24 @@
 .login-glow {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(0,255,180,0.18), transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0,200,255,0.15), transparent 55%);
+  background: radial-gradient(
+      circle at 30% 20%,
+      rgba(0, 255, 180, 0.18),
+      transparent 50%
+    ),
+    radial-gradient(circle at 80% 80%, rgba(0, 200, 255, 0.15), transparent 55%);
   filter: blur(65px);
   opacity: 0.6;
 }
 
 /* GLASS CARD */
 .glass-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(18px);
   border-radius: 24px;
-  box-shadow:
-      0 0 25px rgba(0,255,200,0.08),
-      inset 0 0 20px rgba(255,255,255,0.04);
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.08),
+    inset 0 0 20px rgba(255, 255, 255, 0.04);
 }
 
 /* LABEL */
@@ -112,8 +119,8 @@
 /* INPUT */
 .login-input {
   width: 100%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 12px;
   border-radius: 14px;
   color: white;
@@ -122,7 +129,7 @@
 
   &:focus {
     border-color: #00ffbf;
-    box-shadow: 0 0 12px rgba(0,255,200,0.25);
+    box-shadow: 0 0 12px rgba(0, 255, 200, 0.25);
   }
 }
 
@@ -140,7 +147,7 @@
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0,255,200,0.35);
+    box-shadow: 0 0 20px rgba(0, 255, 200, 0.35);
   }
 
   &:disabled {
@@ -202,14 +209,16 @@ async function login() {
       detail: "Welcome back!",
       life: 3000,
     });
-
-    return navigateTo("/");
+    navigateTo("/");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   } catch (error) {
-    errorsfront.value = Object.values(error?.data?.data || { error: ["Login failed"] }).flat();
+    errorsfront.value = Object.values(
+      error?.data?.data || { error: ["Login failed"] }
+    ).flat();
   } finally {
     loading.value = false;
   }
 }
 </script>
-
-

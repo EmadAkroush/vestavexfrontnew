@@ -85,7 +85,7 @@ async function verify() {
   try {
     loading.value = true;
 
-    await $fetch("/api/auth/verify", {
+    await $fetch("/api/auth/verifyemail", {
       method: "POST",
       body: { token: token.value },
     });

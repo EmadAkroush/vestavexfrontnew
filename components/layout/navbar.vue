@@ -164,7 +164,7 @@ import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 
 // 👇 این authUser را از store یا API بگیر
-const authUser = ref(null) // اگر null باشد Login نمایش داده می‌شود
+const { authUser } = useAuth() // ✅ برای تشخیص لاگین بودن کاربر
 
 const route = useRoute()
 const activeRoute = computed(() => route.path)
