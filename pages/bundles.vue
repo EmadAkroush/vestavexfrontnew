@@ -27,7 +27,7 @@
       class="glass-dialog"
     >
       <div class="glass-header">
-        <h3>{{ selectedBundle?.title }} Bundle</h3>
+        <h3>{{ selectedBundle?.name }} Bundle</h3>
         <p class="subtitle">Premium Investment Information</p>
       </div>
 
@@ -37,27 +37,27 @@
           <i class="mdi mdi-cash text-green-400"></i>
           <span class="label">Invest Range</span>
           <span class="value"
-            >{{ selectedBundle.investedDown }} –
-            {{ selectedBundle.investedUp }}</span
+            >{{ selectedBundle.range }} 
+          </span
           >
         </div>
 
         <div class="info-row">
           <i class="mdi mdi-bank-transfer text-green-400"></i>
           <span class="label">Min Withdrawal</span>
-          <span class="value">{{ selectedBundle.minimumwithdrawal }}</span>
+          <span class="value">$50</span>
         </div>
 
         <div class="info-row">
           <i class="mdi mdi-chart-line text-green-400"></i>
           <span class="label">Monthly Return</span>
-          <span class="value">{{ selectedBundle.earn }}</span>
+          <span class="value">{{ selectedBundle.monthRate }}%</span>
         </div>
 
         <div class="info-row">
           <i class="mdi mdi-percent-outline text-green-400"></i>
           <span class="label">Max Cap</span>
-          <span class="value">{{ selectedBundle.maxcap }}%</span>
+          <span class="value">{{ selectedBundle.maxCap }}%</span>
         </div>
 
         <!-- EXPLANATION BOX -->
