@@ -202,23 +202,13 @@ async function login() {
     });
 
     authUser.value = user;
-
-    toast.add({
-      severity: "success",
-      summary: "Login Successful",
-      detail: "Welcome back!",
-      life: 3000,
-    });
-    navigateTo("/");
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
   } catch (error) {
     errorsfront.value = Object.values(
-      error?.data?.data || { error: ["Login failed"] }
+      error?.data?.data 
     ).flat();
   } finally {
     loading.value = false;
+    window.location.reload();
   }
 }
 </script>
