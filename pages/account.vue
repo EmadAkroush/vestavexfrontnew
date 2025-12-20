@@ -83,6 +83,9 @@ import AccountHistory from "@/components/account/history.vue"
 import AccountSetting from "@/components/account/setting.vue"
 import AccountVxPlan from "@/components/account/vxplan.vue"
 
+definePageMeta({ middleware: 'auth' })
+
+
 // ==== Menu Items ====
 const menuItems = ref([
   { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },

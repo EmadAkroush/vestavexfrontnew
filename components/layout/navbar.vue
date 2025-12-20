@@ -172,9 +172,16 @@ const activeRoute = computed(() => route.path)
 const profileOpen = ref(false)
 const mobileMenu = ref(false)
 
-const logout = () => {
-  alert("Logged out")
-  authUser.value = null
+const logout = async () => {
+  try {
+    const res = await $fetch('/api/auth/logout', { method: 'POST' })
+   
+    
+    authUser.value = null
+    navigateTo('/')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
 }
 
 const items = ref([
