@@ -16,8 +16,8 @@
           <i class="mdi mdi-cash-multiple text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">Total Balance</p>
-          <h3 class="text-2xl font-bold text-green-700">$4,250</h3>
+          <p class="text-gray-500 text-sm">Main Balance</p>
+          <h3 class="text-2xl font-bold text-green-700">  ${{ balances.mainBalance }} </h3>
         </div>
       </div>
 
@@ -27,8 +27,8 @@
           <i class="mdi mdi-chart-line text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">Profits Wallet</p>
-          <h3 class="text-2xl font-bold text-blue-700">$1,200</h3>
+          <p class="text-gray-500 text-sm">Profits Balances</p>
+          <h3 class="text-2xl font-bold text-blue-700"> ${{ balances.profitBalance }}</h3>
         </div>
       </div>
 
@@ -38,8 +38,8 @@
           <i class="mdi mdi-wallet-outline text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">VX Wallet</p>
-          <h3 class="text-2xl font-bold text-purple-700">$780</h3>
+          <p class="text-gray-500 text-sm">VX Balances</p>
+          <h3 class="text-2xl font-bold text-purple-700">${{ balances.referralBalance }}</h3>
         </div>
       </div>
 
@@ -49,8 +49,8 @@
           <i class="mdi mdi-account-group text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">Network Bonus</p>
-          <h3 class="text-2xl font-bold text-yellow-700">$430</h3>
+          <p class="text-gray-500 text-sm">maxCap Balances</p>
+          <h3 class="text-2xl font-bold text-yellow-700">${{ balances.maxCapBalance }}</h3>
         </div>
       </div>
     </div>
@@ -122,9 +122,52 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onBeforeUnmount, computed, watch } from "vue";
 import Card from "primevue/card";
 import Chart from "primevue/chart";
 import Button from "primevue/button";
+import { useToast } from "primevue/usetoast";
+const { authUser } = useAuth();
+
+// ✅ Reactive states
+const balances = ref({
+  mainBalance: 0,
+  maxCapBalance: 0,
+  withdrawalTotalBalance: 0,
+  profitBalance: 0,
+  referralBalance: 0,
+  bonusBalance: 0,
+});
+
+
+const toast = useToast();
+
+/* ======================
+   ✅ API Calls (Backend)
+   ====================== */
+
+async function fetchBalances() {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) return;
+    const res = await $fetch("/api/balances", {
+      method: "POST",
+      body: { userId },
+    });
+    balances.value = res;
+   
+    
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error loading balances",
+      detail: error?.data?.message || "Failed to fetch balances",
+      life: 4000,
+    });
+  }
+}
+
+
 
 const earningsChart = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -167,6 +210,28 @@ const activities = [
   { icon: "mdi mdi-wallet-outline", action: "VX Reward Credited", date: "1d ago" },
   { icon: "mdi mdi-cash-minus", action: "Withdrawal Requested", date: "2d ago" },
 ];
+
+/* ======================
+   ✅ Ensure balances are fetched
+   - Try fetch on mount if authUser is ready
+   - Watch authUser and fetch once user becomes available
+   ====================== */
+onMounted(() => {
+  if (authUser?.value?.user?.id) {
+    fetchBalances();
+  }
+});
+
+watch(
+  () => authUser.value,
+  (newVal) => {
+    if (newVal?.user?.id) fetchBalances();
+  }
+);
+
+
+
+
 </script>
 
 <style lang="scss" scoped>
