@@ -156,56 +156,7 @@ const paymentMethods = [
 
 
 
-const bundlesItems = [
-  {
-    title: "Bronze",
-    investedDown: "$50",
-    investedUp: "$249",
-    minimumwithdrawal: "$50",
-    earn: "3% / month",
-    maxcap: 300,
-  },
-  {
-    title: "Silver",
-    investedDown: "$250",
-    investedUp: "$499",
-    minimumwithdrawal: "$50",
-    earn: "3.5% / month",
-    maxcap: 300,
-  },
-  {
-    title: "Gold",
-    investedDown: "$500",
-    investedUp: "$999",
-    minimumwithdrawal: "$50",
-    earn: "4% / month",
-    maxcap: 300,
-  },
-  {
-    title: "Platinum",
-    investedDown: "$1,000",
-    investedUp: "$2,499",
-    minimumwithdrawal: "$1,000",
-    earn: "4.5% / month",
-    maxcap: 300,
-  },
-  {
-    title: "Diamond",
-    investedDown: "$2,500",
-    investedUp: "$4,999",
-    minimumwithdrawal: "$50",
-    earn: "5% / month",
-    maxcap: 300,
-  },
-  {
-    title: "Titanium",
-    investedDown: "$5,000",
-    investedUp: "and more",
-    minimumwithdrawal: "$50",
-    earn: "6% / month",
-    maxcap: 300,
-  },
-];
+
 
 
 onMounted(async () => {
