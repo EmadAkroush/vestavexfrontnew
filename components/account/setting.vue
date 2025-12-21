@@ -89,7 +89,7 @@
           </div>
         </div>
         <div class="mt-4 text-right">
-          <Button label="Save Profile" icon="pi pi-check" class="p-button-sm" />
+          <Button   @click="saveProfile"  label="Save Profile" icon="pi pi-check" class="p-button-sm" />
         </div>
       </template>
     </Card>
