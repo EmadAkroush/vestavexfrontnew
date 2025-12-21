@@ -36,10 +36,7 @@
         <div class="info-row">
           <i class="mdi mdi-cash text-green-400"></i>
           <span class="label">Invest Range</span>
-          <span class="value"
-            >{{ selectedBundle.range }} 
-          </span
-          >
+          <span class="value">{{ selectedBundle.range }} </span>
         </div>
 
         <div class="info-row">
@@ -146,6 +143,7 @@ const selectedBundle = ref(null);
 const investAmount = ref(null);
 const selectedPayment = ref(null);
 const bundles = ref(null);
+const { authUser } = useAuth();
 
 const paymentMethods = [
   { label: "Crypto (USDT / BTC / ETH)", value: "crypto" },
@@ -153,18 +151,11 @@ const paymentMethods = [
   { label: "Bank", value: "bank" },
 ];
 
-
-
-
-
-
-
 onMounted(async () => {
   try {
     const data = await $fetch(`api/packages`);
     bundles.value = data;
-    console.log("data" , bundles.value);
-    
+    console.log("data", bundles.value);
   } catch (err) {
     console.error("❌ Failed to fetch plans:", err);
     toast.add({
@@ -182,6 +173,9 @@ function openDialog(item) {
   visibleDetails.value = true;
 }
 function openInvestDialog(item) {
+  if (!authUser.value) {
+    return navigateTo("/login");
+  }
   selectedBundle.value = item;
   visibleInvest.value = true;
 }
