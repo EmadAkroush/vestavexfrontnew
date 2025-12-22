@@ -175,6 +175,7 @@ function openDialog(item) {
 }
 
 function openInvestDialog(item) {
+    console.log("ITEM from grid:", item);
   if (!authUser.value) return router.push("/login");
   selectedBundle.value = item;
   visibleInvest.value = true;
@@ -184,6 +185,7 @@ function openInvestDialog(item) {
  * POST Investment API Call
  */
 async function confirmInvestment() {
+  console.log("Confirming investment...");
   if (!investAmount.value || !selectedPayment.value) {
     toast.add({
       severity: "warn",
@@ -196,12 +198,12 @@ async function confirmInvestment() {
 
   try {
     const payload = {
-      user_id: authUser.value.id,
-      package_id: selectedBundle.value.id,
+      userId: authUser.value?.user?.id,
+      package_id: selectedBundle.value._id,
       amount: investAmount.value,
       payment_type: selectedPayment.value,
     };
-
+    console.log("Investment Payload:", payload);
     const res = await $fetch("/api/investments", {
       method: "POST",
       body: payload,
