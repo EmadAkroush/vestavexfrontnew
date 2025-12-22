@@ -3,7 +3,6 @@ export default defineEventHandler(async (event) => {
   const {
     public: { apiBase },
   } = useRuntimeConfig();
-
   try {
     const data = await $fetch(`${apiBase}/auth/login`, {
       method: "POST",
@@ -14,10 +13,9 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-   console.log("data", data);
-   
 
 
+    
     setCookie(event, "accessToken", data.accessToken, {
       httpOnly: true,
       secure: false,
