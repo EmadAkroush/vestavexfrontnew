@@ -11,14 +11,13 @@
     <BundlesHeader />
 
     <!-- grid -->
-
     <BundlesGrid
       :items="bundles"
       @details="openDialog"
       @invest="openInvestDialog"
     />
 
-    <!-- dialogs (use your existing PrimeVue dialogs or replace) -->
+    <!-- DETAILS DIALOG -->
     <Dialog
       v-model:visible="visibleDetails"
       modal
@@ -32,11 +31,10 @@
       </div>
 
       <div class="glass-content">
-        <!-- Row -->
         <div class="info-row">
           <i class="mdi mdi-cash text-green-400"></i>
           <span class="label">Invest Range</span>
-          <span class="value">{{ selectedBundle.range }} </span>
+          <span class="value">{{ selectedBundle.range }}</span>
         </div>
 
         <div class="info-row">
@@ -57,26 +55,21 @@
           <span class="value">{{ selectedBundle.maxCap }}%</span>
         </div>
 
-        <!-- EXPLANATION BOX -->
-        <!-- EXPLANATION BOX -->
         <div class="explain-box">
           <h4>📌 Max Cap 300%</h4>
-          <p>
-            The maximum earning limit for each bundle includes the total of:
-          </p>
+          <p>The maximum earning limit for each bundle includes the total of:</p>
           <ul>
             <li>✔ Monthly returns from the bundle</li>
             <li>✔ Network earnings (Binary Income)</li>
           </ul>
           <p>
-            This means once your total profit reaches <strong>300%</strong> of
-            your invested amount, the bundle has reached its cap and must be
-            renewed.
+            This means once your total profit reaches
+            <strong>300%</strong> of your invested amount, the bundle has
+            reached its cap and must be renewed.
           </p>
         </div>
       </div>
 
-      <!-- FOOTER -->
       <template #footer>
         <div class="dialog-footer">
           <Button
@@ -93,6 +86,7 @@
       </template>
     </Dialog>
 
+    <!-- INVEST DIALOG -->
     <Dialog
       v-model:visible="visibleInvest"
       modal
@@ -107,8 +101,18 @@
           locale="en-US"
           class="w-full"
         />
-    
+
+        <label>Payment Method</label>
+        <Dropdown
+          class="w-full"
+          v-model="selectedPayment"
+          :options="paymentMethods"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select a payment method"
+        />
       </div>
+
       <template #footer>
         <div class="flex justify-end gap-3">
           <Button
@@ -128,18 +132,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted } from "vue";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
-let gsap; // module reference
-
-// UI state (dialogs etc.)
 const visibleDetails = ref(false);
 const visibleInvest = ref(false);
 const selectedBundle = ref(null);
 const investAmount = ref(null);
 const selectedPayment = ref(null);
-const bundles = ref(null);
+const bundles = ref([]);
+const loading = ref(true);
+
 const { authUser } = useAuth();
+const router = useRouter();
 
 const paymentMethods = [
   { label: "Crypto (USDT / BTC / ETH)", value: "crypto" },
@@ -149,11 +155,9 @@ const paymentMethods = [
 
 onMounted(async () => {
   try {
-    const data = await $fetch(`api/packages`);
+    const data = await $fetch(`/api/packages`);
     bundles.value = data;
-    console.log("data", bundles.value);
   } catch (err) {
-    console.error("❌ Failed to fetch plans:", err);
     toast.add({
       severity: "error",
       summary: "Error",
@@ -164,60 +168,64 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
 function openDialog(item) {
   selectedBundle.value = item;
   visibleDetails.value = true;
 }
+
 function openInvestDialog(item) {
-  if (!authUser.value) {
-    return navigateTo("/login");
-  }
+  if (!authUser.value) return router.push("/login");
   selectedBundle.value = item;
   visibleInvest.value = true;
 }
-function confirmInvestment() {
+
+/**
+ * POST Investment API Call
+ */
+async function confirmInvestment() {
   if (!investAmount.value || !selectedPayment.value) {
-    alert("Please enter amount and select payment method");
+    toast.add({
+      severity: "warn",
+      summary: "Missing Info",
+      detail: "Please enter amount & select payment",
+      life: 3000,
+    });
     return;
   }
-  alert(`Invested ${investAmount.value} in ${selectedBundle.value.title}`);
-  visibleInvest.value = false;
-}
 
-/* ---------- GSAP card hover micro-interactions (dynamic import) ---------- */
-async function enableGSAP() {
-  const mod = await import("gsap");
-  gsap = mod.default || mod;
-  // add simple hover scale/shadow handled in CSS + small gsap tweak on enter
-  const cards = Array.from(document.querySelectorAll(".bundle-card"));
-  cards.forEach((card) => {
-    card.addEventListener("mouseenter", () => {
-      gsap.to(card, { scale: 1.03, duration: 0.35, ease: "power3.out" });
-    });
-    card.addEventListener("mouseleave", () => {
-      gsap.to(card, { scale: 1, duration: 0.5, ease: "power3.out" });
-      gsap.to(card.querySelector(".card-body"), {
-        x: 0,
-        y: 0,
-        rotationX: 0,
-        rotationY: 0,
-        duration: 0.6,
-        ease: "power3.out",
-      });
-    });
-  });
-}
-
-onMounted(async () => {
-  // enable GSAP interactions without blocking render (dynamic import)
   try {
-    await enableGSAP();
-  } catch (e) {
-    // fine if no GSAP — fallback to CSS hover
-  }
+    const payload = {
+      user_id: authUser.value.id,
+      package_id: selectedBundle.value.id,
+      amount: investAmount.value,
+      payment_type: selectedPayment.value,
+    };
 
-  window.addEventListener("resize", onResize);
-});
+    const res = await $fetch("/api/investments", {
+      method: "POST",
+      body: payload,
+    });
+
+    toast.add({
+      severity: "success",
+      summary: "Investment Submitted",
+      detail: `Investment of $${investAmount.value} created`,
+      life: 3500,
+    });
+
+    visibleInvest.value = false;
+    investAmount.value = null;
+    selectedPayment.value = null;
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Investment Failed",
+      detail: e?.data?.message || "Server Error",
+      life: 4000,
+    });
+  }
+}
 </script>
 
 <style scoped lang="scss">
