@@ -107,11 +107,7 @@
           locale="en-US"
           class="w-full"
         />
-        <Dropdown
-          v-model="selectedPayment"
-          :options="paymentMethods"
-          optionLabel="label"
-        />
+    
       </div>
       <template #footer>
         <div class="flex justify-end gap-3">
