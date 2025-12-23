@@ -94,12 +94,9 @@
                 label="Renew"
                 icon="mdi mdi-refresh"
                 class="p-button-sm p-button-success"
+                @click="openInvestDialog(selectedBundle)"
               />
-              <Button
-                label="Upgrade"
-                icon="mdi mdi-arrow-up-bold"
-                class="p-button-sm p-button-warning"
-              />
+            
             </div>
           </template>
         </Card>
@@ -163,6 +160,41 @@
       </transition>
     </div>
 
+      <!-- INVEST DIALOG -->
+    <Dialog
+      v-model:visible="visibleInvest"
+      modal
+      :header="'Invest in ' + (selectedBundle?.title || '')"
+    >
+      <div class="space-y-3">
+        <label>Amount (USD)</label>
+        <InputNumber
+          v-model="investAmount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          class="w-full"
+        />
+
+     
+      </div>
+
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <Button
+            label="Cancel"
+            class="p-button-text"
+            @click="visibleInvest = false"
+          />
+          <Button
+            label="Confirm"
+            class="p-button-success"
+            @click="confirmInvestment"
+          />
+        </div>
+      </template>
+    </Dialog>
+
     <!-- ===== Modal: Plan Details ===== -->
     <Dialog v-model:visible="showModal" modal header="Plan Details" class="max-w-lg w-full">
       <div class="space-y-3">
@@ -201,6 +233,74 @@ const { authUser } = useAuth()
 
 const portfolio = ref([])
 const loading = ref(true)
+const selectedBundle = ref(null);
+const visibleInvest = ref(false);
+const investAmount = ref(null);
+
+function openInvestDialog(item) {
+    console.log("ITEM from grid:", item);
+
+  selectedBundle.value = item;
+  visibleInvest.value = true;
+}
+
+
+
+async function confirmInvestment() {
+
+  // ✅ amount required
+  if (!investAmount.value) {
+    toast.add({
+      severity: "warn",
+      summary: "Missing Info",
+      detail: "Please enter amount",
+      life: 3000,
+    });
+    return;
+  }
+
+  // ✅ Dynamic range from selectedBundle.range
+
+
+  try {
+    const payload = {
+      userId: authUser.value?.user?.id,
+      amount: investAmount.value,
+    };
+
+    console.log("Investment Payload:", payload);
+
+    const res = await $fetch("/api/investments", {
+      method: "POST",
+      body: payload,
+    });
+
+    toast.add({
+      severity: "success",
+      summary: "Investment Submitted",
+      detail: `Investment of $${investAmount.value} created`,
+      life: 3500,
+    });
+
+    visibleInvest.value = false;
+    investAmount.value = null;
+    selectedPayment.value = null;
+
+  } catch (e) {
+    // toast.add({
+    //   severity: "error",
+    //   summary: "Investment Failed",
+    //   detail: e?.data?.message || "Server Error",
+    //   life: 4000,
+    // });
+  }
+}
+
+
+
+
+
+
 
 // ===== Fetch My Investments =====
 onMounted(async () => {
