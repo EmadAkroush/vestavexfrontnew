@@ -102,15 +102,7 @@
           class="w-full"
         />
 
-        <label>Payment Method</label>
-        <Dropdown
-          class="w-full"
-          v-model="selectedPayment"
-          :options="paymentMethods"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Select a payment method"
-        />
+     
       </div>
 
       <template #footer>
@@ -147,11 +139,7 @@ const loading = ref(true);
 const { authUser } = useAuth();
 const router = useRouter();
 
-const paymentMethods = [
-  { label: "Crypto (USDT / BTC / ETH)", value: "crypto" },
-  { label: "Card", value: "card" },
-  { label: "Bank", value: "bank" },
-];
+
 
 onMounted(async () => {
   try {
@@ -186,7 +174,7 @@ function openInvestDialog(item) {
  */
 async function confirmInvestment() {
   console.log("Confirming investment...");
-  if (!investAmount.value || !selectedPayment.value) {
+  if (!investAmount.value ) {
     toast.add({
       severity: "warn",
       summary: "Missing Info",
@@ -201,7 +189,6 @@ async function confirmInvestment() {
       userId: authUser.value?.user?.id,
       package_id: selectedBundle.value._id,
       amount: investAmount.value,
-      payment_type: selectedPayment.value,
     };
     console.log("Investment Payload:", payload);
     const res = await $fetch("/api/investments", {
