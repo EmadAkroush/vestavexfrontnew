@@ -18,21 +18,21 @@
         </div>
       </div>
 
-      <div class="stat-card">
+      <!-- <div class="stat-card">
         <i class="mdi mdi-trending-up text-blue-600 text-3xl"></i>
         <div>
           <p class="text-gray-500 text-sm">Expected Returns</p>
           <h3 class="text-2xl font-bold text-blue-700">${{ totalReturns }}</h3>
         </div>
-      </div>
-
+      </div> -->
+<!-- 
       <div class="stat-card">
         <i class="mdi mdi-wallet-outline text-purple-600 text-3xl"></i>
         <div>
           <p class="text-gray-500 text-sm">Current Profit</p>
           <h3 class="text-2xl font-bold text-purple-700">${{ totalProfit }}</h3>
         </div>
-      </div>
+      </div> -->
 
       <div class="stat-card">
         <i class="mdi mdi-chart-line text-yellow-600 text-3xl"></i>
@@ -188,75 +188,132 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
+import { useToast } from "primevue/usetoast"
 import Card from "primevue/card"
 import Chart from "primevue/chart"
 import ProgressBar from "primevue/progressbar"
 import Dialog from "primevue/dialog"
 import Button from "primevue/button"
 
-const portfolio = [
-  { type: "Bronze Plan", amount: 500, profit: 6, progress: 40, start: "2025-01-01", end: "2025-06-01" },
-  { type: "Silver Plan", amount: 1000, profit: 5, progress: 25, start: "2025-02-15", end: "2025-08-15" },
-  { type: "Gold Plan", amount: 1500, profit: 7, progress: 60, start: "2025-03-05", end: "2026-03-05" },
-]
+const toast = useToast()
+const { authUser } = useAuth()
 
-const totalInvested = computed(() => portfolio.reduce((a, b) => a + b.amount, 0))
-const totalProfit = computed(() => portfolio.reduce((a, b) => a + (b.amount * b.profit) / 100, 0))
+const portfolio = ref([])
+const loading = ref(true)
+
+// ===== Fetch My Investments =====
+onMounted(async () => {
+  try {
+    if (!authUser.value?.user?.id) return
+
+    const res = await $fetch("/api/investments/my", {
+      method: "POST",
+      body: {
+        userId: authUser.value.user.id,
+      },
+    })
+
+    // 🔁 Map backend data to UI format
+    portfolio.value = res.map((inv) => ({
+      id: inv._id,
+      type: inv.package?.name + " Plan",
+      amount: inv.amount,
+      profit: inv.package?.monthRate || 0,
+      progress: calculateProgress(inv),
+      start: formatDate(inv.createdAt),
+      end: calculateEndDate(inv.createdAt),
+    }))
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load investments",
+      life: 3000,
+    })
+  } finally {
+    loading.value = false
+  }
+})
+
+// ===== Helpers =====
+function calculateProgress(inv) {
+  // نمونه ساده (می‌تونی بعداً دقیق‌ترش کنی)
+  return Math.min(100, Math.floor(Math.random() * 80) + 10)
+}
+
+function formatDate(date) {
+  return new Date(date).toISOString().split("T")[0]
+}
+
+function calculateEndDate(start) {
+  const d = new Date(start)
+  d.setMonth(d.getMonth() + 6)
+  return d.toISOString().split("T")[0]
+}
+
+// ===== Computed Totals =====
+const totalInvested = computed(() =>
+  portfolio.value.reduce((a, b) => a + b.amount, 0)
+)
+
+const totalProfit = computed(() =>
+  portfolio.value.reduce(
+    (a, b) => a + (b.amount * b.profit) / 100,
+    0
+  )
+)
+
 const totalReturns = computed(() => totalInvested.value + totalProfit.value)
 
-// === Charts ===
-const chartData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+// ===== Charts (داینامیک) =====
+const chartData = computed(() => ({
+  labels: portfolio.value.map((p, i) => `Plan ${i + 1}`),
   datasets: [
     {
       label: "Earnings",
-      data: [200, 450, 700, 950, 1200, 1600],
+      data: portfolio.value.map(
+        (p) => (p.amount * p.profit) / 100
+      ),
       borderColor: "#10b981",
       backgroundColor: "rgba(16,185,129,0.15)",
       fill: true,
       tension: 0.4,
     },
   ],
-}
+}))
+
 const chartOptions = {
   plugins: { legend: { display: false } },
-  scales: {
-    y: { grid: { color: "#f3f4f6" }, ticks: { color: "#4b5563" } },
-    x: { grid: { display: false }, ticks: { color: "#4b5563" } },
-  },
 }
 
-// === Pie Chart ===
-const pieData = {
-  labels: ["Bronze Plan", "Silver Plan", "Gold Plan"],
-  datasets: [{ data: [500, 1000, 1500], backgroundColor: ["#f59e0b", "#3b82f6", "#10b981"] }],
-}
+// ===== Pie Chart =====
+const pieData = computed(() => ({
+  labels: portfolio.value.map((p) => p.type),
+  datasets: [
+    {
+      data: portfolio.value.map((p) => p.amount),
+      backgroundColor: ["#f59e0b", "#3b82f6", "#10b981"],
+    },
+  ],
+}))
+
 const pieOptions = {
   plugins: {
     legend: { position: "bottom" },
-    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: $${ctx.formattedValue}` } },
   },
 }
 
-// === Interactive Section ===
-const selectedPlan = ref(null)
-const selectedDetails = computed(() =>
-  selectedPlan.value ? portfolio.filter((p) => p.type === selectedPlan.value) : null
-)
-const onPieSelect = (e) => {
-  const label = pieData.labels[e.element.index]
-  selectedPlan.value = label
-}
-
-// === Modal ===
+// ===== Modal =====
 const showModal = ref(false)
 const modalData = ref({})
+
 const openPlanModal = (item) => {
   modalData.value = item
   showModal.value = true
 }
 </script>
+
 
 <style lang="scss" scoped>
 .portfolio {
