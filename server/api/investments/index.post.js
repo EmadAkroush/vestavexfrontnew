@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
- console.log("data:", data);
+
  
     
 

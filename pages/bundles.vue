@@ -173,15 +173,39 @@ function openInvestDialog(item) {
  * POST Investment API Call
  */
 async function confirmInvestment() {
-  console.log("Confirming investment...");
-  if (!investAmount.value ) {
+
+  // ✅ amount required
+  if (!investAmount.value) {
     toast.add({
       severity: "warn",
       summary: "Missing Info",
-      detail: "Please enter amount & select payment",
+      detail: "Please enter amount",
       life: 3000,
     });
     return;
+  }
+
+  // ✅ Dynamic range from selectedBundle.range
+  const rangeText = selectedBundle.value?.range; // "$500 — $999"
+
+  if (rangeText) {
+    // extract numbers from string
+    const numbers = rangeText.match(/\d+/g)?.map(Number);
+
+    if (numbers && numbers.length >= 2) {
+      const min = numbers[0];
+      const max = numbers[1];
+
+      if (investAmount.value < min || investAmount.value > max) {
+        toast.add({
+          severity: "warn",
+          summary: "Invalid Amount",
+          detail: `Investment amount must be between $${min} and $${max}`,
+          life: 3000,
+        });
+        return;
+      }
+    }
   }
 
   try {
@@ -190,7 +214,9 @@ async function confirmInvestment() {
       package_id: selectedBundle.value._id,
       amount: investAmount.value,
     };
+
     console.log("Investment Payload:", payload);
+
     const res = await $fetch("/api/investments", {
       method: "POST",
       body: payload,
@@ -206,6 +232,7 @@ async function confirmInvestment() {
     visibleInvest.value = false;
     investAmount.value = null;
     selectedPayment.value = null;
+
   } catch (e) {
     toast.add({
       severity: "error",
@@ -215,6 +242,7 @@ async function confirmInvestment() {
     });
   }
 }
+
 </script>
 
 <style scoped lang="scss">
