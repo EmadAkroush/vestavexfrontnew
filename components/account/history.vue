@@ -140,7 +140,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
+import { useToast } from "primevue/usetoast"
 import Card from "primevue/card"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -150,57 +151,45 @@ import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import Calendar from "primevue/calendar"
 
+const toast = useToast()
+const { authUser } = useAuth()
+
 // --- Data
-const transactions = ref([
-  {
-    date: "2025-09-01",
-    type: "Cashout",
-    amount: "$250",
-    status: "Completed",
-    id: "VX-CASHOUT-928374",
-    details: "Withdrawal processed to your USDT wallet (TRC20).",
-  },
-  {
-    date: "2025-08-15",
-    type: "Top-Up",
-    amount: "$500",
-    status: "Completed",
-    id: "VX-TOPUP-412398",
-    details: "Funds added via TRC20 network.",
-  },
-  {
-    date: "2025-08-01",
-    type: "Profit Payout",
-    amount: "$120",
-    status: "Completed",
-    id: "VX-PROFIT-219837",
-    details: "Monthly profit added to Profits Wallet.",
-  },
-  {
-    date: "2025-07-20",
-    type: "Cashout",
-    amount: "$300",
-    status: "Pending",
-    id: "VX-CASHOUT-871234",
-    details: "Awaiting blockchain confirmation.",
-  },
-  {
-    date: "2025-07-01",
-    type: "Profit Payout",
-    amount: "$100",
-    status: "Completed",
-    id: "VX-PROFIT-128765",
-    details: "Profit credited successfully.",
-  },
-  {
-    date: "2025-06-15",
-    type: "Top-Up",
-    amount: "$400",
-    status: "Failed",
-    id: "VX-TOPUP-534221",
-    details: "Payment failed due to network timeout.",
-  },
-])
+const transactions = ref([])
+const loading = ref(true)
+
+// --- Fetch Transactions
+onMounted(async () => {
+  try {
+    if (!authUser.value?.user?.id) return
+
+    const res = await $fetch("/api/transactions/my", {
+      method: "POST",
+      body: {
+        userId: authUser.value.user.id,
+      },
+    })
+
+    // 🔁 Map backend → UI
+    transactions.value = res.map((tx) => ({
+      id: tx._id,
+      date: formatDate(tx.createdAt),
+      type: mapType(tx.type),
+      amount: `$${tx.amount}`,
+      status: capitalize(tx.status),
+      details: tx.note || "-",
+    }))
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load transactions",
+      life: 3000,
+    })
+  } finally {
+    loading.value = false
+  }
+})
 
 // --- Filters & Search
 const search = ref("")
@@ -213,6 +202,7 @@ const typeOptions = [
   { label: "Cashout", value: "Cashout" },
   { label: "Top-Up", value: "Top-Up" },
   { label: "Profit Payout", value: "Profit Payout" },
+  { label: "Investment", value: "Investment" },
 ]
 
 const statusOptions = [
@@ -242,7 +232,7 @@ const filteredTransactions = computed(() => {
   })
 })
 
-// --- UI Helpers
+// --- Helpers
 const typeIcon = (type) => {
   switch (type) {
     case "Cashout":
@@ -251,20 +241,20 @@ const typeIcon = (type) => {
       return "mdi mdi-arrow-up-bold-circle-outline text-blue-500"
     case "Profit Payout":
       return "mdi mdi-chart-line text-purple-500"
+    case "Investment":
+      return "mdi mdi-briefcase-outline text-indigo-500"
     default:
       return "mdi mdi-cash"
   }
 }
 
-const statusClass = (status) => {
-  return {
-    "bg-green-100 text-green-700": status === "Completed",
-    "bg-yellow-100 text-yellow-700": status === "Pending",
-    "bg-red-100 text-red-700": status === "Failed",
-  }
-}
+const statusClass = (status) => ({
+  "bg-green-100 text-green-700": status === "Completed",
+  "bg-yellow-100 text-yellow-700": status === "Pending",
+  "bg-red-100 text-red-700": status === "Failed",
+})
 
-// --- Modal Logic
+// --- Modal
 const visible = ref(false)
 const selectedTx = ref(null)
 
@@ -272,7 +262,32 @@ const showDetails = (tx) => {
   selectedTx.value = tx
   visible.value = true
 }
+
+// --- Utils
+function formatDate(date) {
+  return new Date(date).toISOString().split("T")[0]
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+function mapType(type) {
+  switch (type) {
+    case "withdraw":
+      return "Cashout"
+    case "topup":
+      return "Top-Up"
+    case "profit":
+      return "Profit Payout"
+    case "investment":
+      return "Investment"
+    default:
+      return type
+  }
+}
 </script>
+
 
 <style lang="scss" scoped>
 .history-page {
