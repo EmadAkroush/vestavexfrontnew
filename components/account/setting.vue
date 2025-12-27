@@ -68,14 +68,7 @@
                 class="w-full mt-1"
               />
             </div>
-            <div>
-              <label class="text-sm font-medium text-gray-600">VX Code</label>
-              <InputText
-                v-model="profile.vxCode"
-                class="w-full mt-1"
-                disabled
-              />
-            </div>
+       
             <div class="md:col-span-2">
               <label class="text-sm font-medium text-gray-600"
                 >Wallet Address</label
@@ -86,10 +79,39 @@
                 class="w-full mt-1"
               />
             </div>
+            <div class="md:col-span-2">
+              <label class="text-sm font-medium text-gray-600">
+                Leader / Referral Code
+              </label>
+
+              <div class="flex gap-2 mt-1">
+                <InputText
+                  v-model="profile.leaderCode"
+                  placeholder="Enter leader VX code"
+                  class="flex-1"
+                />
+
+                <Button
+                  label="Connect"
+                  icon="mdi mdi-account-arrow-up-outline"
+                  class="p-button-sm p-button-success"
+                  @click="connectLeader"
+                />
+              </div>
+
+              <small class="text-gray-500">
+                Enter the VX code of your leader to connect your account.
+              </small>
+            </div>
           </div>
         </div>
         <div class="mt-4 text-right">
-          <Button   @click="saveProfile"  label="Save Profile" icon="pi pi-check" class="p-button-sm" />
+          <Button
+            @click="saveProfile"
+            label="Save Profile"
+            icon="pi pi-check"
+            class="p-button-sm"
+          />
         </div>
       </template>
     </Card>
