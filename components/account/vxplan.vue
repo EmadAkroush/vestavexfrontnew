@@ -38,11 +38,7 @@
           class="p-button-warning"
           @click="onActivateClick"
         />
-        <Button
-          label="Export CSV"
-          icon="mdi mdi-file-export"
-          @click="exportCsv"
-        />
+     
       </div>
     </div>
 
@@ -281,163 +277,200 @@
   </div>
 </template>
 
+
+
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useToast } from "primevue/usetoast";
 
-// state
-// const showNodeDetails = ref(false)
-// const selectedNode = ref(null)
+const toast = useToast();
 
-// باز کردن دیالوگ با نود انتخاب‌شده
-function openNodeDetails(node) {
-  // ساخت مقادیر تستی برای نمایش واقعی
-  selectedNode.value = {
-    ...node,
-    left: Math.floor(Math.random() * 5000),
-    right: Math.floor(Math.random() * 5000),
-    leftCount: Math.floor(Math.random() * 40),
-    rightCount: Math.floor(Math.random() * 40),
-    vxc: Math.floor(Math.random() * 20),
-    used: Math.floor(Math.random() * 800),
-  };
-  showNodeDetails.value = true;
-}
-
-// کپی کد VX
-function copyCode(code) {
-  if (!code) return;
-  navigator.clipboard?.writeText(code);
-  alert(`Copied VX Code: ${code}`);
-}
-
-// محاسبه ظرفیت حساب (10 برابر)
-function getNodeCapacity(node) {
-  const base = node.data?.baseInvestment || 100;
-  return base * 10;
-}
-
-// کلیک روی Top-Up داخل دیالوگ
-function handleTopUp() {
-  showTopUp.value = true;
-  showNodeDetails.value = false;
-}
-
-const data = ref({
-  key: "VX_root",
+/* =========================
+   SAFE DEFAULT TREE
+========================= */
+const emptyTree = {
+  key: "root",
   type: "person",
   data: {
+    name: "Loading...",
+    title: "",
+    vxCode: "",
     image: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
-    name: "VX5029",
-    title: "Your VX Account",
-    vxCode: "VX5029",
   },
-  children: [
-    {
-      key: "VX_L1",
-      type: "person",
-      data: {
-        image: "https://primefaces.org/cdn/primevue/images/avatar/annafali.png",
-        name: "Left Leader",
-        title: "Branch Left",
-        vxCode: "VX5020",
-      },
-      children: [
-        { key: "VX_L1_0", label: "Left A" },
-        { key: "VX_L1_1", label: "Left B" },
-      ],
-    },
-    {
-      key: "VX_R1",
-      type: "person",
-      data: {
-        image:
-          "https://primefaces.org/cdn/primevue/images/avatar/stephenshaw.png",
-        name: "Right Leader",
-        title: "Branch Right",
-        vxCode: "VX5919",
-      },
-      children: [
-        { key: "VX_R1_0", label: "Right A" },
-        { key: "VX_R1_1", label: "Right B" },
-      ],
-    },
-  ],
-});
+  children: [],
+};
 
-const root = data.value;
-const totalTeamVolume = ref(12450);
-const totalTeamCount = ref(78);
-const accountBalance = ref(500);
-const usedCapacity = ref(1200);
-const flushOut = ref(250);
-const vxcCount = ref(78);
+/* =========================
+   STATE
+========================= */
+const data = ref({ ...emptyTree });
+const root = ref({ ...emptyTree });
 const selection = ref({});
+
 const showNodeDetails = ref(false);
 const selectedNode = ref(null);
+
+const totalTeamVolume = ref(0);
+const totalTeamCount = ref(0);
+const accountBalance = ref(0);
+const usedCapacity = ref(0);
+const flushOut = ref(0);
+const vxcCount = ref(0);
+
 const showTopUp = ref(false);
 const topUpAmount = ref(50);
 
+/* =========================
+   COMPUTED
+========================= */
 const accountCapacity = computed(() => accountBalance.value * 10);
 
-// function openNodeDetails(node) {
-//   selectedNode.value = node
-//   showNodeDetails.value = true
-// }
+/* =========================
+   API CALLS
+========================= */
+async function loadReferralTree() {
+  try {
+    const res = await $fetch("/api/referrals/node", {
+      method: "POST",
+      body: {},
+    });
 
-// function copyCode(code) {
-//   if (!code) return
-//   navigator.clipboard?.writeText(code)
-// }
+    // 🛡️ ایمن‌سازی
+    if (!res || !res.data) {
+      data.value = { ...emptyTree };
+      root.value = { ...emptyTree };
+      return;
+    }
 
+    data.value = res;
+    root.value = res;
+  } catch (e) {
+    console.error(e);
+    data.value = { ...emptyTree };
+    root.value = { ...emptyTree };
+
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load referral tree",
+      life: 3000,
+    });
+  }
+}
+
+async function loadStats() {
+  try {
+    const res = await $fetch("/api/referrals/stats", {
+      method: "POST",
+      body: {
+        investmentAmount: 0,
+      },
+    });
+
+    totalTeamVolume.value = res?.totalTeamVolume || 0;
+    totalTeamCount.value = res?.totalMembers || 0;
+    usedCapacity.value = res?.usedCapacity || 0;
+    flushOut.value = res?.flushOut || 0;
+    vxcCount.value = res?.vxc || 0;
+    accountBalance.value = res?.baseInvestment || 0;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function loadEarnings() {
+  try {
+    const res = await $fetch("/api/referrals/earnings", {
+      method: "POST",
+      body: {},
+    });
+    console.log("Earnings:", res);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+/* =========================
+   NODE DETAILS
+========================= */
+function openNodeDetails(node) {
+  if (!node) return;
+
+  selectedNode.value = {
+    ...node,
+    left: node.leftVolume || 0,
+    right: node.rightVolume || 0,
+    leftCount: node.leftCount || 0,
+    rightCount: node.rightCount || 0,
+    vxc: node.vxc || 0,
+    used: node.usedCapacity || 0,
+  };
+
+  showNodeDetails.value = true;
+}
+
+/* =========================
+   HELPERS
+========================= */
+function copyCode(code) {
+  if (!code) return;
+
+  navigator.clipboard.writeText(code);
+  toast.add({
+    severity: "success",
+    summary: "Copied",
+    detail: `VX Code ${code} copied`,
+    life: 2000,
+  });
+}
+
+function getNodeCapacity(node) {
+  const base = node?.data?.baseInvestment || 0;
+  return base * 10;
+}
+
+/* =========================
+   ACTIONS
+========================= */
 function onActivateClick() {
   if (accountBalance.value < 5) {
-    alert("Insufficient balance. Please deposit first.");
+    toast.add({
+      severity: "warn",
+      summary: "Insufficient Balance",
+      detail: "Please top-up first",
+      life: 3000,
+    });
     return;
   }
-  if (
-    confirm("Activate VX Code for $5? (This will deduct from your balance)")
-  ) {
-    accountBalance.value -= 5;
-    alert("VX Code activated.");
-  }
+
+  accountBalance.value -= 5;
+
+  toast.add({
+    severity: "success",
+    summary: "Activated",
+    detail: "VX Code activated successfully",
+    life: 3000,
+  });
 }
 
 function confirmTopUp() {
   if (topUpAmount.value < 50) {
-    alert("Minimum deposit is $50");
+    toast.add({
+      severity: "warn",
+      summary: "Invalid Amount",
+      detail: "Minimum top-up is $50",
+      life: 3000,
+    });
     return;
   }
+
   accountBalance.value += topUpAmount.value;
   showTopUp.value = false;
-  alert(`Top-up successful: $${topUpAmount.value}`);
 }
 
-function exportCsv() {
-  const rows = [];
-  function walk(node) {
-    rows.push({
-      key: node.key,
-      name: node.data?.name || node.label,
-      vxCode: node.data?.vxCode || "",
-      children: node.children?.length || 0,
-    });
-    node.children?.forEach(walk);
-  }
-  walk(data.value);
-  const csv = [
-    "key,name,vxCode,children",
-    ...rows.map((r) => `${r.key},${r.name},${r.vxCode},${r.children}`),
-  ].join("\\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "vx_team.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-/* ---- Zoom & Pan ---- */
+/* =========================
+   ZOOM & PAN
+========================= */
 const zoom = ref(1);
 const translate = ref({ x: 0, y: 0 });
 const isPanning = ref(false);
@@ -468,51 +501,15 @@ const doPan = (e) => {
 
 const endPan = () => (isPanning.value = false);
 
-const handleWheel = (e) => {
-  zoom.value += e.deltaY * -0.001;
-  zoom.value = Math.min(Math.max(zoom.value, 0.4), 3);
-};
-
-/* Touch / Pinch zoom */
-let touchDistance = null;
-function handleTouchStart(e) {
-  if (e.touches.length === 2) {
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    touchDistance = Math.sqrt(dx * dx + dy * dy);
-  } else if (e.touches.length === 1) {
-    panStart.value = {
-      x: e.touches[0].clientX - translate.value.x,
-      y: e.touches[0].clientY - translate.value.y,
-    };
-    isPanning.value = true;
-  }
-}
-
-function handleTouchMove(e) {
-  if (e.touches.length === 2) {
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    const newDist = Math.sqrt(dx * dx + dy * dy);
-    if (touchDistance) {
-      const scaleChange = newDist / touchDistance;
-      zoom.value = Math.min(Math.max(zoom.value * scaleChange, 0.4), 3);
-    }
-    touchDistance = newDist;
-  } else if (e.touches.length === 1 && isPanning.value) {
-    translate.value = {
-      x: e.touches[0].clientX - panStart.value.x,
-      y: e.touches[0].clientY - panStart.value.y,
-    };
-  }
-}
-
-function handleTouchEnd(e) {
-  if (e.touches.length < 2) touchDistance = null;
-  if (e.touches.length === 0) isPanning.value = false;
-}
+/* =========================
+   INIT
+========================= */
+onMounted(async () => {
+  await loadReferralTree();
+  await loadStats();
+  await loadEarnings();
+});
 </script>
-
 <style scoped>
 .p-organizationchart .p-organizationchart-node {
   border-radius: 8px;
