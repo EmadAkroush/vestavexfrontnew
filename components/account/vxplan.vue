@@ -282,8 +282,9 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
-
+const { authUser } = useAuth();
 const toast = useToast();
+  const userId = authUser.value?.user?.id;
 
 /* =========================
    SAFE DEFAULT TREE
@@ -332,7 +333,9 @@ async function loadReferralTree() {
   try {
     const res = await $fetch("/api/referrals/node", {
       method: "POST",
-      body: {},
+      body: {
+        userId
+      },
     });
 
     // 🛡️ ایمن‌سازی
@@ -364,6 +367,7 @@ async function loadStats() {
       method: "POST",
       body: {
         investmentAmount: 0,
+        userId
       },
     });
 
@@ -382,7 +386,9 @@ async function loadEarnings() {
   try {
     const res = await $fetch("/api/referrals/earnings", {
       method: "POST",
-      body: {},
+      body: {
+        userId
+      },
     });
     console.log("Earnings:", res);
   } catch (e) {
