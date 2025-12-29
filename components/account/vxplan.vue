@@ -1,46 +1,13 @@
 <template>
   <div class="">
     <!-- Header / Actions -->
-    <div
-      class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6"
-    >
-      <div>
-        <h1 class="text-2xl font-bold">VX Plan — Team & Binary Overview</h1>
-        <p class="text-sm text-gray-500">
-          Manage your VX team structure, earnings, and capacity (10x rule)
-        </p>
-      </div>
-
-      <div class="flex items-center gap-3 flex-wrap">
-        <Button
-          icon="mdi mdi-magnify-minus"
-          class="p-button-rounded"
-          @click="zoomOut"
-        />
-        <Button
-          icon="mdi mdi-magnify-plus"
-          class="p-button-rounded"
-          @click="zoomIn"
-        />
-        <Button
-          icon="mdi mdi-restore"
-          class="p-button-rounded"
-          @click="resetZoom"
-        />
-        <Button
-          label="Top-Up"
-          icon="mdi mdi-wallet"
-          @click="showTopUp = true"
-        />
-        <Button
-          label="Activate VX Code ($5)"
-          icon="mdi mdi-key"
-          class="p-button-warning"
-          @click="onActivateClick"
-        />
-     
-      </div>
-    </div>
+    <VxPlanHeaderActions
+      @zoom-in="zoomIn"
+      @zoom-out="zoomOut"
+      @reset-zoom="resetZoom"
+      @topup="showTopUp = true"
+      @activate="onActivateClick"
+    />
 
     <!-- Summary cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -277,14 +244,13 @@
   </div>
 </template>
 
-
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
 const { authUser } = useAuth();
 const toast = useToast();
-  const userId = authUser.value?.user?.id;
+const userId = authUser.value?.user?.id;
+import VxPlanHeaderActions from "@/components/vx/vxplanheaderactions.vue";
 
 /* =========================
    SAFE DEFAULT TREE
@@ -334,7 +300,7 @@ async function loadReferralTree() {
     const res = await $fetch("/api/referrals/node", {
       method: "POST",
       body: {
-        userId
+        userId,
       },
     });
 
@@ -367,7 +333,7 @@ async function loadStats() {
       method: "POST",
       body: {
         investmentAmount: 0,
-        userId
+        userId,
       },
     });
 
@@ -387,7 +353,7 @@ async function loadEarnings() {
     const res = await $fetch("/api/referrals/earnings", {
       method: "POST",
       body: {
-        userId
+        userId,
       },
     });
     console.log("Earnings:", res);
