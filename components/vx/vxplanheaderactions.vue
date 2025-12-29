@@ -28,7 +28,7 @@
         @click="$emit('reset-zoom')"
       />
 
-      <Button label="Top-Up" icon="mdi mdi-wallet" @click="$emit('topup')" />
+
 
       <Button
         label="Activate VX Code ($5)"

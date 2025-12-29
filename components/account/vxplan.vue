@@ -161,12 +161,7 @@
 
         <!-- Footer Actions -->
         <div class="flex flex-wrap gap-2 justify-end">
-          <Button
-            label="Top-Up"
-            icon="mdi mdi-plus"
-            class="p-button-sm"
-            @click="handleTopUp"
-          />
+       
           <Button
             label="Copy VX Code"
             icon="mdi mdi-content-copy"
@@ -183,28 +178,7 @@
       </div>
     </Dialog>
 
-    <!-- TopUp Dialog -->
-    <Dialog header="Top Up" v-model:visible="showTopUp" :modal="true">
-      <div class="space-y-3">
-        <div class="text-sm">Minimum deposit: $50</div>
-        <InputNumber
-          v-model="topUpAmount"
-          :min="50"
-          :showButtons="true"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-        />
-        <div class="flex gap-2">
-          <Button label="Confirm" icon="mdi mdi-check" @click="confirmTopUp" />
-          <Button
-            label="Cancel"
-            class="p-button-secondary"
-            @click="() => (showTopUp = false)"
-          />
-        </div>
-      </div>
-    </Dialog>
+  
 
     <Toast />
   </div>
@@ -251,8 +225,8 @@ const usedCapacity = ref(0);
 const flushOut = ref(0);
 const vxcCount = ref(0);
 
-const showTopUp = ref(false);
-const topUpAmount = ref(50);
+
+
 
 /* =========================
    COMPUTED
@@ -392,20 +366,7 @@ function onActivateClick() {
   });
 }
 
-function confirmTopUp() {
-  if (topUpAmount.value < 50) {
-    toast.add({
-      severity: "warn",
-      summary: "Invalid Amount",
-      detail: "Minimum top-up is $50",
-      life: 3000,
-    });
-    return;
-  }
 
-  accountBalance.value += topUpAmount.value;
-  showTopUp.value = false;
-}
 
 /* =========================
    ZOOM & PAN
