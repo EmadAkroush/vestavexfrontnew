@@ -10,49 +10,15 @@
     />
 
     <!-- Summary cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <div class="bg-white shadow rounded p-4">
-        <div class="text-xs uppercase text-gray-500">Account</div>
-        <div class="text-xl font-semibold">
-          {{ root.data.name }} ({{ root.key }})
-        </div>
-        <div class="text-sm text-gray-600">{{ root.data.title }}</div>
-      </div>
-
-      <div class="bg-white shadow rounded p-4">
-        <div class="text-xs uppercase text-gray-500">Total Team Volume</div>
-        <div class="text-xl font-semibold">
-          ${{ totalTeamVolume.toLocaleString("en-US") }}
-        </div>
-        <div class="text-sm text-gray-600">
-          {{ totalTeamCount.toLocaleString("en-US") }} members
-        </div>
-      </div>
-
-      <div class="bg-white shadow rounded p-4">
-        <div class="text-xs uppercase text-gray-500">
-          Account Capacity (10x)
-        </div>
-        <div class="text-xl font-semibold">
-          ${{ accountCapacity.toLocaleString("en-US") }}
-        </div>
-        <div class="text-sm text-gray-600">
-          Used: ${{ usedCapacity.toLocaleString("en-US") }} / Remaining: ${{
-            (accountCapacity - usedCapacity).toLocaleString("en-US")
-          }}
-        </div>
-      </div>
-
-      <div class="bg-white shadow rounded p-4">
-        <div class="text-xs uppercase text-gray-500">Flush Out (Burned)</div>
-        <div class="text-xl font-semibold text-red-500">
-          ${{ flushOut.toLocaleString("en-US") }}
-        </div>
-        <div class="text-sm text-gray-600">
-          Cycles: {{ vxcCount.toLocaleString("en-US") }}
-        </div>
-      </div>
-    </div>
+    <VXPlanSummary
+      :root="root"
+      :totalTeamVolume="totalTeamVolume"
+      :totalTeamCount="totalTeamCount"
+      :accountCapacity="accountCapacity"
+      :usedCapacity="usedCapacity"
+      :flushOut="flushOut"
+      :vxcCount="vxcCount"
+    />
 
     <!-- Chart Container with Pan & Zoom -->
     <div
@@ -251,6 +217,7 @@ const { authUser } = useAuth();
 const toast = useToast();
 const userId = authUser.value?.user?.id;
 import VxPlanHeaderActions from "@/components/vx/vxplanheaderactions.vue";
+import VXPlanSummary from "@/components/vx/vxplansummary.vue";
 
 /* =========================
    SAFE DEFAULT TREE
