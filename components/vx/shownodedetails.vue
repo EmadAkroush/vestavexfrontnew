@@ -1,0 +1,189 @@
+<template>
+  <Dialog
+    header="Node Details"
+    v-model:visible="localVisible"
+    :modal="true"
+    :closable="true"
+    class="max-w-2xl w-full"
+  >
+    <div v-if="node">
+      <!-- ================= HEADER ================= -->
+      <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
+        <img
+          :src="node.data?.image"
+          class="w-24 h-24 rounded-full shadow-md border border-gray-200"
+          :alt="node.data?.name"
+        />
+
+        <div class="flex flex-col text-center md:text-left">
+          <div class="font-bold text-xl">
+            {{ node.data?.name || "—" }}
+          </div>
+          <div class="text-gray-600 text-sm">
+            {{ node.data?.title || "" }}
+          </div>
+          <div class="text-sm mt-1">
+            VX Code:
+            <span class="font-semibold">
+              {{ node.data?.vxCode || "—" }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= STATS GRID ================= -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <StatCard
+          title="Left Volume"
+          :value="node.left"
+          :count="node.leftCount"
+        />
+
+        <StatCard
+          title="Right Volume"
+          :value="node.right"
+          :count="node.rightCount"
+        />
+
+        <StatSimple
+          title="Active Cycles (VXC)"
+          :value="node.vxc"
+        />
+
+        <StatCapacity :node="node" />
+      </div>
+
+      <!-- ================= FOOTER ================= -->
+      <div class="flex flex-wrap gap-2 justify-end">
+        <Button
+          label="Copy VX Code"
+          icon="mdi mdi-content-copy"
+          class="p-button-sm p-button-outlined"
+          @click="emit('copy', node.data?.vxCode)"
+        />
+
+        <Button
+          label="Close"
+          icon="mdi mdi-close"
+          class="p-button-secondary p-button-sm"
+          @click="localVisible = false"
+        />
+      </div>
+    </div>
+  </Dialog>
+</template>
+
+<script setup>
+import { computed, defineComponent, h } from "vue";
+
+/* ================= PROPS ================= */
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    required: true,
+  },
+  node: {
+    type: Object,
+    default: null,
+  },
+});
+
+/* ================= EMITS ================= */
+const emit = defineEmits(["update:visible", "copy"]);
+
+/* ================= V-MODEL BRIDGE ================= */
+const localVisible = computed({
+  get: () => props.visible,
+  set: (val) => emit("update:visible", val),
+});
+
+/* ================= SUB COMPONENTS ================= */
+
+/* ---- StatCard ---- */
+const StatCard = defineComponent({
+  props: {
+    title: String,
+    value: Number,
+    count: Number,
+  },
+  setup(props) {
+    return () =>
+      h("div", { class: "bg-slate-50 rounded-lg p-4 shadow-sm" }, [
+        h(
+          "div",
+          { class: "text-xs uppercase text-gray-500 mb-1" },
+          props.title
+        ),
+        h(
+          "div",
+          { class: "text-lg font-semibold" },
+          `$${(props.value || 0).toLocaleString("en-US")}`
+        ),
+        h(
+          "div",
+          { class: "text-xs text-gray-500" },
+          `Members: ${(props.count || 0).toLocaleString("en-US")}`
+        ),
+      ]);
+  },
+});
+
+/* ---- StatSimple ---- */
+const StatSimple = defineComponent({
+  props: {
+    title: String,
+    value: Number,
+  },
+  setup(props) {
+    return () =>
+      h("div", { class: "bg-slate-50 rounded-lg p-4 shadow-sm" }, [
+        h(
+          "div",
+          { class: "text-xs uppercase text-gray-500 mb-1" },
+          props.title
+        ),
+        h(
+          "div",
+          { class: "text-lg font-semibold" },
+          (props.value || 0).toLocaleString("en-US")
+        ),
+      ]);
+  },
+});
+
+/* ---- StatCapacity ---- */
+const StatCapacity = defineComponent({
+  props: {
+    node: Object,
+  },
+  setup(props) {
+    const capacity = computed(() => {
+      const base = props.node?.data?.baseInvestment || 0;
+      return base * 10;
+    });
+
+    const used = computed(() => props.node?.used || 0);
+
+    return () =>
+      h("div", { class: "bg-slate-50 rounded-lg p-4 shadow-sm" }, [
+        h(
+          "div",
+          { class: "text-xs uppercase text-gray-500 mb-1" },
+          "Account Capacity (3x)"
+        ),
+        h(
+          "div",
+          { class: "text-lg font-semibold" },
+          `$${capacity.value.toLocaleString("en-US")}`
+        ),
+        h(
+          "div",
+          { class: "text-xs text-gray-500" },
+          `Used: $${used.value.toLocaleString("en-US")} / Remaining: $${(
+            capacity.value - used.value
+          ).toLocaleString("en-US")}`
+        ),
+      ]);
+  },
+});
+</script>

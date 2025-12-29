@@ -5,7 +5,6 @@
       @zoom-in="zoomIn"
       @zoom-out="zoomOut"
       @reset-zoom="resetZoom"
-      @topup="showTopUp = true"
       @activate="onActivateClick"
     />
 
@@ -81,104 +80,11 @@
       </div>
     </div>
 
-    <Dialog
-      header="Node Details"
+    <VXNodeDetailsDialog
       v-model:visible="showNodeDetails"
-      :modal="true"
-      :closable="true"
-      class="max-w-2xl w-full"
-    >
-      <div v-if="selectedNode">
-        <!-- Header Info -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
-          <img
-            :src="selectedNode.data?.image"
-            class="w-24 h-24 rounded-full shadow-md border border-gray-200"
-            :alt="selectedNode.data?.name"
-          />
-          <div class="flex flex-col text-center md:text-left">
-            <div class="font-bold text-xl">{{ selectedNode.data?.name }}</div>
-            <div class="text-gray-600 text-sm">
-              {{ selectedNode.data?.title }}
-            </div>
-            <div class="text-sm mt-1">
-              VX Code:
-              <span class="font-semibold">{{ selectedNode.data?.vxCode }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Node Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div class="bg-slate-50 rounded-lg p-4 shadow-sm">
-            <div class="text-xs uppercase text-gray-500 mb-1">Left Volume</div>
-            <div class="text-lg font-semibold">
-              ${{ selectedNode.left?.toLocaleString("en-US") || "0" }}
-            </div>
-            <div class="text-xs text-gray-500">
-              Members:
-              {{ selectedNode.leftCount?.toLocaleString("en-US") || "0" }}
-            </div>
-          </div>
-
-          <div class="bg-slate-50 rounded-lg p-4 shadow-sm">
-            <div class="text-xs uppercase text-gray-500 mb-1">Right Volume</div>
-            <div class="text-lg font-semibold">
-              ${{ selectedNode.right?.toLocaleString("en-US") || "0" }}
-            </div>
-            <div class="text-xs text-gray-500">
-              Members:
-              {{ selectedNode.rightCount?.toLocaleString("en-US") || "0" }}
-            </div>
-          </div>
-
-          <div class="bg-slate-50 rounded-lg p-4 shadow-sm">
-            <div class="text-xs uppercase text-gray-500 mb-1">
-              Active Cycles (VXC)
-            </div>
-            <div class="text-lg font-semibold">
-              {{ selectedNode.vxc?.toLocaleString("en-US") || "0" }}
-            </div>
-          </div>
-
-          <div class="bg-slate-50 rounded-lg p-4 shadow-sm">
-            <div class="text-xs uppercase text-gray-500 mb-1">
-              Account Capacity (10x)
-            </div>
-            <div class="text-lg font-semibold">
-              ${{ getNodeCapacity(selectedNode).toLocaleString("en-US") }}
-            </div>
-            <div class="text-xs text-gray-500">
-              Used: ${{ selectedNode.used?.toLocaleString("en-US") || "0" }} /
-              Remaining: ${{
-                (
-                  getNodeCapacity(selectedNode) - (selectedNode.used || 0)
-                ).toLocaleString("en-US")
-              }}
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="flex flex-wrap gap-2 justify-end">
-       
-          <Button
-            label="Copy VX Code"
-            icon="mdi mdi-content-copy"
-            class="p-button-sm p-button-outlined"
-            @click="copyCode(selectedNode.data?.vxCode)"
-          />
-          <Button
-            label="Close"
-            icon="mdi mdi-close"
-            class="p-button-secondary p-button-sm"
-            @click="showNodeDetails = false"
-          />
-        </div>
-      </div>
-    </Dialog>
-
-  
+      :node="selectedNode"
+      @copy="copyCode"
+    />
 
     <Toast />
   </div>
@@ -192,6 +98,8 @@ const toast = useToast();
 const userId = authUser.value?.user?.id;
 import VxPlanHeaderActions from "@/components/vx/vxplanheaderactions.vue";
 import VXPlanSummary from "@/components/vx/vxplansummary.vue";
+import VXNodeDetailsDialog from "@/components/vx/shownodedetails.vue";
+
 
 /* =========================
    SAFE DEFAULT TREE
@@ -224,9 +132,6 @@ const accountBalance = ref(0);
 const usedCapacity = ref(0);
 const flushOut = ref(0);
 const vxcCount = ref(0);
-
-
-
 
 /* =========================
    COMPUTED
@@ -365,8 +270,6 @@ function onActivateClick() {
     life: 3000,
   });
 }
-
-
 
 /* =========================
    ZOOM & PAN
