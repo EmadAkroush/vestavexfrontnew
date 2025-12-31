@@ -132,11 +132,12 @@ const accountBalance = ref(0);
 const usedCapacity = ref(0);
 const flushOut = ref(0);
 const vxcCount = ref(0);
+const accountCapacity = ref(0);
 
 /* =========================
    COMPUTED
 ========================= */
-const accountCapacity = computed(() => accountBalance.value * 3);
+
 
 /* =========================
    API CALLS
@@ -187,22 +188,23 @@ async function loadStats() {
   try {
     const res = await $fetch("/api/referrals/stats", {
       method: "POST",
-      body: {
-        investmentAmount: 0,
-        userId,
-      },
+      body: { userId },
     });
 
-    totalTeamVolume.value = res?.totalTeamVolume || 0;
-    totalTeamCount.value = res?.totalMembers || 0;
-    usedCapacity.value = res?.usedCapacity || 0;
-    flushOut.value = res?.flushOut || 0;
-    vxcCount.value = res?.vxc || 0;
-    accountBalance.value = res?.baseInvestment || 0;
+    totalTeamVolume.value = res.totalTeamVolume;
+    totalTeamCount.value = res.totalMembers;
+    usedCapacity.value = res.usedCapacity;
+    flushOut.value = res.flushOut;
+    vxcCount.value = res.vxc;
+    accountBalance.value = res.baseInvestment;
+    accountCapacity.value = res.accountCapacity;
+
+
   } catch (e) {
     console.error(e);
   }
 }
+
 
 async function loadEarnings() {
   try {
@@ -300,6 +302,8 @@ async function onActivateClick() {
       return;
     }
 
+
+
     // ✅ موفق
     accountBalance.value = res.balance;
 
@@ -309,6 +313,10 @@ async function onActivateClick() {
       detail: res.message,
       life: 3000,
     });
+
+      // 🔁 خیلی مهم
+    await loadReferralTree();
+    await loadStats();
   } catch (e) {
     toast.add({
       severity: "error",

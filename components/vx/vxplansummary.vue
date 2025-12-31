@@ -25,7 +25,7 @@
     <!-- Account Capacity -->
     <div class="bg-white shadow rounded p-4">
       <div class="text-xs uppercase text-gray-500">
-        Account Capacity (10x)
+        Account Capacity (3x)
       </div>
       <div class="text-xl font-semibold">
         ${{ format(accountCapacity) }}
