@@ -136,11 +136,21 @@ const vxcCount = ref(0);
 /* =========================
    COMPUTED
 ========================= */
-const accountCapacity = computed(() => accountBalance.value * 10);
+const accountCapacity = computed(() => accountBalance.value * 3);
 
 /* =========================
    API CALLS
 ========================= */
+
+
+
+
+
+
+
+
+
+
 async function loadReferralTree() {
   try {
     const res = await $fetch("/api/referrals/node", {
@@ -250,25 +260,63 @@ function getNodeCapacity(node) {
 /* =========================
    ACTIONS
 ========================= */
-function onActivateClick() {
-  if (accountBalance.value < 5) {
+async function onActivateClick() {
+  try {
+    const res = await $fetch("/api/referrals/activatevxcode", {
+      method: "POST",
+      body: { userId },
+    });
+
+    if (!res.success) {
+      // 🔴 قبلاً خریداری شده
+      if (res.code === "ALREADY_ACTIVE") {
+        toast.add({
+          severity: "info",
+          summary: "Already Activated",
+          detail: "Your VX Code has already been activated.",
+          life: 3000,
+        });
+        return;
+      }
+
+      // 🟠 موجودی کم
+      if (res.code === "INSUFFICIENT_BALANCE") {
+        toast.add({
+          severity: "warn",
+          summary: "Insufficient Balance",
+          detail: "Please top-up your account to activate VX Code.",
+          life: 3000,
+        });
+        return;
+      }
+
+      // fallback
+      toast.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: res.message || "Activation failed",
+        life: 3000,
+      });
+      return;
+    }
+
+    // ✅ موفق
+    accountBalance.value = res.balance;
+
     toast.add({
-      severity: "warn",
-      summary: "Insufficient Balance",
-      detail: "Please top-up first",
+      severity: "success",
+      summary: "Activated",
+      detail: res.message,
       life: 3000,
     });
-    return;
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Activation failed. Please try again.",
+      life: 3000,
+    });
   }
-
-  accountBalance.value -= 5;
-
-  toast.add({
-    severity: "success",
-    summary: "Activated",
-    detail: "VX Code activated successfully",
-    life: 3000,
-  });
 }
 
 /* =========================
