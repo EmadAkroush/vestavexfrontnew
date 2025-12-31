@@ -1,6 +1,7 @@
 <template>
   <div class="">
     <!-- Header / Actions -->
+
     <VxPlanHeaderActions
       @zoom-in="zoomIn"
       @zoom-out="zoomOut"
@@ -144,6 +145,24 @@ const accountCapacity = ref(0);
 ========================= */
 
 
+function mapNode(node) {
+  if (!node) return null;
+
+  return {
+    key: node.id,
+    type: "person",
+    data: {
+      name: node.name,
+      title: node.email,
+      vxCode: node.vxCode,
+      image: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
+    },
+    children: [
+      node.left ? mapNode(node.left) : null,
+      node.right ? mapNode(node.right) : null,
+    ].filter(Boolean),
+  };
+}
 
 
 
@@ -160,18 +179,20 @@ async function loadReferralTree() {
         userId,
       },
     });
-
+    console.log("node " , res);
+    
     // 🛡️ ایمن‌سازی
-    if (!res || !res.data) {
+    if (!res) {
       data.value = { ...emptyTree };
       root.value = { ...emptyTree };
       return;
     }
+  const mapped = mapNode(res);
 
-    data.value = res;
-    root.value = res;
+    root.value = mapped;
+    data.value = mapped; // یا [mapped] اگر آرایه خواستی
   } catch (e) {
-    console.error(e);
+
     data.value = { ...emptyTree };
     root.value = { ...emptyTree };
 
@@ -183,6 +204,9 @@ async function loadReferralTree() {
     });
   }
 }
+
+
+
 
 async function loadStats() {
   try {
