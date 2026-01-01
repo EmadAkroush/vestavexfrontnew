@@ -144,19 +144,27 @@ const accountCapacity = ref(0);
    API CALLS
 ========================= */
 
-
 function mapNode(node) {
   if (!node) return null;
 
   return {
     key: node.id,
     type: "person",
+
     data: {
       name: node.name,
       title: node.email,
       vxCode: node.vxCode,
-      image: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
+
+      // 🧮 Binary Volumes
+      leftVolume: node.volumes?.leftVolume ?? 0,
+      rightVolume: node.volumes?.rightVolume ?? 0,
+      totalTeamVolume: node.volumes?.totalTeamVolume ?? 0,
+
+      image:
+        "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
     },
+
     children: [
       node.left ? mapNode(node.left) : null,
       node.right ? mapNode(node.right) : null,
@@ -280,7 +288,7 @@ function copyCode(code) {
 
 function getNodeCapacity(node) {
   const base = node?.data?.baseInvestment || 0;
-  return base * 10;
+  return base * 3;
 }
 
 /* =========================

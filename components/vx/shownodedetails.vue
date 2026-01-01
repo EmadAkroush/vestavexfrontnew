@@ -35,22 +35,22 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <StatCard
           title="Left Volume"
-          :value="node.left"
-          :count="node.leftCount"
+          :value="node.data.leftVolume"
+          :count="node.data.leftCount"
         />
 
         <StatCard
           title="Right Volume"
-          :value="node.right"
-          :count="node.rightCount"
+          :value="node.data.rightVolume"
+          :count="node.data.rightCount"
         />
 
         <StatSimple
-          title="Active Cycles (VXC)"
-          :value="node.vxc"
+          title="totalTeamVolume (TTV)"
+          :value="node.data.totalTeamVolume"
         />
-
-        <StatCapacity :node="node" />
+<!-- 
+        <StatCapacity :node="node" /> -->
       </div>
 
       <!-- ================= FOOTER ================= -->
@@ -145,8 +145,8 @@ const StatSimple = defineComponent({
         h(
           "div",
           { class: "text-lg font-semibold" },
-          (props.value || 0).toLocaleString("en-US")
-        ),
+          `$${(props.value || 0).toLocaleString("en-US")}`
+        )
       ]);
   },
 });
