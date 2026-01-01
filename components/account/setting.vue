@@ -68,7 +68,7 @@
                 class="w-full mt-1"
               />
             </div>
-       
+
             <div class="md:col-span-2">
               <label class="text-sm font-medium text-gray-600"
                 >Wallet Address</label
@@ -79,7 +79,18 @@
                 class="w-full mt-1"
               />
             </div>
-            <div class="md:col-span-2">
+            <div class="flex flex-row items-center justify-end md:col-span-2">
+              <div class="mt-4">
+                <Button
+                  @click="saveProfile"
+                  label="Save Profile"
+                  icon="pi pi-check"
+                  class="p-button-sm"
+                />
+              </div>
+            </div>
+
+            <div class="md:col-span-2 border p-4">
               <label class="text-sm font-medium text-gray-600">
                 Leader / Referral Code
               </label>
@@ -90,28 +101,53 @@
                   placeholder="Enter leader VX code"
                   class="flex-1"
                 />
+              </div>
 
-                <Button
-                  label="Connect"
-                  icon="mdi mdi-account-arrow-up-outline"
-                  class="p-button-sm p-button-success"
-                  @click="connectLeader"
-                />
+              <div class="mt-2">
+                <label class="text-sm font-medium text-gray-600 mb-1 block">
+                  Position
+                </label>
+
+                <div class="flex gap-6 green-600">
+                  <!-- LEFT -->
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="position"
+                      value="left"
+                      v-model="profile.position"
+                      class="w-4 h-4 text-green-600 focus:ring-green-500"
+                    />
+                    <span>Left</span>
+                  </label>
+
+                  <!-- RIGHT -->
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="position"
+                      value="right"
+                      v-model="profile.position"
+                      class="w-4 h-4 text-green-600 focus:ring-green-500"
+                    />
+                    <span>Right</span>
+                  </label>
+                </div>
               </div>
 
               <small class="text-gray-500">
                 Enter the VX code of your leader to connect your account.
               </small>
+              <div class="flex flex-row items-center justify-end">
+                <Button
+                  label="Connect"
+                  icon="mdi mdi-account-arrow-up-outline"
+                  class="p-button-sm p-button-success custombtn"
+                  @click="connectLeader"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="mt-4 text-right">
-          <Button
-            @click="saveProfile"
-            label="Save Profile"
-            icon="pi pi-check"
-            class="p-button-sm"
-          />
         </div>
       </template>
     </Card>
@@ -198,6 +234,7 @@ const profile = ref({
   email: "",
   leaderCode: "",
   wallet: "",
+  position: "", // 👈 اضافه شد
 });
 
 const placeholders = ref({
@@ -240,7 +277,7 @@ onMounted(async () => {
         phone: user.phone || "",
         email: user.email || "",
         wallet: user.wallet || "",
-        leaderCode: user.referredBy || "",
+     
       };
     }
 
@@ -277,6 +314,16 @@ const connectLeader = async () => {
     return;
   }
 
+  if (!profile.value.position) {
+    toast.add({
+      severity: "warn",
+      summary: "Position Required",
+      detail: "Please select Left or Right position.",
+      life: 3000,
+    });
+    return;
+  }
+
   try {
     loadingLeader.value = true;
     const userId = authUser.value?.user?.id;
@@ -295,8 +342,19 @@ const connectLeader = async () => {
       body: {
         referrerCode: profile.value.leaderCode,
         newUserId: userId,
+        position: profile.value.position, // 👈 مهم
       },
     });
+
+    if (!res.success && res.code === "POSITION_TAKEN") {
+      toast.add({
+        severity: "error",
+        summary: "Position Unavailable",
+        detail: res.message,
+        life: 4000,
+      });
+      return;
+    }
 
     toast.add({
       severity: res.success ? "success" : "warn",
@@ -379,3 +437,5 @@ const onAvatarUpload = (event) => {
   }
 };
 </script>
+
+<style></style>
