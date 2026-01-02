@@ -17,7 +17,7 @@
         ${{ format(root?.data?.totalTeamVolume ) }}
       </div>
       <div class="text-sm text-gray-600">
-        {{ format(totalTeamCount) }} members
+        {{ format(root?.data?.totalCount) }} members
       </div>
     </div>
 
