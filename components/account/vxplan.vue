@@ -265,10 +265,6 @@ function copyCode(code) {
   });
 }
 
-function getNodeCapacity(node) {
-  const base = node?.data?.baseInvestment || 0;
-  return base * 3;
-}
 
 /* =========================
    ACTIONS
