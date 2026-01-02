@@ -152,15 +152,27 @@ function mapNode(node) {
     type: "person",
 
     data: {
+      // 👤 User Info
       name: node.name,
       title: node.email,
       vxCode: node.vxCode,
+
+      // 💰 Balances (اگر خواستی بعداً استفاده کنی)
+      mainBalance: node.balances?.main ?? 0,
+      profitBalance: node.balances?.profit ?? 0,
+      referralBalance: node.balances?.referral ?? 0,
 
       // 🧮 Binary Volumes
       leftVolume: node.volumes?.leftVolume ?? 0,
       rightVolume: node.volumes?.rightVolume ?? 0,
       totalTeamVolume: node.volumes?.totalTeamVolume ?? 0,
 
+      // 👥 Binary Counts ✅
+      leftCount: node.counts?.leftCount ?? 0,
+      rightCount: node.counts?.rightCount ?? 0,
+      totalCount: node.counts?.totalCount ?? 0,
+
+      // 🖼 Avatar
       image:
         "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
     },
@@ -171,6 +183,7 @@ function mapNode(node) {
     ].filter(Boolean),
   };
 }
+
 
 async function loadReferralTree() {
   try {
