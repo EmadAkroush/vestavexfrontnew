@@ -49,8 +49,8 @@
           title="totalTeamVolume (TTV)"
           :value="node.data.totalTeamVolume"
         />
-<!-- 
-        <StatCapacity :node="node" /> -->
+
+        <StatCapacity :node="node.data.referralBalance" />
       </div>
 
       <!-- ================= FOOTER ================= -->
@@ -169,20 +169,14 @@ const StatCapacity = defineComponent({
         h(
           "div",
           { class: "text-xs uppercase text-gray-500 mb-1" },
-          "Account Capacity (3x)"
+          "VX Balances"
         ),
         h(
           "div",
           { class: "text-lg font-semibold" },
           `$${capacity.value.toLocaleString("en-US")}`
         ),
-        h(
-          "div",
-          { class: "text-xs text-gray-500" },
-          `Used: $${used.value.toLocaleString("en-US")} / Remaining: $${(
-            capacity.value - used.value
-          ).toLocaleString("en-US")}`
-        ),
+     
       ]);
   },
 });
