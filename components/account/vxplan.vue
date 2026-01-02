@@ -172,13 +172,6 @@ function mapNode(node) {
   };
 }
 
-
-
-
-
-
-
-
 async function loadReferralTree() {
   try {
     const res = await $fetch("/api/referrals/node", {
@@ -212,8 +205,6 @@ async function loadReferralTree() {
     });
   }
 }
-
-
 
 
 async function loadStats() {

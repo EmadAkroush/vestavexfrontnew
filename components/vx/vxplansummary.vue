@@ -1,6 +1,7 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
     <!-- Account -->
+   
     <div class="bg-white shadow rounded p-4">
       <div class="text-xs uppercase text-gray-500">Account</div>
       <div class="text-xl font-semibold">
@@ -13,7 +14,7 @@
     <div class="bg-white shadow rounded p-4">
       <div class="text-xs uppercase text-gray-500">Total Team Volume</div>
       <div class="text-xl font-semibold">
-        ${{ format(totalTeamVolume) }}
+        ${{ format(root?.data?.totalTeamVolume ) }}
       </div>
       <div class="text-sm text-gray-600">
         {{ format(totalTeamCount) }} members
