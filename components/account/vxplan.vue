@@ -238,19 +238,7 @@ async function loadStats() {
 }
 
 
-async function loadEarnings() {
-  try {
-    const res = await $fetch("/api/referrals/earnings", {
-      method: "POST",
-      body: {
-        userId,
-      },
-    });
-    console.log("Earnings:", res);
-  } catch (e) {
-    console.error(e);
-  }
-}
+
 
 /* =========================
    NODE DETAILS
