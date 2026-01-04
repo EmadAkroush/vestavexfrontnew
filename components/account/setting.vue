@@ -187,12 +187,12 @@
               class="w-full mt-1"
             />
           </div>
-          <div class="flex items-center justify-between md:col-span-2">
+          <!-- <div class="flex items-center justify-between md:col-span-2">
             <span class="text-sm font-medium text-gray-600"
               >Enable 2FA for withdrawals</span
             >
             <InputSwitch v-model="security.twoFA" />
-          </div>
+          </div> -->
         </div>
         <div class="mt-4 text-right">
           <Button
