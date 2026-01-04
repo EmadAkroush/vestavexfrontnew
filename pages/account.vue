@@ -2,11 +2,15 @@
   <div class="account-container min-h-screen bg-gray-50 flex flex-col">
     <!-- Breadcrumb -->
     <div class="px-6 sm:px-20 pt-6 text-sm text-gray-600">
-      <nuxt-link to="/" class="text-green-700 font-semibold hover:underline">Home /</nuxt-link>
+      <nuxt-link to="/" class="text-green-700 font-semibold hover:underline"
+        >Home /</nuxt-link
+      >
       <span> Account </span>
     </div>
 
-    <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 px-6 sm:px-20 py-6">
+    <div
+      class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 px-6 sm:px-20 py-6"
+    >
       <!-- ===== Sidebar (Desktop) ===== -->
       <aside
         class="hidden sm:flex sm:flex-col sm:col-span-3 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sticky top-8 h-fit"
@@ -15,10 +19,20 @@
           <div
             class="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-700 text-3xl font-bold"
           >
-            VX
+            {{ loadingUser ? "..." : userInitials }}
           </div>
-          <h2 class="mt-3 font-semibold text-gray-800">My Account</h2>
-          <p class="text-xs text-gray-500">Smart Investment Member</p>
+
+          <h2 class="mt-3 font-semibold text-gray-800">
+            {{
+              loadingUser
+                ? "Loading..."
+                : user?.firstName + " " + user?.lastName
+            }}
+          </h2>
+
+          <p class="text-xs text-gray-500">
+            {{ loadingUser ? "" : user?.plan || "Smart Investment platform" }}
+          </p>
         </div>
 
         <div class="divide-y divide-gray-100">
@@ -28,8 +42,9 @@
             @click="setActive(item.key)"
             class="flex items-center px-4 py-3 rounded-lg cursor-pointer transition-all"
             :class="{
-              'bg-green-50 text-green-700 font-semibold border-l-4 border-green-500 shadow-sm': activeItem === item.key,
-              'text-gray-600 hover:bg-gray-100': activeItem !== item.key
+              'bg-green-50 text-green-700 font-semibold border-l-4 border-green-500 shadow-sm':
+                activeItem === item.key,
+              'text-gray-600 hover:bg-gray-100': activeItem !== item.key,
             }"
           >
             <i :class="item.icon + ' text-xl mr-3'"></i>
@@ -47,7 +62,9 @@
       </aside>
 
       <!-- ===== Main Content ===== -->
-      <main class="sm:col-span-9 bg-white rounded-2xl shadow-sm p-4 sm:p-6 relative overflow-hidden">
+      <main
+        class="sm:col-span-9 bg-white rounded-2xl shadow-sm p-4 sm:p-6 relative overflow-hidden"
+      >
         <transition name="fade-slide" mode="out-in">
           <component :is="currentComponent" :key="activeItem" />
         </transition>
@@ -73,19 +90,20 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, onMounted, computed } from "vue";
 
 // ==== Import Components ====
-import AccountPerformance from "@/components/account/performance.vue"
-import AccountPortfolio from "@/components/account/portfolio.vue"
-import AccountCashout from "@/components/account/cashout.vue"
-import AccountHistory from "@/components/account/history.vue"
-import AccountSetting from "@/components/account/setting.vue"
-import AccountVxPlan from "@/components/account/vxplan.vue"
+import AccountPerformance from "@/components/account/performance.vue";
+import AccountPortfolio from "@/components/account/portfolio.vue";
+import AccountCashout from "@/components/account/cashout.vue";
+import AccountHistory from "@/components/account/history.vue";
+import AccountSetting from "@/components/account/setting.vue";
+import AccountVxPlan from "@/components/account/vxplan.vue";
 
-definePageMeta({ middleware: 'auth' })
-
-
+definePageMeta({ middleware: "auth" });
+const { authUser } = useAuth();
+const user = ref(null);
+const loadingUser = ref(true);
 // ==== Menu Items ====
 const menuItems = ref([
   { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
@@ -94,41 +112,80 @@ const menuItems = ref([
   { key: "history", label: "History", icon: "mdi mdi-history" },
   { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
   { key: "setting", label: "Setting", icon: "mdi mdi-account-cog-outline" },
-])
+]);
 
-const activeItem = ref("performance")
+const activeItem = ref("performance");
+
+// 🟢 Load current user data from backend
+onMounted(async () => {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Not Logged In",
+        detail: "Please log in to view your account.",
+        life: 3000,
+      });
+      return;
+    }
+
+    user.value = await $fetch("/api/account/find", {
+      method: "POST",
+      body: { id: userId },
+    });
+
+    console.log("user", user);
+  } catch (err) {
+    console.error("Profile load error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load user data.",
+      life: 4000,
+    });
+  } finally {
+    loadingUser.value = false;
+  }
+});
+const userInitials = computed(() => {
+  if (!user.value) return "VX";
+  const f = user.value.firstName?.[0] || "";
+  const l = user.value.lastName?.[0] || "";
+  return (f + l).toUpperCase();
+});
 
 const setActive = (key) => {
-  activeItem.value = key
-  window.scrollTo({ top: 0, behavior: "smooth" })
-}
+  activeItem.value = key;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
 const currentComponent = computed(() => {
   switch (activeItem.value) {
     case "performance":
-      return AccountPerformance
+      return AccountPerformance;
     case "portfolio":
-      return AccountPortfolio
+      return AccountPortfolio;
     case "cashout":
-      return AccountCashout
+      return AccountCashout;
     case "history":
-      return AccountHistory
+      return AccountHistory;
     case "vxplan":
-      return AccountVxPlan
+      return AccountVxPlan;
     case "setting":
-      return AccountSetting
+      return AccountSetting;
     default:
       return {
         template: `<div class="text-center text-gray-400 py-20">Select an item from the menu.</div>`,
-      }
+      };
   }
-})
+});
 
 const logout = () => {
   if (confirm("Are you sure you want to log out?")) {
-    alert("You have been logged out successfully.")
+    alert("You have been logged out successfully.");
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
