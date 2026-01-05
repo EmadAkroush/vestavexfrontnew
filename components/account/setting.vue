@@ -26,14 +26,7 @@
 
           <!-- User Info -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-            <div>
-              <label class="text-sm font-medium text-gray-600">Username</label>
-              <InputText
-                v-model="profile.username"
-                :placeholder="placeholders.username"
-                class="w-full mt-1"
-              />
-            </div>
+        
             <div>
               <label class="text-sm font-medium text-gray-600"
                 >First Name</label
@@ -66,6 +59,7 @@
                 v-model="profile.email"
                 :placeholder="placeholders.email"
                 class="w-full mt-1"
+                readonly
               />
             </div>
 
@@ -157,16 +151,7 @@
       <template #title>Security</template>
       <template #content>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="text-sm font-medium text-gray-600"
-              >Current Password</label
-            >
-            <Password
-              v-model="security.current"
-              toggleMask
-              class="w-full mt-1"
-            />
-          </div>
+      
           <div>
             <label class="text-sm font-medium text-gray-600"
               >New Password</label
