@@ -195,7 +195,7 @@ function initThreeBG(container) {
 }
 
 
-const goToSignup = () => router.push("/signup");
+const goToSignup = () => router.push("/login");
 
 // Features (بر اساس سند PDF)
 const features = [

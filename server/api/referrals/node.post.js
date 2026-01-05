@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
-  //  console.log("node data " , data);
+   console.log("node data " , data);
  
     
 
