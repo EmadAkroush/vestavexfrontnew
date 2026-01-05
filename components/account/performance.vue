@@ -95,17 +95,23 @@
           <div class="flex flex-col gap-4">
             <div class="flex justify-between items-center">
               <span class="text-gray-500">Total Referrals</span>
-              <span class="font-semibold text-green-700">{{ referral?.counts?.totalCount }}</span>
+              <span class="font-semibold text-green-700">{{
+                referral?.counts?.totalCount
+              }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-500">Total Invesstment</span>
-              <span class="font-semibold text-green-700">${{ referral?.volumes?.leftVolume }}</span>
+              <span class="font-semibold text-green-700"
+                >${{ referral?.volumes?.leftVolume }}</span
+              >
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-500">Left Volume</span>
-              <span class="font-semibold text-green-700">${{ referral?.volumes?.rightVolume }}</span>
+              <span class="font-semibold text-green-700"
+                >${{ referral?.volumes?.rightVolume }}</span
+              >
             </div>
-              <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center">
               <span class="text-gray-500">Right Volume</span>
               <span class="font-semibold text-green-700">$560</span>
             </div>
@@ -123,19 +129,28 @@
       <Card class="shadow-md">
         <template #title>Recent Activity</template>
         <template #content>
-          <ul class="divide-y divide-gray-200 text-sm">
+          <ul v-if="activities.length" class="divide-y divide-gray-200 text-sm">
             <li
               v-for="(item, index) in activities"
               :key="index"
-              class="py-3 flex justify-between"
+              class="py-3 flex justify-between items-center hover:bg-gray-50 px-2 rounded transition"
             >
               <div class="flex items-center gap-3">
-                <i :class="item.icon + ' text-xl text-green-600'"></i>
-                <span>{{ item.action }}</span>
+                <i :class="`${item.icon} ${item.color} text-xl`"></i>
+                <span class="font-medium text-gray-700">
+                  {{ item.action }}
+                </span>
               </div>
-              <span class="text-gray-500">{{ item.date }}</span>
+
+              <span class="text-gray-400 text-xs whitespace-nowrap">
+                {{ item.date }}
+              </span>
             </li>
           </ul>
+
+          <div v-else class="text-center text-gray-400 py-6">
+            No recent activity
+          </div>
         </template>
       </Card>
     </div>
@@ -170,10 +185,81 @@ const vxChart = ref({
 const referral = ref();
 
 const toast = useToast();
+const activities = ref([]);
 
 /* ======================
    ✅ API Calls (Backend)
    ====================== */
+async function fetchRecentActivities() {
+  if (!authUser.value?.user?.id) return;
+
+  const res = await $fetch("/api/transactions/my", {
+    method: "POST",
+    body: {
+      userId: authUser.value.user.id,
+    },
+  });
+
+  // فقط ۴ تای آخر (جدیدترین)
+  activities.value = res.slice(0, 4).map(mapTransactionToActivity);
+}
+
+function mapTransactionToActivity(tx) {
+  const typeMap = {
+    deposit: {
+      icon: "mdi mdi-cash-plus",
+      label: "Deposit Added",
+      color: "text-green-600",
+    },
+    investment: {
+      icon: "mdi mdi-chart-line",
+      label: "Investment Started",
+      color: "text-blue-600",
+    },
+    "investment-upgrade": {
+      icon: "mdi mdi-arrow-up-bold",
+      label: "Investment Upgraded",
+      color: "text-indigo-600",
+    },
+    profit: {
+      icon: "mdi mdi-cash-multiple",
+      label: "Profit Earned",
+      color: "text-emerald-600",
+    },
+    "binary-profit": {
+      icon: "mdi mdi-account-group",
+      label: "Binary Bonus",
+      color: "text-purple-600",
+    },
+    withdraw: {
+      icon: "mdi mdi-cash-minus",
+      label: "Withdrawal",
+      color: "text-red-500",
+    },
+  };
+
+  const meta = typeMap[tx.type] || {
+    icon: "mdi mdi-swap-horizontal",
+    label: tx.type,
+    color: "text-gray-500",
+  };
+
+  return {
+    icon: meta.icon,
+    color: meta.color,
+    action: `${meta.label} • $${tx.amount}`,
+    date: timeAgo(tx.createdAt),
+  };
+}
+
+function timeAgo(date) {
+  const seconds = Math.floor((Date.now() - new Date(date)) / 1000);
+
+  if (seconds < 60) return `${seconds} seconds ago`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+  return `${Math.floor(seconds / 86400)} days ago`;
+}
 
 async function fetchBalances() {
   try {
@@ -218,7 +304,6 @@ async function fetchProfitChart() {
   };
 }
 
-
 async function fetchVXChart() {
   const userId = authUser.value?.user?.id;
   if (!userId) return;
@@ -244,23 +329,18 @@ async function fetchVXChart() {
 }
 
 async function loadReferralTree() {
-
   try {
     const userId = authUser.value?.user?.id;
-     referral.value = await $fetch("/api/referrals/node", {
+    referral.value = await $fetch("/api/referrals/node", {
       method: "POST",
       body: {
         userId,
       },
     });
-    console.log("node " , referral.value);
-    
+    console.log("node ", referral.value);
+
     // 🛡️ ایمن‌سازی
-
   } catch (e) {
-
-  
-
     toast.add({
       severity: "error",
       summary: "Error",
@@ -269,9 +349,6 @@ async function loadReferralTree() {
     });
   }
 }
-
-
-
 
 const lineOptions = {
   plugins: {
@@ -283,21 +360,6 @@ const lineOptions = {
   },
 };
 
-const activities = [
-  { icon: "mdi mdi-cash-plus", action: "Deposit Added", date: "2h ago" },
-  { icon: "mdi mdi-chart-line", action: "Profit Earned", date: "5h ago" },
-  {
-    icon: "mdi mdi-wallet-outline",
-    action: "VX Reward Credited",
-    date: "1d ago",
-  },
-  {
-    icon: "mdi mdi-cash-minus",
-    action: "Withdrawal Requested",
-    date: "2d ago",
-  },
-];
-
 /* ======================
    ✅ Ensure balances are fetched
    - Try fetch on mount if authUser is ready
@@ -308,7 +370,8 @@ onMounted(() => {
     fetchBalances();
     fetchProfitChart();
     fetchVXChart();
-    loadReferralTree()
+    loadReferralTree();
+    fetchRecentActivities(); // ✅
   }
 });
 
@@ -316,6 +379,9 @@ watch(
   () => authUser.value,
   (newVal) => {
     if (newVal?.user?.id) fetchBalances();
+  },
+  (val) => {
+    if (val?.user?.id) fetchRecentActivities();
   }
 );
 </script>
