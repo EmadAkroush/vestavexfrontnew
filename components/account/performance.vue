@@ -95,16 +95,21 @@
           <div class="flex flex-col gap-4">
             <div class="flex justify-between items-center">
               <span class="text-gray-500">Total Referrals</span>
-              <span class="font-semibold text-green-700">124</span>
+              <span class="font-semibold text-green-700">{{ referral?.counts?.totalCount }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Active Members</span>
-              <span class="font-semibold text-green-700">89</span>
+              <span class="text-gray-500">Total Invesstment</span>
+              <span class="font-semibold text-green-700">${{ referral?.volumes?.leftVolume }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Referral Earnings</span>
+              <span class="text-gray-500">Left Volume</span>
+              <span class="font-semibold text-green-700">${{ referral?.volumes?.rightVolume }}</span>
+            </div>
+              <div class="flex justify-between items-center">
+              <span class="text-gray-500">Right Volume</span>
               <span class="font-semibold text-green-700">$560</span>
             </div>
+
             <Button
               label="Invite More"
               icon="mdi mdi-account-plus-outline"
@@ -162,6 +167,7 @@ const vxChart = ref({
   labels: null,
   datasets: [],
 });
+const referral = ref();
 
 const toast = useToast();
 
@@ -237,6 +243,33 @@ async function fetchVXChart() {
   };
 }
 
+async function loadReferralTree() {
+
+  try {
+    const userId = authUser.value?.user?.id;
+     referral.value = await $fetch("/api/referrals/node", {
+      method: "POST",
+      body: {
+        userId,
+      },
+    });
+    console.log("node " , referral.value);
+    
+    // 🛡️ ایمن‌سازی
+
+  } catch (e) {
+
+  
+
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load referral tree",
+      life: 3000,
+    });
+  }
+}
+
 
 
 
@@ -275,6 +308,7 @@ onMounted(() => {
     fetchBalances();
     fetchProfitChart();
     fetchVXChart();
+    loadReferralTree()
   }
 });
 
