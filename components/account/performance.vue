@@ -10,7 +10,6 @@
         place.
       </p>
     </div>
-
     <!-- ===== Stats Overview ===== -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Total Balance -->
@@ -120,6 +119,8 @@
               label="Invite More"
               icon="mdi mdi-account-plus-outline"
               class="p-button-success mt-2"
+              :loading="inviteLoading"
+              @click="handleInvite"
             />
           </div>
         </template>
@@ -164,6 +165,7 @@ import Chart from "primevue/chart";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 const { authUser } = useAuth();
+const inviteLoading = ref(false);
 
 // ✅ Reactive states
 const balances = ref({
@@ -183,6 +185,7 @@ const vxChart = ref({
   datasets: [],
 });
 const referral = ref();
+const vxCode = ref();
 
 const toast = useToast();
 const activities = ref([]);
@@ -190,6 +193,31 @@ const activities = ref([]);
 /* ======================
    ✅ API Calls (Backend)
    ====================== */
+
+async function handleInvite() {
+ 
+    // ⛔ اکانت فعال نیست
+    if (!vxCode.value) {
+      toast.add({
+        severity: "warn",
+        summary: "Account Not Active",
+        detail: "Please activate your account to get your referral link.",
+        life: 4000,
+      });
+      return;
+    }
+
+    // ✅ کپی به کلیپ‌بورد
+    await navigator.clipboard.writeText(vxCode);
+
+    toast.add({
+      severity: "success",
+      summary: "Copied!",
+      detail: "Your referral code has been copied to clipboard.",
+      life: 3000,
+    });
+  } 
+
 async function fetchRecentActivities() {
   if (!authUser.value?.user?.id) return;
 
@@ -312,7 +340,7 @@ async function fetchVXChart() {
     method: "POST",
     body: { userId },
   });
-
+ 
   vxChart.value = {
     labels: res.labels,
     datasets: [
@@ -337,6 +365,7 @@ async function loadReferralTree() {
         userId,
       },
     });
+     vxCode.value = referral.value?.vxCode;
     console.log("node ", referral.value);
 
     // 🛡️ ایمن‌سازی
