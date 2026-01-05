@@ -2,9 +2,12 @@
   <div class="dashboard space-y-10 p-4 sm:p-8">
     <!-- ===== Header Section ===== -->
     <div class="text-center mb-6">
-      <h1 class="text-3xl font-bold text-green-700">Welcome Back, Investor 👋</h1>
+      <h1 class="text-3xl font-bold text-green-700">
+        Welcome Back, Investor 👋
+      </h1>
       <p class="text-gray-500 mt-2">
-        Track your financial growth, portfolio, and VX rewards — all in one place.
+        Track your financial growth, portfolio, and VX rewards — all in one
+        place.
       </p>
     </div>
 
@@ -17,7 +20,9 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">Main Balance</p>
-          <h3 class="text-2xl font-bold text-green-700">  ${{ balances.mainBalance }} </h3>
+          <h3 class="text-2xl font-bold text-green-700">
+            ${{ balances.mainBalance }}
+          </h3>
         </div>
       </div>
 
@@ -28,7 +33,9 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">Profits Balances</p>
-          <h3 class="text-2xl font-bold text-blue-700"> ${{ balances.profitBalance }}</h3>
+          <h3 class="text-2xl font-bold text-blue-700">
+            ${{ balances.profitBalance }}
+          </h3>
         </div>
       </div>
 
@@ -39,7 +46,9 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">VX Balances</p>
-          <h3 class="text-2xl font-bold text-purple-700">${{ balances.referralBalance }}</h3>
+          <h3 class="text-2xl font-bold text-purple-700">
+            ${{ balances.referralBalance }}
+          </h3>
         </div>
       </div>
 
@@ -50,26 +59,29 @@
         </div>
         <div>
           <p class="text-gray-500 text-sm">maxCap Balances</p>
-          <h3 class="text-2xl font-bold text-yellow-700">${{ balances.maxCapBalance }}</h3>
+          <h3 class="text-2xl font-bold text-yellow-700">
+            ${{ balances.maxCapBalance }}
+          </h3>
         </div>
       </div>
     </div>
 
     <!-- ===== Charts Section ===== -->
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Earnings Growth -->
+      <!-- Profits Balances -->
       <Card class="shadow-md">
-        <template #title>Earnings Growth</template>
+        <template #title> Profits Balances</template>
         <template #content>
-          <Chart type="line" :data="earningsChart" :options="lineOptions" />
+          <Chart type="line" :data="profitChart" :options="lineOptions" />
         </template>
       </Card>
 
-      <!-- VX Plan (10x Rule) -->
+      <!-- Profits Balances -->
       <Card class="shadow-md">
-        <template #title>VX Plan Progress</template>
+        <template #title> VX Balances</template>
         <template #content>
-          <Chart type="doughnut" :data="vxChart" />
+          <Chart type="line" :data="vxChart" :options="lineOptions" />
         </template>
       </Card>
     </div>
@@ -107,7 +119,11 @@
         <template #title>Recent Activity</template>
         <template #content>
           <ul class="divide-y divide-gray-200 text-sm">
-            <li v-for="(item, index) in activities" :key="index" class="py-3 flex justify-between">
+            <li
+              v-for="(item, index) in activities"
+              :key="index"
+              class="py-3 flex justify-between"
+            >
               <div class="flex items-center gap-3">
                 <i :class="item.icon + ' text-xl text-green-600'"></i>
                 <span>{{ item.action }}</span>
@@ -138,7 +154,14 @@ const balances = ref({
   referralBalance: 0,
   bonusBalance: 0,
 });
-
+const profitChart = ref({
+  labels: null,
+  datasets: [],
+});
+const vxChart = ref({
+  labels: null,
+  datasets: [],
+});
 
 const toast = useToast();
 
@@ -155,8 +178,6 @@ async function fetchBalances() {
       body: { userId },
     });
     balances.value = res;
-   
-    
   } catch (error) {
     toast.add({
       severity: "error",
@@ -167,32 +188,57 @@ async function fetchBalances() {
   }
 }
 
+async function fetchProfitChart() {
+  const userId = authUser.value?.user?.id;
+  if (!userId) return;
+
+  const res = await $fetch("/api/transactions/profit", {
+    method: "POST",
+    body: { userId },
+  });
+
+  profitChart.value = {
+    labels: res.labels,
+    datasets: [
+      {
+        label: "Profit ($)",
+        data: res.data,
+        borderColor: "#3b82f6",
+        backgroundColor: "rgba(59,130,246,0.15)",
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+}
 
 
-const earningsChart = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "Earnings ($)",
-      data: [300, 800, 1200, 2000, 2600, 3300],
-      borderColor: "#10b981",
-      tension: 0.3,
-      fill: true,
-      backgroundColor: "rgba(16,185,129,0.15)",
-    },
-  ],
-};
+async function fetchVXChart() {
+  const userId = authUser.value?.user?.id;
+  if (!userId) return;
 
-const vxChart = {
-  labels: ["Achieved", "Remaining"],
-  datasets: [
-    {
-      data: [65, 35],
-      backgroundColor: ["#10b981", "#e5e7eb"],
-      hoverOffset: 6,
-    },
-  ],
-};
+  const res = await $fetch("/api/transactions/vxchart", {
+    method: "POST",
+    body: { userId },
+  });
+
+  vxChart.value = {
+    labels: res.labels,
+    datasets: [
+      {
+        label: "VX Earnings",
+        data: res.data,
+        borderColor: "#8b5cf6",
+        backgroundColor: "rgba(139,92,246,0.15)",
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+}
+
+
+
 
 const lineOptions = {
   plugins: {
@@ -207,8 +253,16 @@ const lineOptions = {
 const activities = [
   { icon: "mdi mdi-cash-plus", action: "Deposit Added", date: "2h ago" },
   { icon: "mdi mdi-chart-line", action: "Profit Earned", date: "5h ago" },
-  { icon: "mdi mdi-wallet-outline", action: "VX Reward Credited", date: "1d ago" },
-  { icon: "mdi mdi-cash-minus", action: "Withdrawal Requested", date: "2d ago" },
+  {
+    icon: "mdi mdi-wallet-outline",
+    action: "VX Reward Credited",
+    date: "1d ago",
+  },
+  {
+    icon: "mdi mdi-cash-minus",
+    action: "Withdrawal Requested",
+    date: "2d ago",
+  },
 ];
 
 /* ======================
@@ -219,6 +273,8 @@ const activities = [
 onMounted(() => {
   if (authUser?.value?.user?.id) {
     fetchBalances();
+    fetchProfitChart();
+    fetchVXChart();
   }
 });
 
@@ -228,10 +284,6 @@ watch(
     if (newVal?.user?.id) fetchBalances();
   }
 );
-
-
-
-
 </script>
 
 <style lang="scss" scoped>

@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // 🟢 ارسال درخواست به بک‌اند finalxcard با توکن
-    const data = await $fetch(`${apiBase}/referrals/node`, {
+    const data = await $fetch(`${apiBase}/transactions/chart/vx`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
-  //  console.log("node data " , data);
  
     
 
