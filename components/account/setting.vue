@@ -185,6 +185,7 @@
             icon="pi pi-lock"
             severity="warning"
             class="p-button-sm"
+            @click="updatePassword"
           />
         </div>
       </template>
@@ -229,6 +230,11 @@ const placeholders = ref({
   phone: "Loading...",
   email: "Loading...",
   wallet: "Loading...",
+});
+
+const security = ref({
+  newPass: "",
+  confirm: "",
 });
 
 // 🟢 Load current user data from backend
@@ -408,12 +414,57 @@ const saveProfile = async () => {
   }
 };
 
-const security = ref({
-  current: "",
-  newPass: "",
-  confirm: "",
-  twoFA: false,
-});
+async function updatePassword() {
+  if (!security.value.newPass || !security.value.confirm) {
+    toast.add({
+      severity: "warn",
+      summary: "Missing Info",
+      detail: "Please fill both password fields",
+      life: 3000,
+    });
+    return;
+  }
+
+  if (security.value.newPass !== security.value.confirm) {
+    toast.add({
+      severity: "error",
+      summary: "Password Error",
+      detail: "Passwords do not match",
+      life: 3000,
+    });
+    return;
+  }
+
+  try {
+    await $fetch("/api/account/updatepassword", {
+      method: "POST",
+      body: {
+        userId: authUser.value.user.id,
+        newPassword: security.value.newPass,
+        confirmPassword: security.value.confirm,
+      },
+    });
+
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "Password updated successfully",
+      life: 3000,
+    });
+
+    security.value.newPass = "";
+    security.value.confirm = "";
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Update Failed",
+      detail: e?.data?.message || "Server error",
+      life: 4000,
+    });
+  }
+}
+
+
 
 const onAvatarUpload = (event) => {
   const file = event.files[0];
