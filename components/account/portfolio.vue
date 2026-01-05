@@ -71,7 +71,7 @@
             <div class="text-sm text-gray-700 space-y-2">
               <p>Invested: <span class="font-semibold text-green-700">${{ item.amount }}</span></p>
               <p>Profit Rate: <span class="font-semibold">{{ item.profit }}% / month</span></p>
-              <p>Duration: <span class="font-semibold">{{ item.start }} → {{ item.end }}</span></p>
+              <p>Date of purchase: <span class="font-semibold">{{ item.start }} </span></p>
               <div class="mt-3">
                 <div class="flex justify-between text-xs text-gray-500 mb-1">
                   <span>Progress</span>
@@ -313,7 +313,8 @@ onMounted(async () => {
         userId: authUser.value.user.id,
       },
     })
-
+   console.log("dddd" , res );
+   
     // 🔁 Map backend data to UI format
     portfolio.value = res.map((inv) => ({
       id: inv._id,
@@ -338,9 +339,26 @@ onMounted(async () => {
 
 // ===== Helpers =====
 function calculateProgress(inv) {
-  // نمونه ساده (می‌تونی بعداً دقیق‌ترش کنی)
-  return Math.min(100, Math.floor(Math.random() * 80) + 10)
+  const amount = Number(inv.amount || 0);
+
+  const min = Number(inv.package?.minDeposit ?? 0);
+  const max = Number(inv.package?.maxDeposit ?? 0);
+
+  // 🛡️ اگر بازه معتبر نیست
+  if (!min || !max || max <= min) return 0;
+
+  // ⛔ کمتر از مین
+  if (amount <= min) return 0;
+
+  // ✅ بیشتر یا مساوی سقف
+  if (amount >= max) return 100;
+
+  // 🎯 محاسبه درصد واقعی
+  const progress = ((amount - min) / (max - min)) * 100;
+
+  return Math.round(progress);
 }
+
 
 function formatDate(date) {
   return new Date(date).toISOString().split("T")[0]
