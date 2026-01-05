@@ -211,8 +211,8 @@
 
       <template #footer>
         <div class="flex justify-between w-full">
-          <Button label="Withdraw" icon="mdi mdi-cash-minus" class="p-button-danger" />
-          <Button label="Reinvest" icon="mdi mdi-repeat" class="p-button-success" />
+          <Button     @click="openInvestDialog(selectedBundle)"   label="Reinvest" icon="mdi mdi-repeat" class="p-button-success" />
+          
         </div>
       </template>
     </Dialog>
@@ -239,7 +239,7 @@ const investAmount = ref(null);
 
 function openInvestDialog(item) {
     console.log("ITEM from grid:", item);
-
+  showModal.value = false;
   selectedBundle.value = item;
   visibleInvest.value = true;
 }
