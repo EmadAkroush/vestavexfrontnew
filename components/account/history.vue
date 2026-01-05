@@ -4,6 +4,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <h2 class="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
         Transaction History
+     
       </h2>
       <div class="flex gap-3 items-center flex-wrap">
         <!-- Search -->
@@ -199,6 +200,9 @@ const dateFrom = ref(null)
 const dateTo = ref(null)
 
 const typeOptions = [
+  { label: "Binary Profit", value: "binary-profit" },
+  { label: "Vx Code Activation", value: "vx-code-activation" },
+  { label: "Investment Upgrade", value: "investment-upgrade" },
   { label: "Cashout", value: "Cashout" },
   { label: "Top-Up", value: "Top-Up" },
   { label: "Profit Payout", value: "Profit Payout" },
