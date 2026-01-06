@@ -6,6 +6,7 @@
     :closable="true"
     class="max-w-2xl w-full"
   >
+
     <div v-if="node">
       <!-- ================= HEADER ================= -->
       <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
@@ -50,7 +51,10 @@
           :value="node.data.totalTeamVolume"
         />
 
-        <StatCapacity :node="node.data.referralBalance" />
+        <StatSimple
+          title="VX Balances (VX)"
+          :value="node.data.referralBalance"
+        />
       </div>
 
       <!-- ================= FOOTER ================= -->
@@ -146,38 +150,10 @@ const StatSimple = defineComponent({
           "div",
           { class: "text-lg font-semibold" },
           `$${(props.value || 0).toLocaleString("en-US")}`
-        )
+        ),
       ]);
   },
 });
 
-/* ---- StatCapacity ---- */
-const StatCapacity = defineComponent({
-  props: {
-    node: Object,
-  },
-  setup(props) {
-    const capacity = computed(() => {
-      const base = props.node?.data?.baseInvestment || 0;
-      return base * 10;
-    });
 
-    const used = computed(() => props.node?.used || 0);
-
-    return () =>
-      h("div", { class: "bg-slate-50 rounded-lg p-4 shadow-sm" }, [
-        h(
-          "div",
-          { class: "text-xs uppercase text-gray-500 mb-1" },
-          "VX Balances"
-        ),
-        h(
-          "div",
-          { class: "text-lg font-semibold" },
-          `$${capacity.value.toLocaleString("en-US")}`
-        ),
-     
-      ]);
-  },
-});
 </script>

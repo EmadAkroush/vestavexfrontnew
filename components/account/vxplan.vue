@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!-- Header / Actions -->
-
+ 
     <VxPlanHeaderActions
       @zoom-in="zoomIn"
       @zoom-out="zoomOut"
