@@ -9,7 +9,7 @@
     </div>
 
     <div
-      class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 px-6 sm:px-20 py-6"
+      class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 px-2 sm:px-10 py-4"
     >
       <!-- ===== Sidebar (Desktop) ===== -->
       <aside
