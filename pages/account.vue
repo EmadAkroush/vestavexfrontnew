@@ -181,11 +181,19 @@ const currentComponent = computed(() => {
   }
 });
 
-const logout = () => {
-  if (confirm("Are you sure you want to log out?")) {
-    alert("You have been logged out successfully.");
+
+
+const logout = async () => {
+  try {
+    const res = await $fetch('/api/auth/logout', { method: 'POST' })
+   
+    
+    authUser.value = null
+    navigateTo('/')
+  } catch (error) {
+    console.error('Logout failed:', error)
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
