@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Head>
-      <Title>VXBUSINESS — Smart Network Investment</Title>
+      <Title>VX business | Shaping the Future of Decentralized Finance</Title>
       <Meta
         name="description"
         content="Join VXBUSINESS: a smart investment platform built for network growth and passive income."
@@ -33,19 +33,20 @@
         class="relative z-10 text-center max-w-3xl backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-10 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] animate-fadeIn"
       >
         <p class="uppercase tracking-[0.2em] text-green-400 font-semibold mb-3">
-          VXBUSINESS
+          VX business | Shaping the Future of Decentralized Finance
         </p>
 
         <h1
           class="gradient-animate text-4xl sm:text-6xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-green-300 via-teal-300 to-white text-transparent bg-clip-text drop-shadow-xl tracking-tight"
         >
-          Smart Investment Platform<br />
-          for a Powerful Network Future
+          Empowering Global Finance Through Decentralized Innovation
+          <br />
         </h1>
 
         <p class="text-gray-200 text-base sm:text-xl leading-relaxed mb-8">
-          Grow with intelligent compounding and next-generation VX binary system
-          — designed for scalable network expansion.
+          VX business is a leading blockchain and decentralized exchange (DEX)
+          company with over four years of continuous and professional experience
+         
         </p>
 
         <Button
@@ -66,8 +67,6 @@
       </div>
     </section>
     <!-- 🌌 3D Background -->
-
-
 
     <!-- FEATURE SECTION -->
     <section
@@ -122,7 +121,6 @@
         </div>
       </div>
     </section>
-
   </div>
 </template>
 
@@ -131,8 +129,6 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 import * as THREE from "three";
 import { onMounted } from "vue";
-
-
 
 onMounted(() => {
   setTimeout(() => {
@@ -194,7 +190,6 @@ function initThreeBG(container) {
   loop();
 }
 
-
 const goToSignup = () => router.push("/login");
 
 // Features (بر اساس سند PDF)
@@ -237,9 +232,6 @@ const features = [
   },
 ];
 </script>
-
-
-
 
 <style lang="scss">
 .animated-squares {
@@ -363,7 +355,6 @@ const features = [
 .home {
   box-sizing: border-box;
   background-color: #eef1fb;
-  
 
   .secmain {
     box-sizing: border-box;

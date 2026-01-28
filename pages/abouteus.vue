@@ -16,45 +16,69 @@
       </div>
     </div>
 
-    <!-- Company Overview -->
-    <div class="max-w-5xl mx-auto py-16 px-6 sm:px-12 text-center">
-      <h2 class="text-3xl font-bold text-green-700 mb-6">Who We Are</h2>
-      <p class="text-gray-600 leading-relaxed text-lg">
-        VXBUSINESS is a next-generation investment ecosystem designed to provide sustainable growth opportunities
-        for individuals around the world. We combine smart technology, financial expertise, and a
-        community-driven reward model to make investing transparent, secure, and accessible to everyone.
-        Through our structured bundles and the innovative VX Plan, investors can earn monthly returns,
-        grow their portfolios, and achieve financial independence with confidence.
-      </p>
-    </div>
+   <div class="bg-white">
+      <div class="max-w-4xl mx-auto py-24 px-6 sm:px-12">
+        <div class="space-y-8 text-lg leading-relaxed text-gray-700">
+          <h2 class="text-3xl font-bold text-green-700 mb-6" style="text-align: center;">Who We Are</h2>
+          <p>
+            VX Business is a specialized company operating in the fields of
+            blockchain technology and decentralized exchanges (DEX), with over
+            four years of continuous and professional experience in the
+            decentralized finance (DeFi) ecosystem. Throughout this period, the
+            company has established itself as a reliable and credible
+            participant within the global DeFi landscape.
+          </p>
 
-    <!-- Mission / Vision / Values -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 sm:px-12 py-16">
-      <div class="card p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
-        <i class="mdi mdi-rocket-launch text-4xl text-green-600 mb-3"></i>
-        <h3 class="text-xl font-semibold mb-2">Our Mission</h3>
-        <p class="text-gray-600 text-sm">
-          To simplify digital investing and enable users to build long-term wealth through structured, ethical,
-          and transparent financial growth systems.
-        </p>
-      </div>
+          <p>
+            Our work began with a focused commitment to the design, development,
+            and optimization of decentralized infrastructures. Through in-depth
+            market research, advanced technical implementation, and
+            professional-grade risk management, VX Business has consistently
+            strengthened its position among serious projects and experienced
+            participants in the Web3 space.
+          </p>
 
-      <div class="card p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
-        <i class="mdi mdi-eye-outline text-4xl text-green-600 mb-3"></i>
-        <h3 class="text-xl font-semibold mb-2">Our Vision</h3>
-        <p class="text-gray-600 text-sm">
-          To become a global leader in smart investment solutions by connecting people, technology, and
-          sustainable growth strategies within one trusted ecosystem.
-        </p>
-      </div>
+          <p>
+            VX Business is built on three fundamental principles: security,
+            transparency, and sustainable innovation. All products and services
+            are developed using standardized blockchain architectures, auditable
+            smart contracts, and a rigorous engineering methodology. Our focus
+            remains on long-term value creation rather than short-term market
+            trends.
+          </p>
 
-      <div class="card p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition">
-        <i class="mdi mdi-shield-check-outline text-4xl text-green-600 mb-3"></i>
-        <h3 class="text-xl font-semibold mb-2">Our Values</h3>
-        <p class="text-gray-600 text-sm">
-          We stand for integrity, transparency, innovation, and community. Our investors’ success is our
-          ultimate measure of achievement.
-        </p>
+          <p>
+            Over four years of active operation, VX Business has accumulated
+            hands-on experience across a wide range of DeFi protocols, liquidity
+            frameworks, decentralized trading strategies, and advanced
+            decentralized exchange architectures. This depth of expertise allows
+            us to deliver solutions aligned with the requirements of
+            professional users, investors, and Web3-oriented organizations.
+          </p>
+
+          <p>
+            The VX Business team is composed of senior blockchain engineers,
+            smart contract architects, DeFi analysts, and security specialists
+            who combine deep technical expertise with a strong understanding of
+            decentralized economic systems. We prioritize precision,
+            reliability, and quality, placing them above speed or market
+            speculation.
+          </p>
+
+          <p>
+            We believe the future of the digital economy lies in systems that
+            operate without intermediaries, with full transparency and global
+            accessibility. VX Business is committed to contributing to this
+            future by bridging advanced blockchain technology with practical,
+            sustainable, real-world adoption.
+          </p>
+
+          <p class="font-medium text-gray-900">
+            VX Business is the choice for those who recognize decentralized
+            finance not as a temporary trend, but as a foundational
+            transformation of the global financial system.
+          </p>
+        </div>
       </div>
     </div>
 
