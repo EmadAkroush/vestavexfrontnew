@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!-- Header / Actions -->
- 
+
     <VxPlanHeaderActions
       @zoom-in="zoomIn"
       @zoom-out="zoomOut"
@@ -21,6 +21,18 @@
     />
 
     <!-- Chart Container with Pan & Zoom -->
+    <div class="my-2">
+      <Button
+        icon="mdi mdi-magnify-minus"
+        class="p-button-rounded mr-2"
+        @click="zoomOut"
+      />
+      <Button
+        icon="mdi mdi-magnify-plus"
+        class="p-button-rounded"
+        @click="zoomIn"
+      />
+    </div>
     <div
       ref="chartWrapper"
       class="relative overflow-auto bg-white shadow rounded p-4 touch-pan-y touch-pan-x"
@@ -41,6 +53,7 @@
           transform: `translate(${translate.x}px, ${translate.y}px) scale(${zoom})`,
         }"
       >
+      
         <OrganizationChart
           v-model:selectionKeys="selection"
           :value="data"
@@ -101,7 +114,6 @@ import VxPlanHeaderActions from "@/components/vx/vxplanheaderactions.vue";
 import VXPlanSummary from "@/components/vx/vxplansummary.vue";
 import VXNodeDetailsDialog from "@/components/vx/shownodedetails.vue";
 
-
 /* =========================
    SAFE DEFAULT TREE
 ========================= */
@@ -139,7 +151,6 @@ const accountCapacity = ref(0);
    COMPUTED
 ========================= */
 
-
 /* =========================
    API CALLS
 ========================= */
@@ -173,8 +184,7 @@ function mapNode(node) {
       totalCount: node.counts?.totalCount ?? 0,
 
       // 🖼 Avatar
-      image:
-        "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
+      image: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
     },
 
     children: [
@@ -184,7 +194,6 @@ function mapNode(node) {
   };
 }
 
-
 async function loadReferralTree() {
   try {
     const res = await $fetch("/api/referrals/node", {
@@ -193,20 +202,19 @@ async function loadReferralTree() {
         userId,
       },
     });
-    console.log("node " , res);
-    
+    console.log("node ", res);
+
     // 🛡️ ایمن‌سازی
     if (!res) {
       data.value = { ...emptyTree };
       root.value = { ...emptyTree };
       return;
     }
-  const mapped = mapNode(res);
+    const mapped = mapNode(res);
 
     root.value = mapped;
     data.value = mapped; // یا [mapped] اگر آرایه خواستی
   } catch (e) {
-
     data.value = { ...emptyTree };
     root.value = { ...emptyTree };
 
@@ -218,7 +226,6 @@ async function loadReferralTree() {
     });
   }
 }
-
 
 async function loadStats() {
   try {
@@ -234,15 +241,10 @@ async function loadStats() {
     vxcCount.value = res.vxc;
     accountBalance.value = res.baseInvestment;
     accountCapacity.value = res.accountCapacity;
-
-
   } catch (e) {
     console.error(e);
   }
 }
-
-
-
 
 /* =========================
    NODE DETAILS
@@ -277,7 +279,6 @@ function copyCode(code) {
     life: 2000,
   });
 }
-
 
 /* =========================
    ACTIONS
@@ -322,8 +323,6 @@ async function onActivateClick() {
       return;
     }
 
-
-
     // ✅ موفق
     accountBalance.value = res.balance;
 
@@ -334,7 +333,7 @@ async function onActivateClick() {
       life: 3000,
     });
 
-      // 🔁 خیلی مهم
+    // 🔁 خیلی مهم
     await loadReferralTree();
     await loadStats();
   } catch (e) {

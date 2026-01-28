@@ -7,7 +7,7 @@
       <div class="text-xl font-semibold">
         {{ root?.data?.vxCode || "-" }}
       </div>
-   
+  
     </div>
 
     <!-- Total Team Volume -->
@@ -16,9 +16,13 @@
       <div class="text-xl font-semibold">
         ${{ format(root?.data?.totalTeamVolume ) }}
       </div>
-      <div class="text-sm text-gray-600">
-        {{ format(root?.data?.totalCount) }} members
+          <div class="text-sm text-gray-600">
+        LeftVolume: ${{ format(root?.data?.leftVolume) }} /
+        RightVolume: ${{ format(root?.data?.rightVolume) }}
       </div>
+      <!-- <div class="text-sm text-gray-600">
+        {{ format(root?.data?.totalCount) }} members
+      </div> -->
     </div>
 
     <!-- Account Capacity -->

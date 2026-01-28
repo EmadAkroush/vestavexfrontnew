@@ -4,17 +4,15 @@
     <div class="absolute inset-0 register-glow" />
 
     <!-- Two-Column FULL WIDTH -->
-    <div class="glass-container grid grid-cols-1 md:grid-cols-2 w-full min-h-screen relative z-10">
-
+    <div class="glass-container w-full min-h-screen relative z-10">
 
       <!-- RIGHT — IMAGE FULL AREA -->
-      <div class="register-image hidden md:block">
+      <div class="register-image">
         <img src="/SL_0212121_40670_54.jpg" class="w-full h-full object-cover" />
       </div>
 
-      
       <!-- LEFT — FORM CENTERED -->
-      <div class="flex items-center justify-center px-10 py-12">
+      <div class="flex items-center justify-center px-10 py-12 form-container">
         <div class="w-full max-w-md">
           <h2 class="text-center text-3xl font-bold bg-gradient-to-r from-green-300 to-teal-400 bg-clip-text text-transparent mb-3">
             Create Account
@@ -91,8 +89,7 @@
                 •
                 <nuxt-link to="/forgot" class="text-green-300 font-semibold hover:underline ml-1">Forgot Password</nuxt-link>
                 •
-               <nuxt-link to="/verifyemail" class="text-green-300 font-semibold hover:underline ml-1">Verify Email</nuxt-link>
-
+                <nuxt-link to="/verifyemail" class="text-green-300 font-semibold hover:underline ml-1">Verify Email</nuxt-link>
               </div>
             </div>
           </div>
@@ -130,7 +127,6 @@ const form = reactive({
   c_password: "",
 });
 
-/* 🔥 Auto-fill referral code from query (?ref=XXXX) */
 onMounted(() => {
   if (route.query.ref) {
     form.referral = String(route.query.ref);
@@ -171,14 +167,11 @@ async function submit() {
 
   try {
     loading.value = true;
-    const payload = { ...form };
 
     const data = await $fetch("/api/auth/register", {
       method: "POST",
-      body: payload,
+      body: { ...form },
     });
-
-    console.log("REGISTER RESULT ===>", data);
 
     toast.add({
       severity: "success",
@@ -187,43 +180,24 @@ async function submit() {
       life: 3000,
     });
 
-    // small delay so toast appears
     setTimeout(() => {
       router.push("/verifyemail");
     }, 400);
 
   } catch (err) {
-    console.log("REGISTER ERROR:", err);
     errorsFront.value = [err?.data?.message || "Registration error"];
   } finally {
     loading.value = false;
   }
 }
-
 </script>
 
 <style scoped lang="scss">
-
-.glass-container {
-  width: 100%;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(18px);
-}
-
-.register-image {
-  width: 100%;
-  height: 100%;
-}
-
 .register-wrapper {
   background: linear-gradient(180deg, #071114 0%, #02110c 60%, #04110e 100%);
 }
 
-/* subtle glow */
+/* glow */
 .register-glow {
   position: absolute;
   inset: 0;
@@ -234,14 +208,37 @@ async function submit() {
   opacity: 0.7;
 }
 
+/* GRID FIX */
 .glass-container {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile */
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(18px);
   box-shadow: 0 0 25px rgba(0,255,200,0.05);
 }
 
-/* INPUTS & LABELS */
+@media (min-width: 768px) {
+  .glass-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* IMAGE */
+.register-image {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .register-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.03);
+  }
+}
+
+/* INPUTS */
 .login-label {
   color: #c9efe4;
   font-size: 13px;
@@ -263,7 +260,6 @@ async function submit() {
   box-shadow: 0 0 12px rgba(0,255,200,0.18);
 }
 
-/* BUTTON */
 .login-btn {
   width: 100%;
   padding: 12px 0;
@@ -271,10 +267,5 @@ async function submit() {
   color: #00221a;
   border-radius: 14px;
   font-weight: 700;
-}
-
-/* IMAGE SECTION */
-.register-image {
-  background: rgba(255,255,255,0.03);
 }
 </style>

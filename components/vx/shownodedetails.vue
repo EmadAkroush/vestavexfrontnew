@@ -20,9 +20,7 @@
           <div class="font-bold text-xl">
             {{ node.data?.name || "—" }}
           </div>
-          <div class="text-gray-600 text-sm">
-            {{ node.data?.title || "" }}
-          </div>
+   
           <div class="text-sm mt-1">
             VX Code:
             <span class="font-semibold">
