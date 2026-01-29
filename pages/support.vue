@@ -105,7 +105,7 @@
               <i class="mdi mdi-email-outline text-2xl"></i>
               <span>support@VXBUSINESS.com</span>
             </li>
-            <li class="flex items-center gap-3">
+            <!-- <li class="flex items-center gap-3">
               <i class="mdi mdi-phone text-2xl"></i>
               <span>+1 (800) 555-2345</span>
             </li>
@@ -116,14 +116,14 @@
             <li class="flex items-center gap-3">
               <i class="mdi mdi-map-marker text-2xl"></i>
               <span>123 Business Ave, London, UK</span>
-            </li>
+            </li> -->
           </ul>
         </div>
 
         <div class="mt-8">
           <h4 class="font-semibold mb-3">Follow Us</h4>
           <div class="flex gap-4 text-2xl">
-            <a href="#" class="hover:text-green-300"
+            <!-- <a href="#" class="hover:text-green-300"
               ><i class="mdi mdi-facebook"></i
             ></a>
             <a href="#" class="hover:text-green-300"
@@ -134,7 +134,7 @@
             ></a>
             <a href="#" class="hover:text-green-300"
               ><i class="mdi mdi-linkedin"></i
-            ></a>
+            ></a> -->
           </div>
         </div>
       </div>

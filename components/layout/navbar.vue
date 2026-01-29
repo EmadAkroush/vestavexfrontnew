@@ -18,7 +18,7 @@
       <!-- DESKTOP MENU -->
       <nav class="hidden md:flex items-center gap-8">
         <router-link
-          v-for="item in items"
+          v-for="item in filteredItems"
           :key="item.label"
           :to="item.route"
           custom
@@ -107,7 +107,7 @@
         class="md:hidden bg-black/60 backdrop-blur-xl border-t border-white/10 px-4 py-5 space-y-2"
       >
         <router-link
-          v-for="item in items"
+          v-for="item in filteredItems"
           :key="item.label"
           :to="item.route"
           custom
@@ -172,6 +172,14 @@ const activeRoute = computed(() => route.path)
 const profileOpen = ref(false)
 const mobileMenu = ref(false)
 
+const filteredItems = computed(() => {
+  return items.value.filter(item => {
+    if (item.authOnly && !authUser.value) return false
+    return true
+  })
+})
+
+
 const logout = async () => {
   try {
     const res = await $fetch('/api/auth/logout', { method: 'POST' })
@@ -186,8 +194,8 @@ const logout = async () => {
 
 const items = ref([
   { label: "Home", route: "/", icon: "mdi mdi-home-outline" },
-  { label: "Bundles", route: "/bundles", icon: "mdi mdi-package-variant-closed" },
-  { label: "Add Funds", route: "/addfunds", icon: "mdi mdi-wallet-plus-outline" },
+  { label: "Bundles", route: "/bundles", icon: "mdi mdi-package-variant-closed", authOnly: true },
+  { label: "Add Funds", route: "/addfunds", icon: "mdi mdi-wallet-plus-outline", authOnly: true },
   { label: "About Us", route: "/abouteus", icon: "mdi mdi-information-outline" },
   { label: "Support", route: "/support", icon: "mdi mdi-lifebuoy" },
 ])

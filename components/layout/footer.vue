@@ -32,20 +32,20 @@
         <ul class="footer-list">
           <li><nuxt-link to="/" class="footer-link">Home</nuxt-link></li>
           <li><nuxt-link to="/bundles" class="footer-link">Bundles</nuxt-link></li>
-          <li><nuxt-link to="/addfunds" class="footer-link">Add Funds</nuxt-link></li>
-          <li><nuxt-link to="/vxplan" class="footer-link">VX Plan</nuxt-link></li>
+          <!-- <li><nuxt-link to="/addfunds" class="footer-link">Add Funds</nuxt-link></li>
+          <li><nuxt-link to="/vxplan" class="footer-link">VX Plan</nuxt-link></li> -->
           <li><nuxt-link to="/support" class="footer-link">Support</nuxt-link></li>
         </ul>
       </div>
 
       <!-- Legal -->
       <div>
-        <h3 class="footer-title">Legal</h3>
+        <!-- <h3 class="footer-title">Legal</h3> -->
         <ul class="footer-list">
-          <li><a class="footer-link">Privacy Policy</a></li>
+          <!-- <li><a class="footer-link">Privacy Policy</a></li>
           <li><a class="footer-link">Terms of Service</a></li>
           <li><a class="footer-link">AML & KYC Policy</a></li>
-          <li><a class="footer-link">Risk Disclosure</a></li>
+          <li><a class="footer-link">Risk Disclosure</a></li> -->
         </ul>
       </div>
 
@@ -57,14 +57,14 @@
             <i class="mdi mdi-email-outline text-green-400 text-xl"></i>
             <a href="mailto:support@VXBUSINESS.com">support@VXBUSINESS.com</a>
           </li>
-          <li class="footer-contact">
+          <!-- <li class="footer-contact">
             <i class="mdi mdi-map-marker text-green-400 text-xl"></i>
             <span>London, UK</span>
           </li>
           <li class="footer-contact">
             <i class="mdi mdi-phone text-green-400 text-xl"></i>
             <a href="tel:+447712345678">+44 7712 345678</a>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -74,8 +74,8 @@
       <p>© {{ new Date().getFullYear() }} VXBUSINESS. All rights reserved.</p>
 
       <div class="flex gap-4 mt-3 sm:mt-0">
-        <a class="footer-link">Privacy Policy</a>
-        <a class="footer-link">Terms</a>
+        <!-- <a class="footer-link">Privacy Policy</a>
+        <a class="footer-link">Terms</a> -->
       </div>
     </div>
 
