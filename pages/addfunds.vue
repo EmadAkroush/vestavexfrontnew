@@ -4,10 +4,11 @@
     <header class="text-center pt-14">
       <p class="eyebrow">VXBUSINESS</p>
       <h2 class="title">Add Funds</h2>
-      <p class="subtitle">Direct Web3 wallet payment</p>
+      <p class="subtitle">USDT Payment on BNB Chain</p>
     </header>
+
     <div class="main-card glass-card mx-auto mt-12 max-w-xl">
-      <!-- STEP 1 -->
+      <!-- STEP 1: Connect Wallet -->
       <div v-if="step === 1">
         <h3 class="step-title">1. Connect Wallet</h3>
         <button class="btn-primary w-full" @click="connectWallet">
@@ -19,41 +20,44 @@
         </p>
         <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
       </div>
-      <!-- STEP 2 -->
+
+      <!-- STEP 2: Enter Amount -->
       <div v-if="step === 2" class="mt-6">
-        <h3 class="step-title">2. Select Network & Amount</h3>
-        <select v-model="selectedNetwork" class="input-box">
-          <option disabled value="">Select Network</option>
-          <option v-for="n in networks" :key="n.chainId" :value="n">
-            {{ n.name }}
-          </option>
-        </select>
+        <h3 class="step-title">2. Enter Amount (USDT)</h3>
+
         <input
           v-model.number="amount"
           type="number"
           min="10"
           step="0.01"
           class="input-box mt-3"
-          placeholder="Amount (USD)"
+          placeholder="Amount (USDT)"
         />
+
         <button
           class="btn-primary w-full mt-4"
-          :disabled="!selectedNetwork || !amount || amount < 10"
+          :disabled="!amount || amount < 10"
           @click="sendPayment"
         >
-          Pay Now
+          Pay with USDT
         </button>
+
         <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
       </div>
-      <!-- STEP 3 -->
+
+      <!-- STEP 3: Success -->
       <div v-if="step === 3" class="text-center mt-6">
         <i class="mdi mdi-check-circle text-5xl text-green-400"></i>
         <h3 class="step-title mt-3">Payment Sent</h3>
         <p class="info-text mt-2">Transaction Hash:</p>
         <p class="tx break-all">{{ txHash }}</p>
       </div>
+
       <!-- Loading Overlay -->
-      <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div
+        v-if="loading"
+        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      >
         <p class="text-white text-lg">Processing...</p>
       </div>
     </div>
@@ -67,18 +71,27 @@ import { ethers } from 'ethers'
 // ---------------- STATE ----------------
 const step = ref(1)
 const walletAddress = ref(null)
-const selectedNetwork = ref(null)
 const amount = ref(null)
 const txHash = ref(null)
 const error = ref(null)
 const loading = ref(false)
 
-// ---------------- NETWORKS ----------------
-const networks = ref([
-  { chainId: 1, name: 'Ethereum Mainnet', symbol: 'ETH' },
-  { chainId: 137, name: 'Polygon', symbol: 'MATIC' },
-  { chainId: 42161, name: 'Arbitrum One', symbol: 'ETH' }
-])
+// ---------------- CONSTANTS ----------------
+// شبکه BNB Chain
+const BNB_CHAIN_ID = 56
+
+// USDT روی BNB Chain
+const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955'
+
+// آدرس کیف پول بیزینس (حتماً عوض کن)
+const RECEIVER = '0x1234567890abcdef1234567890abcdef12345678'
+
+// ERC20 ABI مختصر برای transfer
+const ERC20_ABI = [
+  'function transfer(address to, uint amount) returns (bool)',
+  'function decimals() view returns (uint8)',
+  'function balanceOf(address owner) view returns (uint)'
+]
 
 // ---------------- COMPUTED ----------------
 const shortAddress = computed(() => {
@@ -90,17 +103,14 @@ const shortAddress = computed(() => {
 const connectWallet = async () => {
   loading.value = true
   error.value = null
-
   try {
-    if (!window.ethereum) {
-      throw new Error('MetaMask یا Web3 Wallet پیدا نشد')
-    }
+    if (!window.ethereum) throw new Error('MetaMask پیدا نشد')
 
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     await provider.send('eth_requestAccounts', [])
-
     const signer = provider.getSigner()
     walletAddress.value = await signer.getAddress()
+
     step.value = 2
   } catch (e) {
     error.value = e.message || 'خطا در اتصال کیف پول'
@@ -109,7 +119,7 @@ const connectWallet = async () => {
   }
 }
 
-// ---------------- SEND PAYMENT ----------------
+// ---------------- SEND USDT PAYMENT ----------------
 const sendPayment = async () => {
   loading.value = true
   error.value = null
@@ -119,31 +129,30 @@ const sendPayment = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     const signer = provider.getSigner()
 
+    // 🔒 چک شبکه BNB Chain
     const network = await provider.getNetwork()
-    if (network.chainId !== Number(selectedNetwork.value.chainId)) {
-      throw new Error(
-        `لطفاً شبکه کیف پول را روی ${selectedNetwork.value.name} تغییر دهید`
-      )
+    if (network.chainId !== BNB_CHAIN_ID) {
+      throw new Error('لطفاً شبکه کیف پول را روی BNB Chain قرار دهید')
     }
 
-    // ✅ آدرس واقعی بیزینس (حتماً عوض کن)
-    const receiver = '0x1234567890abcdef1234567890abcdef12345678'
-
-    if (!ethers.utils.isAddress(receiver)) {
+    // 🔒 چک آدرس مقصد
+    if (!ethers.utils.isAddress(RECEIVER)) {
       throw new Error('آدرس مقصد معتبر نیست')
     }
 
-    // ⚠️ فقط تست – قیمت واقعی بعداً با oracle
-    const nativePriceUSD = 2000
-    const nativeAmount = amount.value / nativePriceUSD
-    const value = ethers.utils.parseEther(nativeAmount.toString())
+    // اتصال به قرارداد USDT
+    const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer)
+    const decimals = await usdt.decimals()
+    const amountInWei = ethers.utils.parseUnits(amount.value.toString(), decimals)
 
-    const tx = await signer.sendTransaction({
-      to: receiver,
-      value
-    })
+    // چک موجودی
+    const balance = await usdt.balanceOf(walletAddress.value)
+    if (balance.lt(amountInWei)) throw new Error('موجودی USDT کافی نیست')
 
+    // ارسال USDT
+    const tx = await usdt.transfer(RECEIVER, amountInWei)
     const receipt = await tx.wait()
+
     txHash.value = receipt.transactionHash
     step.value = 3
   } catch (e) {
@@ -154,6 +163,9 @@ const sendPayment = async () => {
   }
 }
 </script>
+
+
+
 
 <style lang="scss" scoped>
 /* ---------------- GLOBAL WRAPPER ---------------- */
@@ -384,19 +396,19 @@ const sendPayment = async () => {
 }
 
 .glass-card {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(18px);
   padding: 28px;
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .input-box {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
 }
 
@@ -418,7 +430,6 @@ const sendPayment = async () => {
   font-size: 0.75rem;
   opacity: 0.7;
 }
-
 
 /* mobile fixes */
 @media (max-width: 650px) {
