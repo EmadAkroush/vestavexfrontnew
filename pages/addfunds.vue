@@ -77,16 +77,16 @@ const error = ref(null)
 const loading = ref(false)
 
 // ---------------- CONSTANTS ----------------
-// شبکه BNB Chain
+// BNB Chain network
 const BNB_CHAIN_ID = 56
 
-// USDT روی BNB Chain
+// USDT on BNB Chain
 const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955'
 
-// آدرس کیف پول بیزینس (حتماً عوض کن)
+// Business wallet address (replace with your own)
 const RECEIVER = '0x1234567890abcdef1234567890abcdef12345678'
 
-// ERC20 ABI مختصر برای transfer
+// ERC20 ABI (minimal for transfer)
 const ERC20_ABI = [
   'function transfer(address to, uint amount) returns (bool)',
   'function decimals() view returns (uint8)',
@@ -104,7 +104,7 @@ const connectWallet = async () => {
   loading.value = true
   error.value = null
   try {
-    if (!window.ethereum) throw new Error('MetaMask پیدا نشد')
+    if (!window.ethereum) throw new Error('MetaMask not found')
 
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     await provider.send('eth_requestAccounts', [])
@@ -113,7 +113,7 @@ const connectWallet = async () => {
 
     step.value = 2
   } catch (e) {
-    error.value = e.message || 'خطا در اتصال کیف پول'
+    error.value = e.message || 'Failed to connect wallet'
   } finally {
     loading.value = false
   }
@@ -129,27 +129,27 @@ const sendPayment = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     const signer = provider.getSigner()
 
-    // 🔒 چک شبکه BNB Chain
+    // 🔒 Check BNB Chain network
     const network = await provider.getNetwork()
     if (network.chainId !== BNB_CHAIN_ID) {
-      throw new Error('لطفاً شبکه کیف پول را روی BNB Chain قرار دهید')
+      throw new Error('Please switch your wallet to BNB Chain')
     }
 
-    // 🔒 چک آدرس مقصد
+    // 🔒 Check receiver address
     if (!ethers.utils.isAddress(RECEIVER)) {
-      throw new Error('آدرس مقصد معتبر نیست')
+      throw new Error('Invalid receiver address')
     }
 
-    // اتصال به قرارداد USDT
+    // Connect to USDT contract
     const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer)
     const decimals = await usdt.decimals()
     const amountInWei = ethers.utils.parseUnits(amount.value.toString(), decimals)
 
-    // چک موجودی
+    // Check balance
     const balance = await usdt.balanceOf(walletAddress.value)
-    if (balance.lt(amountInWei)) throw new Error('موجودی USDT کافی نیست')
+    if (balance.lt(amountInWei)) throw new Error('Insufficient USDT balance')
 
-    // ارسال USDT
+    // Send USDT
     const tx = await usdt.transfer(RECEIVER, amountInWei)
     const receipt = await tx.wait()
 
@@ -157,12 +157,13 @@ const sendPayment = async () => {
     step.value = 3
   } catch (e) {
     console.error(e)
-    error.value = e.reason || e.message || 'پرداخت ناموفق بود'
+    error.value = e.reason || e.message || 'Payment failed'
   } finally {
     loading.value = false
   }
 }
 </script>
+
 
 
 
