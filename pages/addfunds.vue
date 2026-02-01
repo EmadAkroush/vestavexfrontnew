@@ -1,180 +1,157 @@
 <template>
-  <section
-    class="addfunds-wrapper addfunds relative min-h-screen overflow-hidden"
-  >
-    <!--  Glow background  -->
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
-
+  <section class="addfunds-wrapper min-h-screen relative overflow-hidden">
     <!-- HEADER -->
-    <header class="text-center pt-14 relative z-10">
+    <header class="text-center pt-14">
       <p class="eyebrow">VXBUSINESS</p>
       <h2 class="title">Add Funds</h2>
-      <p class="subtitle">
-        Secure blockchain deposits with real-time verification.
-      </p>
+      <p class="subtitle">Direct Web3 wallet payment</p>
     </header>
-
-    <!-- MAIN CARD -->
-    <div class="main-card relative z-10 mx-auto mt-12 max-w-2xl glass-card">
-      <!-- STEPPER -->
-      <div class="stepper">
-        <div v-for="(step, index) in steps" :key="index" class="step">
-          <div class="circle" :class="currentStep >= index + 1 ? 'active' : ''">
-            <i :class="step.icon"></i>
-          </div>
-          <p :class="currentStep >= index + 1 ? 'label active' : 'label'">
-            {{ step.label }}
-          </p>
-
-          <!-- line -->
-          <div
-            v-if="index < steps.length - 1"
-            class="line"
-            :class="currentStep > index + 1 ? 'active' : ''"
-          ></div>
-        </div>
-      </div>
-
+    <div class="main-card glass-card mx-auto mt-12 max-w-xl">
       <!-- STEP 1 -->
-      <div v-if="currentStep === 1" class="step-body">
-        <h3 class="step-title">
-          <i class="mdi mdi-wallet-outline"></i> Select Network & Amount
-        </h3>
-
-        <div class="network-grid">
-          <div
-            v-for="network in networks"
-            :key="network.name"
-            @click="selected = network"
-            class="network-card"
-            :class="selected?.name === network.name ? 'active' : ''"
-          >
-            <img :src="network.icon" class="net-logo" />
-            <p>{{ network.name }}</p>
-          </div>
-        </div>
-
-        <label class="input-label">Amount (USD)</label>
-        <input
-          v-model="amount"
-          type="number"
-          min="50"
-          class="input-box"
-          placeholder="Enter amount (min $50)"
-        />
-
-        <button
-          class="btn-primary w-full"
-          :disabled="!selected || amount < 50"
-          @click="nextStep"
-        >
-          Continue <i class="mdi mdi-arrow-right-bold"></i>
+      <div v-if="step === 1">
+        <h3 class="step-title">1. Connect Wallet</h3>
+        <button class="btn-primary w-full" @click="connectWallet">
+          <i class="mdi mdi-wallet"></i>
+          Connect Wallet
         </button>
+        <p v-if="walletAddress" class="wallet-info mt-3">
+          {{ shortAddress }}
+        </p>
+        <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
       </div>
-
       <!-- STEP 2 -->
-      <div v-else-if="currentStep === 2" class="step-body text-center">
-        <img :src="selected.icon" class="network-big" />
-
-        <h3 class="step-title">{{ selected.name }} Payment</h3>
-
-        <p class="info-text">
-          Send exactly <strong class="amount">${{ amount }}</strong> to the
-          wallet below:
-        </p>
-
-        <div class="address-box">
-          <p>{{ generatedAddress }}</p>
-        </div>
-
-        <button class="btn-outline w-full mb-3" @click="copyAddress">
-          <i class="mdi mdi-content-copy"></i> Copy Address
-        </button>
-
-        <button class="btn-primary w-full" @click="nextStep">
-          I’ve Paid <i class="mdi mdi-check-circle"></i>
-        </button>
-
-        <p class="note">Confirmation may take up to 5 minutes.</p>
-      </div>
-
-      <!-- STEP 3 -->
-      <div v-else class="step-body text-center">
-        <i class="mdi mdi-timer-sand text-5xl text-green-400"></i>
-        <h3 class="step-title">Payment Verification</h3>
-
-        <p class="info-text">
-          Verifying your <strong class="amount">${{ amount }}</strong> deposit
-          via <strong>{{ selected.name }}</strong
-          >.
-        </p>
-
-        <ProgressBar :value="progress" class="w-full mb-4" />
-
+      <div v-if="step === 2" class="mt-6">
+        <h3 class="step-title">2. Select Network & Amount</h3>
+        <select v-model="selectedNetwork" class="input-box">
+          <option disabled value="">Select Network</option>
+          <option v-for="n in networks" :key="n.chainId" :value="n">
+            {{ n.name }}
+          </option>
+        </select>
+        <input
+          v-model.number="amount"
+          type="number"
+          min="10"
+          step="0.01"
+          class="input-box mt-3"
+          placeholder="Amount (USD)"
+        />
         <button
-          v-if="progress >= 100"
-          class="btn-primary w-full"
-          @click="goToDashboard"
+          class="btn-primary w-full mt-4"
+          :disabled="!selectedNetwork || !amount || amount < 10"
+          @click="sendPayment"
         >
-          Go to Dashboard <i class="mdi mdi-arrow-right"></i>
+          Pay Now
         </button>
+        <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
+      </div>
+      <!-- STEP 3 -->
+      <div v-if="step === 3" class="text-center mt-6">
+        <i class="mdi mdi-check-circle text-5xl text-green-400"></i>
+        <h3 class="step-title mt-3">Payment Sent</h3>
+        <p class="info-text mt-2">Transaction Hash:</p>
+        <p class="tx break-all">{{ txHash }}</p>
+      </div>
+      <!-- Loading Overlay -->
+      <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <p class="text-white text-lg">Processing...</p>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import ProgressBar from "primevue/progressbar";
-import { useRouter } from "vue-router";
+import { ref, computed } from 'vue'
+import { ethers } from 'ethers'
 
-const router = useRouter();
+// ---------------- STATE ----------------
+const step = ref(1)
+const walletAddress = ref(null)
+const selectedNetwork = ref(null)
+const amount = ref(null)
+const txHash = ref(null)
+const error = ref(null)
+const loading = ref(false)
 
-const currentStep = ref(1);
-const selected = ref(null);
-const amount = ref(null);
-const progress = ref(0);
-const generatedAddress = ref("0xA1B2C3D4E5F678901234567890ABCDEF12345678");
+// ---------------- NETWORKS ----------------
+const networks = ref([
+  { chainId: 1, name: 'Ethereum Mainnet', symbol: 'ETH' },
+  { chainId: 137, name: 'Polygon', symbol: 'MATIC' },
+  { chainId: 42161, name: 'Arbitrum One', symbol: 'ETH' }
+])
 
-const steps = [
-  { label: "Network", icon: "mdi mdi-wallet-outline" },
-  { label: "Payment", icon: "mdi mdi-currency-usd" },
-  { label: "Verify", icon: "mdi mdi-shield-check-outline" },
-];
+// ---------------- COMPUTED ----------------
+const shortAddress = computed(() => {
+  if (!walletAddress.value) return ''
+  return `${walletAddress.value.slice(0, 6)}...${walletAddress.value.slice(-4)}`
+})
 
-const networks = [
-  {
-    name: "TRON (TRC20)",
-    icon: "https://cryptologos.cc/logos/tron-trx-logo.png",
-  },
-  { name: "USDT", icon: "https://cryptologos.cc/logos/tether-usdt-logo.png" },
-  {
-    name: "ETH (ERC20)",
-    icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png",
-  },
-  { name: "BTC", icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png" },
-];
+// ---------------- CONNECT WALLET ----------------
+const connectWallet = async () => {
+  loading.value = true
+  error.value = null
 
-function nextStep() {
-  currentStep.value++;
+  try {
+    if (!window.ethereum) {
+      throw new Error('MetaMask یا Web3 Wallet پیدا نشد')
+    }
 
-  if (currentStep.value === 3) {
-    progress.value = 0;
-    const timer = setInterval(() => {
-      if (progress.value >= 100) clearInterval(timer);
-      else progress.value += 8;
-    }, 400);
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    await provider.send('eth_requestAccounts', [])
+
+    const signer = provider.getSigner()
+    walletAddress.value = await signer.getAddress()
+    step.value = 2
+  } catch (e) {
+    error.value = e.message || 'خطا در اتصال کیف پول'
+  } finally {
+    loading.value = false
   }
 }
 
-function copyAddress() {
-  navigator.clipboard.writeText(generatedAddress.value);
-  alert("Wallet address copied.");
-}
+// ---------------- SEND PAYMENT ----------------
+const sendPayment = async () => {
+  loading.value = true
+  error.value = null
+  txHash.value = null
 
-function goToDashboard() {
-  router.push("/account");
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+    const signer = provider.getSigner()
+
+    const network = await provider.getNetwork()
+    if (network.chainId !== Number(selectedNetwork.value.chainId)) {
+      throw new Error(
+        `لطفاً شبکه کیف پول را روی ${selectedNetwork.value.name} تغییر دهید`
+      )
+    }
+
+    // ✅ آدرس واقعی بیزینس (حتماً عوض کن)
+    const receiver = '0x1234567890abcdef1234567890abcdef12345678'
+
+    if (!ethers.utils.isAddress(receiver)) {
+      throw new Error('آدرس مقصد معتبر نیست')
+    }
+
+    // ⚠️ فقط تست – قیمت واقعی بعداً با oracle
+    const nativePriceUSD = 2000
+    const nativeAmount = amount.value / nativePriceUSD
+    const value = ethers.utils.parseEther(nativeAmount.toString())
+
+    const tx = await signer.sendTransaction({
+      to: receiver,
+      value
+    })
+
+    const receipt = await tx.wait()
+    txHash.value = receipt.transactionHash
+    step.value = 3
+  } catch (e) {
+    console.error(e)
+    error.value = e.reason || e.message || 'پرداخت ناموفق بود'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -400,6 +377,48 @@ function goToDashboard() {
   opacity: 0.6;
   margin-top: 8px;
 }
+
+.addfunds-wrapper {
+  background: linear-gradient(180deg, #061a15, #000b09);
+  color: #dff7e8;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(18px);
+  padding: 28px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.input-box {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #00d99a, #00ffd0);
+  padding: 12px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.wallet-info {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #7fffd4;
+}
+
+.tx {
+  font-family: monospace;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
 
 /* mobile fixes */
 @media (max-width: 650px) {
