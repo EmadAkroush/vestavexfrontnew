@@ -16,7 +16,7 @@
           Connect Wallet
         </button>
         <p v-if="walletAddress" class="wallet-info mt-3">
-          {{ shortAddress }}
+          Connected: {{ shortAddress }}
         </p>
         <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
       </div>
@@ -36,7 +36,7 @@
 
         <button
           class="btn-primary w-full mt-4"
-          :disabled="!amount || amount < 10"
+          :disabled="!amount || amount < 10 || loading"
           @click="sendPayment"
         >
           Pay with USDT
@@ -51,6 +51,9 @@
         <h3 class="step-title mt-3">Payment Sent</h3>
         <p class="info-text mt-2">Transaction Hash:</p>
         <p class="tx break-all">{{ txHash }}</p>
+        <p class="mt-2 text-sm text-gray-500">
+          Your payment is being confirmed on the blockchain.
+        </p>
       </div>
 
       <!-- Loading Overlay -->
@@ -67,30 +70,25 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { ethers } from 'ethers'
-
+const { authUser } = useAuth()
 // ---------------- STATE ----------------
 const step = ref(1)
 const walletAddress = ref(null)
 const amount = ref(null)
 const txHash = ref(null)
+const paymentId = ref(null)
+
 const error = ref(null)
 const loading = ref(false)
 
 // ---------------- CONSTANTS ----------------
-// BNB Chain network
 const BNB_CHAIN_ID = 56
-
-// USDT on BNB Chain
 const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955'
 
-// Business wallet address (replace with your own)
-const RECEIVER = '0x1234567890abcdef1234567890abcdef12345678'
-
-// ERC20 ABI (minimal for transfer)
 const ERC20_ABI = [
-  'function transfer(address to, uint amount) returns (bool)',
+  'function transfer(address to, uint amount)',
   'function decimals() view returns (uint8)',
-  'function balanceOf(address owner) view returns (uint)'
+  'function balanceOf(address owner) view returns (uint)',
 ]
 
 // ---------------- COMPUTED ----------------
@@ -103,57 +101,101 @@ const shortAddress = computed(() => {
 const connectWallet = async () => {
   loading.value = true
   error.value = null
+
   try {
-    if (!window.ethereum) throw new Error('MetaMask not found')
+    if (!window.ethereum) {
+      throw new Error('Wallet not found')
+    }
 
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     await provider.send('eth_requestAccounts', [])
     const signer = provider.getSigner()
-    walletAddress.value = await signer.getAddress()
 
+    walletAddress.value = await signer.getAddress()
     step.value = 2
   } catch (e) {
-    error.value = e.message || 'Failed to connect wallet'
+    error.value = e.message
   } finally {
     loading.value = false
   }
 }
 
-// ---------------- SEND USDT PAYMENT ----------------
+// ---------------- CREATE PAYMENT (BACKEND) ----------------
+const createPayment = async () => {
+  if (!amount.value || amount.value <= 0) {
+    error.value = 'Invalid amount'
+    return
+  }
+
+  loading.value = true
+  error.value = null
+
+  try {
+    const res = await $fetch('/api/payment/addfunds', {
+      method: 'POST',
+      body: {
+        userId: authUser.value.user.id, // از auth خودت بگیر
+        amountUsd: amount.value,
+      },
+    })
+
+    paymentId.value = res.paymentId
+
+    return res
+  } catch (e) {
+    error.value = e.data?.message || e.message
+    throw e
+  } finally {
+    loading.value = false
+  }
+}
+
+// ---------------- SEND USDT ----------------
 const sendPayment = async () => {
   loading.value = true
   error.value = null
-  txHash.value = null
 
   try {
+    // 1️⃣ create payment in backend
+    const payment = await createPayment()
+
     const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
     const signer = provider.getSigner()
 
-    // 🔒 Check BNB Chain network
+    // 2️⃣ check network
     const network = await provider.getNetwork()
     if (network.chainId !== BNB_CHAIN_ID) {
-      throw new Error('Please switch your wallet to BNB Chain')
+      throw new Error('Please switch to BNB Chain')
     }
 
-    // 🔒 Check receiver address
-    if (!ethers.utils.isAddress(RECEIVER)) {
-      throw new Error('Invalid receiver address')
-    }
-
-    // Connect to USDT contract
+    // 3️⃣ send USDT
     const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer)
     const decimals = await usdt.decimals()
-    const amountInWei = ethers.utils.parseUnits(amount.value.toString(), decimals)
+    const amountWei = ethers.utils.parseUnits(
+      amount.value.toString(),
+      decimals,
+    )
 
-    // Check balance
     const balance = await usdt.balanceOf(walletAddress.value)
-    if (balance.lt(amountInWei)) throw new Error('Insufficient USDT balance')
+    if (balance.lt(amountWei)) {
+      throw new Error('Insufficient USDT balance')
+    }
 
-    // Send USDT
-    const tx = await usdt.transfer(RECEIVER, amountInWei)
+    const tx = await usdt.transfer(payment.receiver, amountWei)
     const receipt = await tx.wait()
 
     txHash.value = receipt.transactionHash
+
+    // 4️⃣ submit txHash to backend
+    await $fetch('/api/payment/submit-tx', {
+      method: 'POST',
+      body: {
+        paymentId: paymentId.value,
+        txHash: txHash.value,
+        fromAddress: walletAddress.value,
+      },
+    })
+
     step.value = 3
   } catch (e) {
     console.error(e)
@@ -163,6 +205,7 @@ const sendPayment = async () => {
   }
 }
 </script>
+
 
 
 

@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 
 
     try {
-        const data = await $fetch(`${apiBase}/api/payment/sendtoman`, {
+        const data = await $fetch(`${apiBase}/payments/web3/submit-tx`, {
             method: 'POST',
             body: body,
             headers: {
