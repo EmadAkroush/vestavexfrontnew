@@ -36,7 +36,6 @@
 
         <button
           class="btn-primary w-full mt-4"
-          :disabled="!amount || amount < 10 || loading"
           @click="sendPayment"
         >
           Pay with USDT
@@ -187,7 +186,7 @@ const sendPayment = async () => {
     txHash.value = receipt.transactionHash
 
     // 4️⃣ submit txHash to backend
-    await $fetch('/api/payment/submit-tx', {
+    await $fetch('/api/payment/submittx', {
       method: 'POST',
       body: {
         paymentId: paymentId.value,
