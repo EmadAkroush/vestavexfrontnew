@@ -36,12 +36,16 @@
 
         <button
           class="btn-primary w-full mt-4"
+          :disabled="loading"
           @click="sendPayment"
         >
-          Pay with USDT
+          <span v-if="!loading">Pay with USDT</span>
+          <span v-else>Waiting for wallet confirmation...</span>
         </button>
 
-        <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
+        <p v-if="walletRequestSent" class="mt-3 text-sm text-yellow-300">
+          Payment request sent to your wallet. Please confirm the transaction.
+        </p>
       </div>
 
       <!-- STEP 3: Success -->
@@ -67,148 +71,156 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { ethers } from 'ethers'
-const { authUser } = useAuth()
-// ---------------- STATE ----------------
-const step = ref(1)
-const walletAddress = ref(null)
-const amount = ref(null)
-const txHash = ref(null)
-const paymentId = ref(null)
+import { ref, computed } from "vue";
+import { ethers } from "ethers";
+const { authUser } = useAuth();
+const walletRequestSent = ref(false);
 
-const error = ref(null)
-const loading = ref(false)
+// ---------------- STATE ----------------
+const step = ref(1);
+const walletAddress = ref(null);
+const amount = ref(null);
+const txHash = ref(null);
+const paymentId = ref(null);
+
+const error = ref(null);
+const loading = ref(false);
 
 // ---------------- CONSTANTS ----------------
-const BNB_CHAIN_ID = 56
-const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955'
+const BNB_CHAIN_ID = 56;
+const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
 
 const ERC20_ABI = [
-  'function transfer(address to, uint amount)',
-  'function decimals() view returns (uint8)',
-  'function balanceOf(address owner) view returns (uint)',
-]
+  "function transfer(address to, uint amount)",
+  "function decimals() view returns (uint8)",
+  "function balanceOf(address owner) view returns (uint)",
+];
 
 // ---------------- COMPUTED ----------------
 const shortAddress = computed(() => {
-  if (!walletAddress.value) return ''
-  return `${walletAddress.value.slice(0, 6)}...${walletAddress.value.slice(-4)}`
-})
+  if (!walletAddress.value) return "";
+  return `${walletAddress.value.slice(0, 6)}...${walletAddress.value.slice(-4)}`;
+});
 
 // ---------------- CONNECT WALLET ----------------
 const connectWallet = async () => {
-  loading.value = true
-  error.value = null
+  loading.value = true;
+  error.value = null;
 
   try {
     if (!window.ethereum) {
-      throw new Error('Wallet not found')
+      throw new Error(
+        "No crypto wallet found. Please install MetaMask or Trust Wallet.",
+      );
     }
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    await provider.send('eth_requestAccounts', [])
-    const signer = provider.getSigner()
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
 
-    walletAddress.value = await signer.getAddress()
-    step.value = 2
+    walletAddress.value = await signer.getAddress();
+
+    if (!walletAddress.value) {
+      throw new Error("Wallet connection failed");
+    }
+
+    step.value = 2;
   } catch (e) {
-    error.value = e.message
+    error.value = e.message || "Wallet connection was rejected";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // ---------------- CREATE PAYMENT (BACKEND) ----------------
 const createPayment = async () => {
   if (!amount.value || amount.value <= 0) {
-    error.value = 'Invalid amount'
-    return
+    error.value = "Invalid amount";
+    return;
   }
 
-  loading.value = true
-  error.value = null
+  loading.value = true;
+  error.value = null;
 
   try {
-    const res = await $fetch('/api/payment/addfunds', {
-      method: 'POST',
+    const res = await $fetch("/api/payment/addfunds", {
+      method: "POST",
       body: {
         userId: authUser.value.user.id, // از auth خودت بگیر
         amountUsd: amount.value,
       },
-    })
+    });
 
-    paymentId.value = res.paymentId
+    paymentId.value = res.paymentId;
 
-    return res
+    return res;
   } catch (e) {
-    error.value = e.data?.message || e.message
-    throw e
+    error.value = e.data?.message || e.message;
+    throw e;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // ---------------- SEND USDT ----------------
 const sendPayment = async () => {
-  loading.value = true
-  error.value = null
+  loading.value = true;
+  walletRequestSent.value = false;
+  error.value = null;
 
   try {
     // 1️⃣ create payment in backend
-    const payment = await createPayment()
+    const payment = await createPayment();
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-    const signer = provider.getSigner()
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    const signer = provider.getSigner();
 
     // 2️⃣ check network
-    const network = await provider.getNetwork()
+    const network = await provider.getNetwork();
     if (network.chainId !== BNB_CHAIN_ID) {
-      throw new Error('Please switch to BNB Chain')
+      throw new Error("Please switch to BNB Chain");
     }
 
-    // 3️⃣ send USDT
-    const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer)
-    const decimals = await usdt.decimals()
+    // 3️⃣ prepare USDT transfer
+    const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer);
+    const decimals = await usdt.decimals();
     const amountWei = ethers.utils.parseUnits(
       amount.value.toString(),
       decimals,
-    )
+    );
 
-    const balance = await usdt.balanceOf(walletAddress.value)
+    const balance = await usdt.balanceOf(walletAddress.value);
     if (balance.lt(amountWei)) {
-      throw new Error('Insufficient USDT balance')
+      throw new Error("Insufficient USDT balance");
     }
 
-    const tx = await usdt.transfer(payment.receiver, amountWei)
-    const receipt = await tx.wait()
+    // 🔔 اینجا دقیقاً لحظه ارسال درخواست به کیف پول
+    walletRequestSent.value = true;
 
-    txHash.value = receipt.transactionHash
+    const tx = await usdt.transfer(payment.receiver, amountWei);
+    const receipt = await tx.wait();
+
+    txHash.value = receipt.transactionHash;
 
     // 4️⃣ submit txHash to backend
-    await $fetch('/api/payment/submittx', {
-      method: 'POST',
+    await $fetch("/api/payment/submittx", {
+      method: "POST",
       body: {
         paymentId: paymentId.value,
         txHash: txHash.value,
         fromAddress: walletAddress.value,
       },
-    })
+    });
 
-    step.value = 3
+    step.value = 3;
   } catch (e) {
-    console.error(e)
-    error.value = e.reason || e.message || 'Payment failed'
+    error.value = e.reason || e.message || "Payment failed";
   } finally {
-    loading.value = false
+    loading.value = false;
+    walletRequestSent.value = false;
   }
-}
+};
 </script>
-
-
-
-
-
 
 <style lang="scss" scoped>
 /* ---------------- GLOBAL WRAPPER ---------------- */
