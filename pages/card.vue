@@ -179,6 +179,8 @@ const totalAmount = computed(() => cart.totalAmount)
 const totalAmountoff = computed(() => cart.totalAmountoff)
 const totalAmountkol = computed(() => cart.totalAmountkol)
 
+definePageMeta({ middleware: "auth" });
+
 
 
 function removeFromCart(id) {

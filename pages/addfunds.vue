@@ -75,6 +75,7 @@ import { ref, computed } from "vue";
 import { ethers } from "ethers";
 const { authUser } = useAuth();
 const walletRequestSent = ref(false);
+definePageMeta({ middleware: "auth" });
 
 // ---------------- STATE ----------------
 const step = ref(1);
