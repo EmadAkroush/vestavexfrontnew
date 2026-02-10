@@ -38,28 +38,28 @@
         </div>
       </div>
 
-      <!-- VX Wallet -->
-      <div class="card-box">
-        <div class="icon-box bg-purple-100 text-purple-600">
-          <i class="mdi mdi-wallet-outline text-3xl"></i>
-        </div>
-        <div>
-          <p class="text-gray-500 text-sm">VX Balances</p>
-          <h3 class="text-2xl font-bold text-purple-700">
-            ${{ balances.referralBalance }}
-          </h3>
-        </div>
-      </div>
-
       <!-- Binary Bonus -->
       <div class="card-box">
         <div class="icon-box bg-yellow-100 text-yellow-600">
           <i class="mdi mdi-account-group text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">maxCap Balances</p>
+          <p class="text-gray-500 text-sm"> VX Balances</p>
           <h3 class="text-2xl font-bold text-yellow-700">
-            ${{ balances.maxCapBalance }}
+                ${{ balances.referralBalance }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- VX Wallet -->
+      <div class="card-box">
+        <div class="icon-box bg-purple-100 text-purple-600">
+          <i class="mdi mdi-wallet-outline text-3xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-500 text-sm"> withdrawalTotal Balances </p>
+          <h3 class="text-2xl font-bold text-purple-700">
+                 ${{ balances.withdrawalTotalBalance }}
           </h3>
         </div>
       </div>
@@ -195,28 +195,27 @@ const activities = ref([]);
    ====================== */
 
 async function handleInvite() {
- 
-    // ⛔ اکانت فعال نیست
-    if (!vxCode.value) {
-      toast.add({
-        severity: "warn",
-        summary: "Account Not Active",
-        detail: "Please activate your account to get your referral link.",
-        life: 4000,
-      });
-      return;
-    }
-
-    // ✅ کپی به کلیپ‌بورد
-    await navigator.clipboard.writeText(vxCode);
-
+  // ⛔ اکانت فعال نیست
+  if (!vxCode.value) {
     toast.add({
-      severity: "success",
-      summary: "Copied!",
-      detail: "Your referral code has been copied to clipboard.",
-      life: 3000,
+      severity: "warn",
+      summary: "Account Not Active",
+      detail: "Please activate your account to get your referral link.",
+      life: 4000,
     });
-  } 
+    return;
+  }
+
+  // ✅ کپی به کلیپ‌بورد
+  await navigator.clipboard.writeText(vxCode);
+
+  toast.add({
+    severity: "success",
+    summary: "Copied!",
+    detail: "Your referral code has been copied to clipboard.",
+    life: 3000,
+  });
+}
 
 async function fetchRecentActivities() {
   if (!authUser.value?.user?.id) return;
@@ -340,7 +339,7 @@ async function fetchVXChart() {
     method: "POST",
     body: { userId },
   });
- 
+
   vxChart.value = {
     labels: res.labels,
     datasets: [
@@ -365,7 +364,7 @@ async function loadReferralTree() {
         userId,
       },
     });
-     vxCode.value = referral.value?.vxCode;
+    vxCode.value = referral.value?.vxCode;
     console.log("node ", referral.value);
 
     // 🛡️ ایمن‌سازی
@@ -411,7 +410,7 @@ watch(
   },
   (val) => {
     if (val?.user?.id) fetchRecentActivities();
-  }
+  },
 );
 </script>
 
