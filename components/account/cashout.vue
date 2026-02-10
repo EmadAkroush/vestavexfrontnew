@@ -13,8 +13,8 @@
             currentStep > index
               ? 'bg-green-600 text-white border-green-600'
               : currentStep === index
-              ? 'border-green-600 text-green-600 bg-white'
-              : 'border-gray-300 text-gray-400'
+                ? 'border-green-600 text-green-600 bg-white'
+                : 'border-gray-300 text-gray-400'
           "
         >
           {{ index + 1 }}
@@ -62,10 +62,15 @@
             label="Next"
             icon="mdi mdi-arrow-right"
             class="p-button-success px-6 py-2"
-            :disabled="!selectedWallet"
+            :disabled="!selectedWallet || !walletAllowed"
             @click="nextStep"
           />
         </div>
+
+        <p v-if="!walletAllowed" class="text-red-400 text-sm text-center mt-3">
+          Please set your wallet address in your account settings before
+          withdrawing.
+        </p>
       </div>
     </transition>
 
@@ -101,7 +106,9 @@
             label="Next"
             icon="mdi mdi-arrow-right"
             class="p-button-success px-6 py-2"
-            :disabled="!amount || amount < 50 || amount > selectedWallet.balance"
+            :disabled="
+              !amount || amount < 50 || amount > selectedWallet.balance
+            "
             @click="nextStep"
           />
         </div>
@@ -166,7 +173,9 @@
             icon="mdi mdi-check"
             class="p-button-success px-6 py-2"
             :loading="loading"
-            :disabled="!method || (method === 'crypto' && !selectedCryptoWallet)"
+            :disabled="
+              !method || (method === 'crypto' && !selectedCryptoWallet)
+            "
             @click="completeCashout"
           />
         </div>
@@ -176,7 +185,9 @@
     <!-- ===== Step 4: Confirmation ===== -->
     <transition name="fade">
       <div v-if="currentStep === 3" class="text-center py-10">
-        <i class="mdi mdi-check-circle-outline text-green-600 text-6xl mb-4"></i>
+        <i
+          class="mdi mdi-check-circle-outline text-green-600 text-6xl mb-4"
+        ></i>
 
         <h2 class="text-2xl font-bold text-green-700">
           Cashout Request Submitted
@@ -186,7 +197,9 @@
           Your withdrawal request is being processed.
         </p>
 
-        <div class="mt-6 bg-white inline-block px-6 py-3 rounded-lg shadow-md border">
+        <div
+          class="mt-6 bg-white inline-block px-6 py-3 rounded-lg shadow-md border"
+        >
           <p class="text-sm text-gray-500 mb-1">Transaction ID</p>
           <p class="text-lg font-mono font-semibold text-green-700">
             {{ transactionId }}
@@ -205,56 +218,78 @@
 </template>
 
 <script setup>
-import Card from "primevue/card"
-import Button from "primevue/button"
-import Dropdown from "primevue/dropdown"
-import InputNumber from "primevue/inputnumber"
-import { ref, onMounted, computed } from "vue"
+import Card from "primevue/card";
+import Button from "primevue/button";
+import Dropdown from "primevue/dropdown";
+import InputNumber from "primevue/inputnumber";
+import { ref, onMounted, computed } from "vue";
 
-
-
-const { authUser } = useAuth()
+const { authUser } = useAuth();
 
 /* ===== State ===== */
-const currentStep = ref(0)
-const selectedWallet = ref(null)
-const amount = ref(null)
-const method = ref(null)
-const selectedCryptoWallet = ref(null)
-const transactionId = ref("")
-const loading = ref(false)
+const currentStep = ref(0);
+const selectedWallet = ref(null);
+const amount = ref(null);
+const method = ref(null);
+const selectedCryptoWallet = ref(null);
+const transactionId = ref("");
+const loading = ref(false);
+const walletAllowed = ref(false); // 🟢 ولت اجازه برداشت
 
 /* ===== Wallets from API ===== */
 
-const wallets = [
-  { label: "Profits Wallet", balance: 1200 },
- 
-]
+const wallets = [{ label: "Main Wallet", balance: 1200 }];
 
-const userWallets = [
-  { name: "main Wallet - TRC20", network: "TRON" },
-
-]
+const userWallets = [{ name: "main Wallet - TRC20", network: "TRON" }];
 
 const steps = [
   { label: "Select Wallet" },
   { label: "Enter Amount" },
   { label: "Withdrawal Method" },
   { label: "Confirmation" },
-]
-
-
+];
 
 /* ===== Navigation ===== */
-const nextStep = () => currentStep.value++
-const prevStep = () => currentStep.value--
+const nextStep = () => currentStep.value++;
+const prevStep = () => currentStep.value--;
+
+// 🟢 بررسی ولت قبل از شروع
+onMounted(async () => {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      errorMessage.value = "Please login to continue.";
+      return;
+    }
+
+    const user = await $fetch("/api/account/find", {
+      method: "POST",
+      body: { id: userId },
+    });
+
+    if (user.wallet && user.wallet.trim() !== "") {
+      walletAllowed.value = true;
+    } else {
+      walletAllowed.value = false;
+      errorMessage.value = "You must set your wallet address before requesting withdrawal.";
+      toast.add({
+        severity: "warn",
+        summary: "Wallet Required",
+        detail: "Please set your wallet address in your profile before withdrawing.",
+        life: 5000,
+      });
+    }
+  } catch (err) {
+    console.error("❌ Wallet Check Error:", err);
+    walletAllowed.value = false;
+  }
+});
+
 
 /* ===== Submit Withdrawal ===== */
 const completeCashout = async () => {
- 
   try {
-    loading.value = true
-
+    loading.value = true;
 
     const res = await $fetch("/api/transactions/withdraw", {
       method: "POST",
@@ -262,31 +297,28 @@ const completeCashout = async () => {
         userId: authUser.value.user.id,
         amount: amount.value,
       },
-    })
-    console.log("res" , res);
-    
+    });
+    console.log("res", res);
 
-    transactionId.value = res._id
-    nextStep()
+    transactionId.value = res._id;
+    nextStep();
   } catch (err) {
-   console.log("res" , err);
-    alert(err?.data?.message || "Withdrawal failed")
+    console.log("res", err);
+    alert(err?.data?.message || "Withdrawal failed");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 /* ===== Reset ===== */
 const resetSteps = () => {
-  currentStep.value = 0
-  selectedWallet.value = null
-  amount.value = null
-  method.value = null
-  selectedCryptoWallet.value = null
-  transactionId.value = ""
-}
-
-
+  currentStep.value = 0;
+  selectedWallet.value = null;
+  amount.value = null;
+  method.value = null;
+  selectedCryptoWallet.value = null;
+  transactionId.value = "";
+};
 </script>
 
 <style lang="scss" scoped>
