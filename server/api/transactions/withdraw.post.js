@@ -2,9 +2,11 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { public: { apiBase } } = useRuntimeConfig()
 
+
   // 🟢 گرفتن توکن از کوکی
   const accessToken = getCookie(event, 'accessToken')
 
+  
   if (!accessToken) {
     throw createError({
       statusCode: 401,
@@ -24,6 +26,7 @@ export default defineEventHandler(async (event) => {
     })
 
  
+
     
 
     return data

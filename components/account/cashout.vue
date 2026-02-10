@@ -26,7 +26,6 @@
           {{ stepItem.label }}
         </span>
 
-        <!-- Connector Line -->
         <div
           v-if="index < steps.length - 1"
           class="absolute top-5 left-[50%] w-full h-[2px] bg-gray-300 z-0"
@@ -48,11 +47,12 @@
               placeholder="Choose your wallet"
               class="w-full"
             />
+
             <p v-if="selectedWallet" class="mt-3 text-sm text-gray-600">
-              Balance:
+              <!-- Balance:
               <span class="font-bold text-green-600">
-                ${{ selectedWallet.balance }}
-              </span>
+                ${{ selectedWallet.balance.toFixed(2) }}
+              </span> -->
             </p>
           </template>
         </Card>
@@ -81,9 +81,11 @@
               currency="USD"
               locale="en-US"
               class="w-full"
+              :max="selectedWallet?.balance"
             />
+
             <p class="text-xs text-gray-500 mt-2">
-              Min withdrawal: $50 | Fee: 2%
+              Min withdrawal: $50 | Fee: 5%
             </p>
           </template>
         </Card>
@@ -99,7 +101,7 @@
             label="Next"
             icon="mdi mdi-arrow-right"
             class="p-button-success px-6 py-2"
-            :disabled="!amount || amount < 50"
+            :disabled="!amount || amount < 50 || amount > selectedWallet.balance"
             @click="nextStep"
           />
         </div>
@@ -123,10 +125,10 @@
                 @click="method = 'crypto'"
               >
                 <i class="mdi mdi-bitcoin text-yellow-500 text-2xl"></i>
-                <span class="font-medium">Crypto (USDT / BTC)</span>
+                <span class="font-medium">Crypto</span>
               </div>
 
-              <div
+              <!-- <div
                 class="border p-4 rounded-md cursor-pointer flex items-center gap-2 transition-all"
                 :class="
                   method === 'bank'
@@ -137,32 +139,17 @@
               >
                 <i class="mdi mdi-bank-outline text-blue-500 text-2xl"></i>
                 <span class="font-medium">Bank Transfer</span>
-              </div>
+              </div> -->
             </div>
 
-            <!-- اگر روش Crypto انتخاب شود -->
             <div v-if="method === 'crypto'" class="mt-5">
-              <label class="block text-sm font-medium mb-2"
-                >Select Your Saved Wallet</label
-              >
               <Dropdown
                 v-model="selectedCryptoWallet"
                 :options="userWallets"
                 optionLabel="name"
-                placeholder="Choose from your saved wallets"
+                placeholder="Select your crypto wallet"
                 class="w-full"
               />
-              <p v-if="selectedCryptoWallet" class="text-xs text-gray-500 mt-2">
-                Network:
-                <span class="font-semibold">{{ selectedCryptoWallet.network }}</span>
-              </p>
-            </div>
-
-            <!-- اگر روش Bank انتخاب شود -->
-            <div v-if="method === 'bank'" class="mt-5">
-              <p class="text-sm text-gray-600">
-                Bank transfers are processed manually within 3-5 business days.
-              </p>
             </div>
           </template>
         </Card>
@@ -178,6 +165,7 @@
             label="Confirm Cashout"
             icon="mdi mdi-check"
             class="p-button-success px-6 py-2"
+            :loading="loading"
             :disabled="!method || (method === 'crypto' && !selectedCryptoWallet)"
             @click="completeCashout"
           />
@@ -189,11 +177,13 @@
     <transition name="fade">
       <div v-if="currentStep === 3" class="text-center py-10">
         <i class="mdi mdi-check-circle-outline text-green-600 text-6xl mb-4"></i>
+
         <h2 class="text-2xl font-bold text-green-700">
           Cashout Request Submitted
         </h2>
+
         <p class="text-gray-600 mt-2">
-          Your withdrawal request is being processed. You’ll receive confirmation soon.
+          Your withdrawal request is being processed.
         </p>
 
         <div class="mt-6 bg-white inline-block px-6 py-3 rounded-lg shadow-md border">
@@ -219,16 +209,31 @@ import Card from "primevue/card"
 import Button from "primevue/button"
 import Dropdown from "primevue/dropdown"
 import InputNumber from "primevue/inputnumber"
-import { ref } from "vue"
+import { ref, onMounted, computed } from "vue"
+
+
+
+const { authUser } = useAuth()
+
+/* ===== State ===== */
+const currentStep = ref(0)
+const selectedWallet = ref(null)
+const amount = ref(null)
+const method = ref(null)
+const selectedCryptoWallet = ref(null)
+const transactionId = ref("")
+const loading = ref(false)
+
+/* ===== Wallets from API ===== */
 
 const wallets = [
   { label: "Profits Wallet", balance: 1200 },
-  { label: "VX Wallet", balance: 780 },
+ 
 ]
 
 const userWallets = [
-  { name: "USDT Wallet - TRC20", network: "TRON" },
-  { name: "BTC Wallet", network: "Bitcoin" },
+  { name: "main Wallet - TRC20", network: "TRON" },
+
 ]
 
 const steps = [
@@ -238,26 +243,40 @@ const steps = [
   { label: "Confirmation" },
 ]
 
-const currentStep = ref(0)
-const selectedWallet = ref(null)
-const amount = ref(null)
-const method = ref(null)
-const selectedCryptoWallet = ref(null)
-const transactionId = ref("")
 
-const nextStep = () => (currentStep.value += 1)
-const prevStep = () => (currentStep.value -= 1)
 
-const generateTransactionId = () => {
-  const random = Math.floor(100000 + Math.random() * 900000)
-  return `VX-CASHOUT-${random}`
+/* ===== Navigation ===== */
+const nextStep = () => currentStep.value++
+const prevStep = () => currentStep.value--
+
+/* ===== Submit Withdrawal ===== */
+const completeCashout = async () => {
+ 
+  try {
+    loading.value = true
+
+
+    const res = await $fetch("/api/transactions/withdraw", {
+      method: "POST",
+      body: {
+        userId: authUser.value.user.id,
+        amount: amount.value,
+      },
+    })
+    console.log("res" , res);
+    
+
+    transactionId.value = res._id
+    nextStep()
+  } catch (err) {
+   console.log("res" , err);
+    alert(err?.data?.message || "Withdrawal failed")
+  } finally {
+    loading.value = false
+  }
 }
 
-const completeCashout = () => {
-  transactionId.value = generateTransactionId()
-  nextStep()
-}
-
+/* ===== Reset ===== */
 const resetSteps = () => {
   currentStep.value = 0
   selectedWallet.value = null
@@ -266,6 +285,8 @@ const resetSteps = () => {
   selectedCryptoWallet.value = null
   transactionId.value = ""
 }
+
+
 </script>
 
 <style lang="scss" scoped>
