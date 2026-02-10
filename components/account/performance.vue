@@ -26,29 +26,47 @@
       </div>
 
       <!-- Profits Wallet -->
-      <div class="card-box">
-        <div class="icon-box bg-blue-100 text-blue-600">
-          <i class="mdi mdi-chart-line text-3xl"></i>
+      <div class="card-box flex flex-col justify-between">
+        <div class="flex flex-row">
+          <div class="icon-box bg-blue-100 text-blue-600">
+            <i class="mdi mdi-chart-line text-3xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm">Profits Balances</p>
+            <h3 class="text-2xl font-bold text-blue-700">
+              ${{ balances.profitBalance }}
+            </h3>
+          </div>
         </div>
-        <div>
-          <p class="text-gray-500 text-sm">Profits Balances</p>
-          <h3 class="text-2xl font-bold text-blue-700">
-            ${{ balances.profitBalance }}
-          </h3>
-        </div>
+        <Button
+          label="Transfer to Main Balance"
+          icon="mdi mdi-arrow-right-bold"
+          class=" p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          @click="transferToMain('profit')"
+          :loading="loadingTransfer === 'profit'"
+        />
       </div>
 
-      <!-- Binary Bonus -->
-      <div class="card-box">
-        <div class="icon-box bg-yellow-100 text-yellow-600">
-          <i class="mdi mdi-account-group text-3xl"></i>
+      <!-- VX Balances -->
+      <div class="card-box flex flex-col justify-between">
+        <div class="flex flex-row">
+          <div class="icon-box bg-yellow-100 text-yellow-600">
+            <i class="mdi mdi-account-group text-3xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-500 text-sm">VX Balances</p>
+            <h3 class="text-2xl font-bold text-yellow-700">
+              ${{ balances.referralBalance }}
+            </h3>
+          </div>
         </div>
-        <div>
-          <p class="text-gray-500 text-sm"> VX Balances</p>
-          <h3 class="text-2xl font-bold text-yellow-700">
-                ${{ balances.referralBalance }}
-          </h3>
-        </div>
+        <Button
+          label="Transfer to Main Balance"
+          icon="mdi mdi-arrow-right-bold"
+          class=" p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          @click="transferToMain('referral')"
+          :loading="loadingTransfer === 'referral'"
+        />
       </div>
 
       <!-- VX Wallet -->
@@ -57,9 +75,9 @@
           <i class="mdi mdi-wallet-outline text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm"> withdrawalTotal Balances </p>
+          <p class="text-gray-500 text-sm">withdrawalTotal Balances</p>
           <h3 class="text-2xl font-bold text-purple-700">
-                 ${{ balances.withdrawalTotalBalance }}
+            ${{ balances.withdrawalTotalBalance }}
           </h3>
         </div>
       </div>
@@ -388,6 +406,45 @@ const lineOptions = {
   },
 };
 
+/* ==========================
+   ✅ Transfer to Main Logic
+   ========================== */
+const loadingTransfer = ref(null);
+async function transferToMain(type) {
+  try {
+    loadingTransfer.value = type;
+    const userId = authUser.value.user.id;
+
+    let endpoint = "";
+    if (type === "profit") endpoint = "/api/activity/transferprofit";
+    else if (type === "referral") endpoint = "/api/activity/transferreferral";
+    else if (type === "bonus") endpoint = "/api/activity/transferbonus";
+
+    const res = await $fetch(endpoint, {
+      method: "POST",
+      body: { userId, amount: balances.value[`${type}Balance`] },
+    });
+
+    toast.add({
+      severity: "success",
+      summary: "Transfer Successful",
+      detail: res.message || "Funds moved to Main Balance",
+      life: 4000,
+    });
+
+    fetchBalances();
+  } catch (err) {
+    toast.add({
+      severity: "error",
+      summary: "Transfer Failed",
+      detail: err?.data?.message || "Unable to transfer balance",
+      life: 4000,
+    });
+  } finally {
+    loadingTransfer.value = null;
+  }
+}
+
 /* ======================
    ✅ Ensure balances are fetched
    - Try fetch on mount if authUser is ready
@@ -421,7 +478,7 @@ watch(
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1.2rem;
+    padding: 1rem;
     background: #fff;
     border-radius: 1rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
