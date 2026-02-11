@@ -1,6 +1,6 @@
 <template>
   <header
-    class="navbar-wrapper sticky top-0 z-50 backdrop-blur-xl bg-white/10 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+    class="navbar-wrapper sticky top-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/10 shadow-[0_4px_30px_rgba(59,130,246,0.15)]"
   >
     <div class="flex items-center justify-between px-6 sm:px-10 py-4">
 
@@ -8,9 +8,9 @@
       <div class="flex items-center gap-3">
         <img
           src="/logo.PNG"
-          class="w-11 h-11 rounded-xl shadow-lg ring-1 ring-white/40"
+          class="w-11 h-11 rounded-xl shadow-lg ring-1 ring-blue-400/40"
         />
-        <span class="text-2xl font-extrabold bg-gradient-to-r from-green-300 to-green-600 text-transparent bg-clip-text tracking-wide">
+        <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 text-transparent bg-clip-text tracking-wide">
           VXBUSINESS
         </span>
       </div>
@@ -30,8 +30,8 @@
             class="relative text-[15px] font-medium transition-all duration-300 px-1 py-1"
             :class="[
               activeRoute === item.route
-                ? 'text-green-400'
-                : 'text-gray-600 hover:text-green-300'
+                ? 'text-blue-400'
+                : 'text-gray-400 hover:text-blue-300'
             ]"
           >
             <span class="flex gap-2 items-center">
@@ -41,7 +41,7 @@
 
             <span
               v-if="activeRoute === item.route"
-              class="absolute bottom-[-6px] left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-green-400 to-green-600 shadow-lg"
+              class="absolute bottom-[-6px] left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-blue-400 to-violet-500 shadow-lg"
             ></span>
           </a>
         </router-link>
@@ -51,7 +51,7 @@
       <div class="relative hidden md:block">
         <button
           v-if="!authUser"
-          class="px-4 py-2 rounded-xl bg-green-500/20 hover:bg-green-500/30 border border-green-400/40 shadow-lg text-green-300 transition"
+          class="px-4 py-2 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/40 shadow-lg text-blue-300 transition"
           @click="$router.push('/login')"
         >
           Login
@@ -60,22 +60,22 @@
         <template v-else>
           <button
             @click="profileOpen = !profileOpen"
-            class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 shadow-lg transition-all backdrop-blur-lg"
+            class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 shadow-lg transition-all backdrop-blur-lg"
           >
-            <i class="mdi mdi-account-circle text-3xl text-green-400"></i>
-            <i class="mdi mdi-chevron-down text-gray-300"></i>
+            <i class="mdi mdi-account-circle text-3xl text-blue-400"></i>
+            <i class="mdi mdi-chevron-down text-gray-400"></i>
           </button>
 
           <transition name="fade">
             <div
               v-if="profileOpen"
-              class="absolute right-0 mt-3 w-48 bg-[#0d0d0d] border border-white/10 shadow-2xl rounded-2xl py-3 backdrop-blur-xl"
+              class="absolute right-0 mt-3 w-48 bg-[#0b0f1a] border border-white/10 shadow-2xl rounded-2xl py-3 backdrop-blur-xl"
             >
               <nuxt-link
                 to="/account"
-                class="px-4 py-2 block text-gray-200 hover:bg-white/10 rounded-lg transition flex items-center gap-2"
+                class="px-4 py-2 block text-gray-200 hover:bg-white/5 rounded-lg transition flex items-center gap-2"
               >
-                <i class="mdi mdi-view-dashboard-outline text-green-400"></i>
+                <i class="mdi mdi-view-dashboard-outline text-blue-400"></i>
                 Dashboard
               </nuxt-link>
 
@@ -93,10 +93,10 @@
 
       <!-- MOBILE MENU BUTTON -->
       <button
-        class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-md transition"
+        class="md:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 backdrop-blur-md transition"
         @click="mobileMenu = !mobileMenu"
       >
-        <i class="mdi mdi-menu text-2xl text-gray-200"></i>
+        <i class="mdi mdi-menu text-2xl text-gray-300"></i>
       </button>
     </div>
 
@@ -104,7 +104,7 @@
     <transition name="slide">
       <nav
         v-if="mobileMenu"
-        class="md:hidden bg-black/60 backdrop-blur-xl border-t border-white/10 px-4 py-5 space-y-2"
+        class="md:hidden bg-black/80 backdrop-blur-xl border-t border-white/10 px-4 py-5 space-y-2"
       >
         <router-link
           v-for="item in filteredItems"
@@ -116,7 +116,7 @@
           <a
             :href="href"
             @click="navigate(); mobileMenu = false"
-            class="flex items-center gap-3 py-3 px-4 rounded-xl transition-all bg-white/5 text-gray-100 hover:bg-white/10"
+            class="flex items-center gap-3 py-3 px-4 rounded-xl transition-all bg-white/5 text-gray-200 hover:bg-white/10"
           >
             <i :class="[item.icon, 'text-xl opacity-80']"></i>
             {{ item.label }}
@@ -128,7 +128,7 @@
           <button
             v-if="!authUser"
             @click="$router.push('/login'); mobileMenu = false"
-            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-green-500/20 hover:bg-green-500/30 text-green-300"
+            class="flex items-center gap-3 py-3 px-4 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-300"
           >
             <i class="mdi mdi-login"></i>
             Login
@@ -138,10 +138,10 @@
           <template v-else>
             <nuxt-link
               to="/account"
-              class="flex items-center gap-3 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition text-gray-100"
+              class="flex items-center gap-3 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 transition text-gray-200"
               @click="mobileMenu = false"
             >
-              <i class="mdi mdi-view-dashboard-outline text-green-400 text-xl"></i>
+              <i class="mdi mdi-view-dashboard-outline text-blue-400 text-xl"></i>
               Dashboard
             </nuxt-link>
 
@@ -163,8 +163,7 @@
 import { ref, computed } from "vue"
 import { useRoute } from "vue-router"
 
-// 👇 این authUser را از store یا API بگیر
-const { authUser } = useAuth() // ✅ برای تشخیص لاگین بودن کاربر
+const { authUser } = useAuth()
 
 const route = useRoute()
 const activeRoute = computed(() => route.path)
@@ -179,12 +178,9 @@ const filteredItems = computed(() => {
   })
 })
 
-
 const logout = async () => {
   try {
     const res = await $fetch('/api/auth/logout', { method: 'POST' })
-   
-    
     authUser.value = null
     navigateTo('/')
   } catch (error) {
