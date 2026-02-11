@@ -9,7 +9,7 @@
 
       <!-- Brand -->
       <div>
-        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-green-400 to-teal-300 bg-clip-text text-transparent drop-shadow-md">
+        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent drop-shadow-md">
           VXBUSINESS
         </h2>
         <p class="mt-3 text-gray-400 leading-relaxed text-sm">
@@ -54,15 +54,15 @@
         <h3 class="footer-title">Contact Us</h3>
         <ul class="footer-list space-y-4">
           <li class="footer-contact">
-            <i class="mdi mdi-email-outline text-green-400 text-xl"></i>
+            <i class="mdi mdi-email-outline text-blue-400 text-xl"></i>
             <a href="mailto:support@VXBUSINESS.com">support@VXBUSINESS.com</a>
           </li>
           <!-- <li class="footer-contact">
-            <i class="mdi mdi-map-marker text-green-400 text-xl"></i>
+            <i class="mdi mdi-map-marker text-blue-400 text-xl"></i>
             <span>London, UK</span>
           </li>
           <li class="footer-contact">
-            <i class="mdi mdi-phone text-green-400 text-xl"></i>
+            <i class="mdi mdi-phone text-blue-400 text-xl"></i>
             <a href="tel:+447712345678">+44 7712 345678</a>
           </li> -->
         </ul>
@@ -102,9 +102,9 @@ footer::before {
 
   background: radial-gradient(
       circle at 50% 0%,
-      rgba(34, 197, 94, 0.45),
-      rgba(16, 185, 129, 0.30) 35%,
-      rgba(20, 184, 166, 0.18) 60%,
+      rgba(59, 130, 246, 0.45),
+      rgba(99, 102, 241, 0.30) 35%,
+      rgba(124, 58, 237, 0.18) 60%,
       transparent 85%
   );
 
@@ -128,7 +128,7 @@ footer::before {
 }
 
 .footer-link:hover {
-  @apply text-green-400;
+  @apply text-blue-400;
 }
 
 /* Contact row */
@@ -137,7 +137,7 @@ footer::before {
 }
 
 .footer-contact a:hover {
-  @apply text-green-400;
+  @apply text-blue-400;
 }
 
 /* Social icon buttons */
@@ -146,13 +146,13 @@ footer::before {
 }
 
 .footer-icon:hover {
-  @apply text-green-400 scale-125 drop-shadow-[0_0_10px_rgba(34,197,94,0.7)];
+  @apply text-blue-400 scale-125 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)];
 }
 
 /* 🔥 animated background */
 .footer-animated-bg {
-  background: radial-gradient(circle at 20% 30%, rgba(34,197,94,0.2), transparent),
-              radial-gradient(circle at 80% 70%, rgba(20,184,166,0.2), transparent);
+  background: radial-gradient(circle at 20% 30%, rgba(59,130,246,0.2), transparent),
+              radial-gradient(circle at 80% 70%, rgba(124,58,237,0.2), transparent);
   animation: footerPulse 8s infinite ease-in-out alternate;
 }
 
@@ -175,7 +175,7 @@ footer::before {
 }
 
 .footer-container {
-  background-color: #0a0a0a;
+  background-color: #0a0f1a;
   color: white;
   position: relative;
   bottom: 0;
@@ -183,11 +183,11 @@ footer::before {
 }
 
 .footer-link {
-  color: #bdbdbd;
+  color: #9ca3af;
   font-size: 14px;
   transition: color 0.2s ease;
   &:hover {
-    color: #10b981;
+    color: #3b82f6;
   }
 }
 
