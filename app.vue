@@ -16,20 +16,21 @@ html {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
+  box-shadow: inset 0 0 5px #1e1e2f;
   border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #22c55e;
+  background: #6366f1; /* آبی-ایندیگو */
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #0b6d20;
+  background: #7c3aed; /* بنفش نئونی */
 }
+
 
 @font-face {
   font-family: numregular;
