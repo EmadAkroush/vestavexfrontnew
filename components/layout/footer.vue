@@ -2,14 +2,14 @@
   <footer class="relative bg-black text-gray-300 pt-16 pb-10 overflow-hidden">
 
     <!-- 🔥 Animated gradient glow background -->
-    <div class="absolute inset-0 opacity-40 footer-animated-bg"></div>
+    <div class="absolute inset-0 opacity-50 footer-animated-bg"></div>
 
     <!-- Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-4 gap-12">
 
       <!-- Brand -->
       <div>
-        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent drop-shadow-md">
+        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]">
           VXBUSINESS
         </h2>
         <p class="mt-3 text-gray-400 leading-relaxed text-sm">
@@ -89,27 +89,25 @@
 <style lang="scss" scoped>
 footer {
   position: relative;
+  background: linear-gradient(to bottom, #070b16 0%, #050816 60%, #04060f 100%);
 }
 
-/* 🔥 Gradient Soft Light on Top */
+/* 🔥 Cinematic Multi-Layer Glow */
 footer::before {
   content: "";
   position: absolute;
-  top: -40px;
+  top: -60px;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: 180px;
 
-  background: radial-gradient(
-      circle at 50% 0%,
-      rgba(59, 130, 246, 0.45),
-      rgba(99, 102, 241, 0.30) 35%,
-      rgba(124, 58, 237, 0.18) 60%,
-      transparent 85%
-  );
+  background:
+    radial-gradient(circle at 50% 0%, rgba(59,130,246,0.55), transparent 60%),
+    radial-gradient(circle at 30% 0%, rgba(99,102,241,0.35), transparent 70%),
+    radial-gradient(circle at 70% 0%, rgba(124,58,237,0.35), transparent 70%);
 
-  filter: blur(45px);
-  opacity: 0.9;
+  filter: blur(60px);
+  opacity: 0.95;
 
   pointer-events: none;
   z-index: 2;
@@ -124,7 +122,7 @@ footer::before {
 }
 
 .footer-link {
-  @apply text-gray-400 text-sm transition duration-200 cursor-pointer;
+  @apply text-gray-400 text-sm transition duration-300 cursor-pointer;
 }
 
 .footer-link:hover {
@@ -146,24 +144,30 @@ footer::before {
 }
 
 .footer-icon:hover {
-  @apply text-blue-400 scale-125 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)];
+  @apply text-blue-400 scale-125 drop-shadow-[0_0_18px_rgba(99,102,241,0.8)];
 }
 
-/* 🔥 animated background */
+/* 🔥 Deep animated cinematic background */
 .footer-animated-bg {
-  background: radial-gradient(circle at 20% 30%, rgba(59,130,246,0.2), transparent),
-              radial-gradient(circle at 80% 70%, rgba(124,58,237,0.2), transparent);
-  animation: footerPulse 8s infinite ease-in-out alternate;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(59,130,246,0.25), transparent 60%),
+    radial-gradient(circle at 85% 75%, rgba(124,58,237,0.25), transparent 60%);
+  animation: footerPulse 12s infinite ease-in-out alternate;
+  filter: blur(40px);
 }
 
 @keyframes footerPulse {
   0% {
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
     opacity: 0.35;
   }
-  100% {
-    transform: scale(1.25);
+  50% {
+    transform: scale(1.15) rotate(2deg);
     opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.25) rotate(-2deg);
+    opacity: 0.45;
   }
 }
 
@@ -175,7 +179,7 @@ footer::before {
 }
 
 .footer-container {
-  background-color: #0a0f1a;
+  background-color: #070b16;
   color: white;
   position: relative;
   bottom: 0;
@@ -185,7 +189,7 @@ footer::before {
 .footer-link {
   color: #9ca3af;
   font-size: 14px;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
   &:hover {
     color: #3b82f6;
   }
