@@ -4,12 +4,15 @@
     <!-- 🔥 Animated gradient glow background -->
     <div class="absolute inset-0 opacity-50 footer-animated-bg"></div>
 
+    <!-- 🔥 Neon glow line at top of footer -->
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 opacity-60 blur-sm"></div>
+
     <!-- Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-4 gap-12">
 
       <!-- Brand -->
       <div>
-        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]">
+        <h2 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(99,102,241,0.8)]">
           VXBUSINESS
         </h2>
         <p class="mt-3 text-gray-400 leading-relaxed text-sm">
@@ -89,7 +92,7 @@
 <style lang="scss" scoped>
 footer {
   position: relative;
-  background: linear-gradient(to bottom, #070b16 0%, #050816 60%, #04060f 100%);
+  background: linear-gradient(to bottom, #050811 0%, #03040b 70%, #02020a 100%);
 }
 
 /* 🔥 Cinematic Multi-Layer Glow */
@@ -106,7 +109,7 @@ footer::before {
     radial-gradient(circle at 30% 0%, rgba(99,102,241,0.35), transparent 70%),
     radial-gradient(circle at 70% 0%, rgba(124,58,237,0.35), transparent 70%);
 
-  filter: blur(60px);
+  filter: blur(70px);
   opacity: 0.95;
 
   pointer-events: none;
@@ -144,7 +147,7 @@ footer::before {
 }
 
 .footer-icon:hover {
-  @apply text-blue-400 scale-125 drop-shadow-[0_0_18px_rgba(99,102,241,0.8)];
+  @apply text-blue-400 scale-125 drop-shadow-[0_0_20px_rgba(99,102,241,0.9)];
 }
 
 /* 🔥 Deep animated cinematic background */
@@ -153,7 +156,7 @@ footer::before {
     radial-gradient(circle at 15% 25%, rgba(59,130,246,0.25), transparent 60%),
     radial-gradient(circle at 85% 75%, rgba(124,58,237,0.25), transparent 60%);
   animation: footerPulse 12s infinite ease-in-out alternate;
-  filter: blur(40px);
+  filter: blur(50px);
 }
 
 @keyframes footerPulse {
@@ -179,7 +182,7 @@ footer::before {
 }
 
 .footer-container {
-  background-color: #070b16;
+  background-color: #050811;
   color: white;
   position: relative;
   bottom: 0;
