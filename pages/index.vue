@@ -17,20 +17,20 @@
       ></div>
 
       <div
-        class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-gray-900/70 backdrop-blur-[3px]"
+        class="absolute inset-0 bg-gradient-to-br from-black/90 via-black/75 to-[#0a0f1f]/85 backdrop-blur-[2px]"
       ></div>
 
       <!-- 🔥 ORB LIGHTS -->
       <div
-        class="absolute w-[380px] h-[380px] bg-blue-500/20 rounded-full blur-[120px] -top-20 -left-20"
+        class="absolute w-[380px] h-[380px] bg-blue-600/25 rounded-full blur-[160px] -top-20 -left-20"
       ></div>
       <div
-        class="absolute w-[300px] h-[300px] bg-purple-500/20 rounded-full blur-[130px] bottom-10 right-10"
+        class="absolute w-[300px] h-[300px] bg-purple-600/25 rounded-full blur-[170px] bottom-10 right-10"
       ></div>
 
       <!-- 🔥 GLASS CONTAINER -->
       <div
-        class="relative z-10 text-center max-w-3xl backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-10 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] animate-fadeIn"
+        class="relative z-10 text-center max-w-3xl backdrop-blur-xl bg-white/5 border border-white/15 rounded-3xl p-10 shadow-[0_0_60px_-15px_rgba(0,0,0,0.8)] animate-fadeIn"
       >
         <p class="uppercase tracking-[0.2em] text-blue-400 font-semibold mb-3">
           VX business | Shaping the Future of Decentralized Finance
@@ -63,14 +63,14 @@
 
     <!-- FEATURE SECTION -->
     <section
-      class="relative py-24 bg-gradient-to-b from-[#f7f8ff] to-[#eef1fb] overflow-hidden"
+      class="relative py-24 bg-gradient-to-b from-[#0b0f1a] via-[#0f172a] to-[#111827] overflow-hidden"
     >
       <div class="absolute inset-0">
         <div
-          class="absolute -top-10 -left-10 w-60 h-60 bg-blue-300/25 blur-3xl rounded-full"
+          class="absolute -top-10 -left-10 w-60 h-60 bg-blue-600/20 blur-3xl rounded-full"
         ></div>
         <div
-          class="absolute bottom-0 right-0 w-72 h-72 bg-purple-300/25 blur-3xl rounded-full"
+          class="absolute bottom-0 right-0 w-72 h-72 bg-purple-600/20 blur-3xl rounded-full"
         ></div>
       </div>
 
@@ -85,7 +85,7 @@
           <div
             v-for="(feature, index) in features"
             :key="feature.title"
-            class="group relative p-8 rounded-3xl backdrop-blur-xl bg-white/40 shadow-lg border border-white/30 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
+            class="group relative p-8 rounded-3xl backdrop-blur-xl bg-white/5 shadow-lg border border-white/10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
           >
             <div
               class="three-bg absolute inset-0 z-0"
@@ -99,11 +99,11 @@
                 <i :class="feature.icon"></i>
               </div>
 
-              <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">
+              <h3 class="text-xl font-semibold text-white mb-3 text-center">
                 {{ feature.title }}
               </h3>
 
-              <p class="text-gray-600 text-center leading-relaxed">
+              <p class="text-gray-400 text-center leading-relaxed">
                 {{ feature.description }}
               </p>
             </div>
@@ -319,7 +319,7 @@ const features = [
 
 .home {
   box-sizing: border-box;
-  background-color: #eef1fb;
+  background-color: #0b0f1a;
 
   .secmain {
     box-sizing: border-box;
