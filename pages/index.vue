@@ -22,22 +22,22 @@
 
       <!-- 🔥 ORB LIGHTS -->
       <div
-        class="absolute w-[380px] h-[380px] bg-green-500/20 rounded-full blur-[120px] -top-20 -left-20"
+        class="absolute w-[380px] h-[380px] bg-blue-500/20 rounded-full blur-[120px] -top-20 -left-20"
       ></div>
       <div
-        class="absolute w-[300px] h-[300px] bg-teal-400/20 rounded-full blur-[130px] bottom-10 right-10"
+        class="absolute w-[300px] h-[300px] bg-purple-500/20 rounded-full blur-[130px] bottom-10 right-10"
       ></div>
 
       <!-- 🔥 GLASS CONTAINER -->
       <div
         class="relative z-10 text-center max-w-3xl backdrop-blur-xl bg-white/10 border border-white/10 rounded-3xl p-10 shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] animate-fadeIn"
       >
-        <p class="uppercase tracking-[0.2em] text-green-400 font-semibold mb-3">
+        <p class="uppercase tracking-[0.2em] text-blue-400 font-semibold mb-3">
           VX business | Shaping the Future of Decentralized Finance
         </p>
 
         <h1
-          class="gradient-animate text-4xl sm:text-6xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-green-300 via-teal-300 to-white text-transparent bg-clip-text drop-shadow-xl tracking-tight"
+          class="gradient-animate text-4xl sm:text-6xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text drop-shadow-xl tracking-tight"
         >
           Empowering Global Finance Through Decentralized Innovation
           <br />
@@ -46,7 +46,6 @@
         <p class="text-gray-200 text-base sm:text-xl leading-relaxed mb-8">
           VX business is a leading blockchain and decentralized exchange (DEX)
           company with over four years of continuous and professional experience
-         
         </p>
 
         <Button
@@ -59,26 +58,19 @@
 
       <!-- 🔥 FLOATING ILLUSTRATION -->
       <div class="absolute bottom-[-60px] sm:bottom-[-80px] animate-floating">
-        <!-- <img
-      src="/public/Team work-bro.svg"
-      alt="Investment Illustration"
-      class="w-40 sm:w-48 drop-shadow-[0_25px_40px_rgba(0,0,0,0.45)]"
-    /> -->
       </div>
     </section>
-    <!-- 🌌 3D Background -->
 
     <!-- FEATURE SECTION -->
     <section
       class="relative py-24 bg-gradient-to-b from-[#f7f8ff] to-[#eef1fb] overflow-hidden"
     >
-      <!-- Background gradient blobs -->
       <div class="absolute inset-0">
         <div
-          class="absolute -top-10 -left-10 w-60 h-60 bg-green-300/25 blur-3xl rounded-full"
+          class="absolute -top-10 -left-10 w-60 h-60 bg-blue-300/25 blur-3xl rounded-full"
         ></div>
         <div
-          class="absolute bottom-0 right-0 w-72 h-72 bg-blue-300/20 blur-3xl rounded-full"
+          class="absolute bottom-0 right-0 w-72 h-72 bg-purple-300/25 blur-3xl rounded-full"
         ></div>
       </div>
 
@@ -95,16 +87,14 @@
             :key="feature.title"
             class="group relative p-8 rounded-3xl backdrop-blur-xl bg-white/40 shadow-lg border border-white/30 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden"
           >
-            <!-- Three.js Canvas -->
             <div
               class="three-bg absolute inset-0 z-0"
               :id="'three-bg-' + index"
             ></div>
 
-            <!-- Card Content -->
             <div class="relative z-10">
               <div
-                class="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/80 to-green-700/80 text-white text-5xl shadow-lg group-hover:scale-110 transition-transform duration-300 mx-auto mb-6"
+                class="w-20 h-20 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/80 to-purple-600/80 text-white text-5xl shadow-lg group-hover:scale-110 transition-transform duration-300 mx-auto mb-6"
               >
                 <i :class="feature.icon"></i>
               </div>
@@ -152,10 +142,9 @@ function initThreeBG(container) {
   renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
 
-  // 🌟 Geometry + Material (floating squares)
   const geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
   const material = new THREE.MeshStandardMaterial({
-    color: "#00ff88",
+    color: "#6366F1",
     transparent: true,
     opacity: 0.25,
     metalness: 0.3,
@@ -172,8 +161,7 @@ function initThreeBG(container) {
     cubes.push(cube);
   }
 
-  // 💡 Lighting
-  const light = new THREE.PointLight(0x00ffcc, 7);
+  const light = new THREE.PointLight(0x7C3AED, 7);
   light.position.set(2, 2, 3);
   scene.add(light);
 
@@ -192,7 +180,6 @@ function initThreeBG(container) {
 
 const goToSignup = () => router.push("/login");
 
-// Features (بر اساس سند PDF)
 const features = [
   {
     title: "Tech & Trading",
@@ -299,15 +286,9 @@ const features = [
 }
 
 @keyframes moveGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .gradient-animate {
@@ -316,40 +297,24 @@ const features = [
 }
 
 .feature-title {
-  background: linear-gradient(90deg, #00f260, #0575e6, #8e2de2, #f953c6);
+  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
   animation: titleGradient 6s ease infinite, floatTitle 4s ease-in-out infinite;
-
-  text-shadow: 0 0 25px rgba(0, 255, 200, 0.4);
+  text-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
 }
 
-/* حرکت گرادینت زنده */
 @keyframes titleGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* حرکت شناور */
 @keyframes floatTitle {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
 
 .home {
@@ -361,11 +326,11 @@ const features = [
   }
 
   .p-button-success {
-    background-color: #0b6d20 !important;
+    background: linear-gradient(135deg, #2563EB, #7C3AED) !important;
     border: none;
   }
   .p-button-success:hover {
-    background-color: #0d8024 !important;
+    background: linear-gradient(135deg, #1E40AF, #6D28D9) !important;
   }
 
   .Htext {
@@ -406,15 +371,9 @@ const features = [
 }
 
 @keyframes floating {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
 }
 
 .animate-floating {
