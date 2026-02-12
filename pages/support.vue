@@ -1,22 +1,20 @@
 <template>
-  <section class="support-page bg-gray-50 min-h-screen">
+  <section class="support-page bg-gray-900 min-h-screen text-gray-100">
     <!-- Hero Section -->
     <div
-      class="support-hero relative text-center py-20 px-4 sm:px-16 bg-gradient-to-b from-green-900 via-green-800 to-green-700 overflow-hidden"
+      class="support-hero relative text-center py-20 px-4 sm:px-16 bg-gradient-to-b from-gray-800 via-gray-900 to-gray-900 overflow-hidden"
     >
-      <!-- پس‌زمینه شفاف برای جلوگیری از تیرگی زیاد -->
-      <div class="absolute inset-0 bg-black/30 z-0"></div>
+      <!-- پس‌زمینه نیمه‌شفاف -->
+      <div class="absolute inset-0 bg-black/40 z-0"></div>
 
       <!-- محتوای اصلی -->
-      <div class="relative z-10 max-w-3xl mx-auto text-white">
-        <h1 class="text-4xl sm:text-5xl font-bold mb-4 text-green-100">
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h1 class="text-4xl sm:text-5xl font-bold mb-4 text-white">
           Support Center
         </h1>
-        <p
-          class="text-base sm:text-lg leading-relaxed text-gray-100 max-w-2xl mx-auto"
-        >
+        <p class="text-base sm:text-lg leading-relaxed max-w-2xl mx-auto text-gray-300">
           Need help? Our support team is available
-          <span class="font-semibold text-green-300">24/7</span> to assist you
+          <span class="font-semibold text-blue-400">24/7</span> to assist you
           with any questions about your account, deposits, withdrawals, or
           investment plans.
         </p>
@@ -28,58 +26,47 @@
       class="max-w-6xl mx-auto my-16 px-6 sm:px-12 grid grid-cols-1 lg:grid-cols-3 gap-10"
     >
       <!-- Form Section -->
-      <div class="lg:col-span-2 bg-white shadow-lg rounded-2xl p-8">
-        <h2
-          class="text-2xl font-semibold text-green-700 mb-6 flex items-center gap-2"
-        >
-          <i class="mdi mdi-email-outline text-green-600 text-3xl"></i> Send Us
-          a Message
+      <div class="lg:col-span-2 bg-gray-800 shadow-md rounded-2xl p-8">
+        <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2 text-white">
+          <i class="mdi mdi-email-outline text-3xl text-blue-400"></i> Send Us a Message
         </h2>
 
         <div class="flex flex-col gap-5">
           <div>
-            <label class="block text-sm font-medium mb-2 text-gray-700"
-              >Topic</label
-            >
+            <label class="block text-sm font-medium mb-2 text-gray-200">Topic</label>
             <InputText
               v-model="form.topic"
               placeholder="Enter your topic..."
-              class="w-full"
+              class="w-full input-field"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-2 text-gray-700"
-              >Email (optional)</label
-            >
+            <label class="block text-sm font-medium mb-2 text-gray-200">Email (optional)</label>
             <InputText
               v-model="form.email"
               placeholder="your@email.com"
-              class="w-full"
+              class="w-full input-field"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-2 text-gray-700"
-              >Description</label
-            >
+            <label class="block text-sm font-medium mb-2 text-gray-200">Description</label>
             <Textarea
               v-model="form.description"
               rows="7"
               autoResize
               placeholder="Describe your issue or question..."
-              class="w-full"
+              class="w-full input-field"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-2 text-gray-700"
-              >Attach File (optional)</label
-            >
+            <label class="block text-sm font-medium mb-2 text-gray-200">Attach File (optional)</label>
             <input
               type="file"
               @change="handleFileUpload"
-              class="w-full border p-2 rounded-md bg-gray-50"
+              class="w-full border p-2 rounded-md bg-gray-700 text-gray-200"
             />
           </div>
 
@@ -87,7 +74,7 @@
             <Button
               label="Send Message"
               icon="mdi mdi-send"
-              class="p-button-success w-48"
+              class="p-button-success w-48 bg-blue-500 hover:bg-blue-600"
               @click="sendMessage"
             />
           </div>
@@ -96,57 +83,32 @@
 
       <!-- Contact Section -->
       <div
-        class="bg-green-700 text-white rounded-2xl p-8 flex flex-col justify-between"
+        class="bg-gray-800 text-white rounded-2xl p-8 flex flex-col justify-between shadow-md"
       >
         <div>
           <h3 class="text-xl font-semibold mb-4">Contact Us Directly</h3>
-          <ul class="space-y-4 text-gray-100">
+          <ul class="space-y-4 text-gray-300">
             <li class="flex items-center gap-3">
-              <i class="mdi mdi-email-outline text-2xl"></i>
+              <i class="mdi mdi-email-outline text-2xl text-blue-400"></i>
               <span>support@VXBUSINESS.com</span>
             </li>
-            <!-- <li class="flex items-center gap-3">
-              <i class="mdi mdi-phone text-2xl"></i>
-              <span>+1 (800) 555-2345</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <i class="mdi mdi-whatsapp text-2xl"></i>
-              <span>+44 7894 123456</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <i class="mdi mdi-map-marker text-2xl"></i>
-              <span>123 Business Ave, London, UK</span>
-            </li> -->
           </ul>
         </div>
 
         <div class="mt-8">
           <h4 class="font-semibold mb-3">Follow Us</h4>
           <div class="flex gap-4 text-2xl">
-            <!-- <a href="#" class="hover:text-green-300"
-              ><i class="mdi mdi-facebook"></i
-            ></a>
-            <a href="#" class="hover:text-green-300"
-              ><i class="mdi mdi-twitter"></i
-            ></a>
-            <a href="#" class="hover:text-green-300"
-              ><i class="mdi mdi-telegram"></i
-            ></a>
-            <a href="#" class="hover:text-green-300"
-              ><i class="mdi mdi-linkedin"></i
-            ></a> -->
+            <!-- Social icons can be added here -->
           </div>
         </div>
       </div>
     </div>
 
     <!-- FAQ Section -->
-    <div class="faq-section bg-white py-16 px-6 sm:px-12">
+    <div class="faq-section bg-gray-800 py-16 px-6 sm:px-12 rounded-2xl shadow-md">
       <div class="max-w-5xl mx-auto text-center mb-10">
-        <h2 class="text-3xl font-bold text-green-700 mb-4">
-          Frequently Asked Questions
-        </h2>
-        <p class="text-gray-600 max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+        <p class="text-gray-300 max-w-3xl mx-auto">
           Find answers to the most common questions our investors ask before
           contacting support.
         </p>
@@ -156,12 +118,10 @@
         <div
           v-for="(faq, index) in faqs"
           :key="index"
-          class="border rounded-xl p-5 shadow-sm hover:shadow-md transition"
+          class="border rounded-xl p-5 shadow-sm hover:shadow-md transition bg-gray-700"
         >
-          <h3 class="font-semibold text-lg text-green-700 mb-2">
-            {{ faq.question }}
-          </h3>
-          <p class="text-gray-600 text-sm leading-relaxed">{{ faq.answer }}</p>
+          <h3 class="font-semibold text-lg text-white mb-2">{{ faq.question }}</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">{{ faq.answer }}</p>
         </div>
       </div>
     </div>
@@ -221,14 +181,27 @@ const faqs = [
     background-position: center;
   }
 
-  .faq-section h3 {
-    position: relative;
+  .input-field {
+    background: #1f2937;
+    border: 1px solid #374151;
+    color: #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
   }
 
-  .faq-section h3::before {
-    content: "❖";
-    color: #0b6d20;
-    margin-right: 6px;
+  .input-field:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+
+  h1, h2, h3, h4 {
+    line-height: 1.3;
+  }
+
+  /* Hover effects */
+  .shadow-md:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   }
 }
 </style>
