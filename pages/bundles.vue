@@ -32,25 +32,25 @@
 
       <div class="glass-content">
         <div class="info-row">
-          <i class="mdi mdi-cash text-green-400"></i>
+          <i class="mdi mdi-cash text-indigo-400"></i>
           <span class="label">Invest Range</span>
           <span class="value">{{ selectedBundle.range }}</span>
         </div>
 
         <div class="info-row">
-          <i class="mdi mdi-bank-transfer text-green-400"></i>
+          <i class="mdi mdi-bank-transfer text-indigo-400"></i>
           <span class="label">Min Withdrawal</span>
           <span class="value">$50</span>
         </div>
 
         <div class="info-row">
-          <i class="mdi mdi-chart-line text-green-400"></i>
+          <i class="mdi mdi-chart-line text-indigo-400"></i>
           <span class="label">Monthly Return</span>
           <span class="value">{{ selectedBundle.monthRate }}%</span>
         </div>
 
         <div class="info-row">
-          <i class="mdi mdi-percent-outline text-green-400"></i>
+          <i class="mdi mdi-percent-outline text-indigo-400"></i>
           <span class="label">Max Cap</span>
           <span class="value">{{ selectedBundle.maxCap }}%</span>
         </div>
@@ -101,8 +101,6 @@
           locale="en-US"
           class="w-full"
         />
-
-     
       </div>
 
       <template #footer>
@@ -139,8 +137,6 @@ const loading = ref(true);
 const { authUser } = useAuth();
 const router = useRouter();
 
-
-
 onMounted(async () => {
   try {
     const data = await $fetch(`/api/packages`);
@@ -163,18 +159,13 @@ function openDialog(item) {
 }
 
 function openInvestDialog(item) {
-    console.log("ITEM from grid:", item);
+  console.log("ITEM from grid:", item);
   if (!authUser.value) return router.push("/login");
   selectedBundle.value = item;
   visibleInvest.value = true;
 }
 
-/**
- * POST Investment API Call
- */
 async function confirmInvestment() {
-
-  // ✅ amount required
   if (!investAmount.value) {
     toast.add({
       severity: "warn",
@@ -185,17 +176,12 @@ async function confirmInvestment() {
     return;
   }
 
-  // ✅ Dynamic range from selectedBundle.range
-  const rangeText = selectedBundle.value?.range; // "$500 — $999"
-
+  const rangeText = selectedBundle.value?.range;
   if (rangeText) {
-    // extract numbers from string
     const numbers = rangeText.match(/\d+/g)?.map(Number);
-
     if (numbers && numbers.length >= 2) {
       const min = numbers[0];
       const max = numbers[1];
-
       if (investAmount.value < min || investAmount.value > max) {
         toast.add({
           severity: "warn",
@@ -217,7 +203,7 @@ async function confirmInvestment() {
 
     console.log("Investment Payload:", payload);
 
-    const res = await $fetch("/api/investments", {
+    await $fetch("/api/investments", {
       method: "POST",
       body: payload,
     });
@@ -242,27 +228,23 @@ async function confirmInvestment() {
     });
   }
 }
-
 </script>
 
 <style scoped lang="scss">
-/* root section */
-/* ---- GLASS CARD DIALOG ---- */
 .glass-dialog .p-dialog-content {
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(99, 102, 241, 0.08) !important;
   backdrop-filter: blur(22px);
   border-radius: 22px;
   padding: 0 !important;
 }
 
-/* HEADER */
 .glass-header {
   padding: 24px 20px 10px;
   text-align: center;
   background: linear-gradient(
     135deg,
-    rgba(0, 255, 190, 0.25),
-    rgba(0, 255, 130, 0.15)
+    rgba(99, 102, 241, 0.35),
+    rgba(139, 92, 246, 0.25)
   );
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 22px 22px 0 0;
@@ -270,16 +252,15 @@ async function confirmInvestment() {
 
 .glass-header h3 {
   font-size: 26px;
-  color: #00ffc3;
+  color: #818cf8;
   font-weight: 700;
 }
 
 .glass-header .subtitle {
-  color: #e0e0e0;
+  color: #c7d2fe;
   font-size: 14px;
 }
 
-/* CONTENT */
 .glass-content {
   padding: 22px;
 }
@@ -289,48 +270,46 @@ async function confirmInvestment() {
   grid-template-columns: 30px 1fr auto;
   align-items: center;
   padding: 12px 0;
-  color: #e6e6e6;
+  color: #e0e7ff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .info-row .label {
-  color: #bfbfbf;
+  color: #a5b4fc;
   font-size: 14px;
 }
 
 .info-row .value {
   font-weight: 600;
-  color: #00ffbf;
+  color: #8b5cf6;
 }
 
-/* Explanation Box */
 .explain-box {
   margin-top: 20px;
-  background: rgba(0, 255, 180, 0.06);
-  border: 1px solid rgba(0, 255, 180, 0.15);
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   padding: 16px;
   border-radius: 14px;
 }
 
 .explain-box h4 {
-  color: #00ffc3;
+  color: #a78bfa;
   margin-bottom: 6px;
 }
 
 .explain-box ul {
   margin: 8px 0;
   padding-left: 18px;
-  color: #dcdcdc;
+  color: #c7d2fe;
   font-size: 14px;
 }
 
-/* FOOTER */
 .dialog-footer {
   padding: 15px 20px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(99, 102, 241, 0.05);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0 0 22px 22px;
 }
@@ -338,29 +317,13 @@ async function confirmInvestment() {
 .bundles-wrapper {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(180deg, #0e1513, #0c0f0e);
-  z-index: 5; /* ✔ محتوا بالای canvas */
-}
-
-.three-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.bundles-wrapper {
-  position: relative;
+  background: linear-gradient(180deg, #0b1020, #050814);
+  z-index: 5;
   padding: 60px 0 100px;
-  background: linear-gradient(180deg, #071114 0%, #06110f 40%, #020403 100%);
-  color: #dbeee4;
+  color: #e0e7ff;
   overflow: hidden;
 }
 
-/* soft static glows */
 .glow {
   position: absolute;
   width: 480px;
@@ -372,54 +335,37 @@ async function confirmInvestment() {
 .glow-left {
   left: -8%;
   top: -6%;
-  background: radial-gradient(circle, rgba(0, 255, 180, 0.14), transparent 40%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.25), transparent 40%);
 }
 .glow-right {
   right: -6%;
   bottom: -8%;
-  background: radial-gradient(
-    circle,
-    rgba(60, 200, 255, 0.12),
-    transparent 40%
-  );
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent 40%);
 }
-
-/* grid */
-.grid-wrap {
-  z-index: 10;
-}
-
-/* body rows */
 
 .card-body .row span {
   font-size: 0.88rem;
-  color: #9adfc9;
-}
-
-/* progress */
-.progress-wrap {
-  margin-top: 12px;
+  color: #a5b4fc;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00ffd0, #2af7e0);
-  box-shadow: 0 6px 18px rgba(0, 255, 190, 0.12);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.25);
   transition: width 0.9s cubic-bezier(0.2, 0.9, 0.25, 1);
 }
+
 .progress-label {
   font-size: 12px;
   margin-top: 6px;
-  color: #9adfc9;
+  color: #a5b4fc;
 }
 
-/* dialog/primevue styling fallback */
 .p-dialog .p-dialog-header {
-  background: linear-gradient(90deg, #00b682, #00fcd1);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
   color: white;
 }
 
-/* small screens */
 @media (max-width: 768px) {
   .bundle-card {
     min-height: 220px;
