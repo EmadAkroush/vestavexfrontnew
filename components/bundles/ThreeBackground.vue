@@ -56,7 +56,7 @@ async function initThree() {
     transparent: true,
     depthWrite: false,
     uniforms: {
-      uColor: { value: new THREE.Color(0x33ffb2) },
+      uColor: { value: new THREE.Color(0x6366f1) },
     },
     vertexShader: `
       attribute float size;
