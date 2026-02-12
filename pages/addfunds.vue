@@ -18,10 +18,10 @@
         <p v-if="walletAddress" class="wallet-info mt-3">
           Connected: {{ shortAddress }}
         </p>
-        <p v-if="error" class="text-red-500 mt-3">{{ error }}</p>
+        <p v-if="error" class="text-red-400 mt-3">{{ error }}</p>
       </div>
 
-      <!-- STEP 2: Enter Amount -->
+      <!-- STEP 2 -->
       <div v-if="step === 2" class="mt-6">
         <h3 class="step-title">2. Enter Amount (USDT)</h3>
 
@@ -48,21 +48,20 @@
         </p>
       </div>
 
-      <!-- STEP 3: Success -->
+      <!-- STEP 3 -->
       <div v-if="step === 3" class="text-center mt-6">
-        <i class="mdi mdi-check-circle text-5xl text-green-400"></i>
+        <i class="mdi mdi-check-circle text-5xl text-cyan-400"></i>
         <h3 class="step-title mt-3">Payment Sent</h3>
         <p class="info-text mt-2">Transaction Hash:</p>
         <p class="tx break-all">{{ txHash }}</p>
-        <p class="mt-2 text-sm text-gray-500">
+        <p class="mt-2 text-sm text-gray-400">
           Your payment is being confirmed on the blockchain.
         </p>
       </div>
 
-      <!-- Loading Overlay -->
       <div
         v-if="loading"
-        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50"
       >
         <p class="text-white text-lg">Processing...</p>
       </div>
@@ -77,17 +76,14 @@ const { authUser } = useAuth();
 const walletRequestSent = ref(false);
 definePageMeta({ middleware: "auth" });
 
-// ---------------- STATE ----------------
 const step = ref(1);
 const walletAddress = ref(null);
 const amount = ref(null);
 const txHash = ref(null);
 const paymentId = ref(null);
-
 const error = ref(null);
 const loading = ref(false);
 
-// ---------------- CONSTANTS ----------------
 const BNB_CHAIN_ID = 56;
 const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
 
@@ -97,34 +93,23 @@ const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint)",
 ];
 
-// ---------------- COMPUTED ----------------
 const shortAddress = computed(() => {
   if (!walletAddress.value) return "";
   return `${walletAddress.value.slice(0, 6)}...${walletAddress.value.slice(-4)}`;
 });
 
-// ---------------- CONNECT WALLET ----------------
 const connectWallet = async () => {
   loading.value = true;
   error.value = null;
-
   try {
     if (!window.ethereum) {
-      throw new Error(
-        "No crypto wallet found. Please install MetaMask or Trust Wallet.",
-      );
+      throw new Error("No crypto wallet found.");
     }
-
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
-
     walletAddress.value = await signer.getAddress();
-
-    if (!walletAddress.value) {
-      throw new Error("Wallet connection failed");
-    }
-
+    if (!walletAddress.value) throw new Error("Wallet connection failed");
     step.value = 2;
   } catch (e) {
     error.value = e.message || "Wallet connection was rejected";
@@ -133,27 +118,22 @@ const connectWallet = async () => {
   }
 };
 
-// ---------------- CREATE PAYMENT (BACKEND) ----------------
 const createPayment = async () => {
   if (!amount.value || amount.value <= 0) {
     error.value = "Invalid amount";
     return;
   }
-
   loading.value = true;
   error.value = null;
-
   try {
     const res = await $fetch("/api/payment/addfunds", {
       method: "POST",
       body: {
-        userId: authUser.value.user.id, // از auth خودت بگیر
+        userId: authUser.value.user.id,
         amountUsd: amount.value,
       },
     });
-
     paymentId.value = res.paymentId;
-
     return res;
   } catch (e) {
     error.value = e.data?.message || e.message;
@@ -163,47 +143,33 @@ const createPayment = async () => {
   }
 };
 
-// ---------------- SEND USDT ----------------
 const sendPayment = async () => {
   loading.value = true;
   walletRequestSent.value = false;
   error.value = null;
-
   try {
-    // 1️⃣ create payment in backend
     const payment = await createPayment();
-
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     const signer = provider.getSigner();
-
-    // 2️⃣ check network
     const network = await provider.getNetwork();
     if (network.chainId !== BNB_CHAIN_ID) {
       throw new Error("Please switch to BNB Chain");
     }
-
-    // 3️⃣ prepare USDT transfer
     const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer);
     const decimals = await usdt.decimals();
     const amountWei = ethers.utils.parseUnits(
       amount.value.toString(),
-      decimals,
+      decimals
     );
-
     const balance = await usdt.balanceOf(walletAddress.value);
     if (balance.lt(amountWei)) {
       throw new Error("Insufficient USDT balance");
     }
-
-    // 🔔 اینجا دقیقاً لحظه ارسال درخواست به کیف پول
     walletRequestSent.value = true;
-
     const tx = await usdt.transfer(payment.receiver, amountWei);
     const receipt = await tx.wait();
-
     txHash.value = receipt.transactionHash;
 
-    // 4️⃣ submit txHash to backend
     await $fetch("/api/payment/submittx", {
       method: "POST",
       body: {
@@ -224,239 +190,46 @@ const sendPayment = async () => {
 </script>
 
 <style lang="scss" scoped>
-/* ---------------- GLOBAL WRAPPER ---------------- */
 .addfunds-wrapper {
-  background: linear-gradient(
-    180deg,
-    #061a15 0%,
-    #03211c 35%,
-    #021412 70%,
-    #000807 100%
-  );
-
+  background: linear-gradient(180deg, #0f0c29, #1b1445, #090922);
+  color: #e6f0ff;
   padding-bottom: 80px;
-  color: #dff7e8;
 }
 
-/* STATIC GLOWS (same style as Bundles page) */
-.glow {
-  position: absolute;
-  width: 480px;
-  height: 480px;
-  filter: blur(120px);
-  opacity: 0.2;
-  z-index: 0;
-}
-.glow-1 {
-  top: -80px;
-  left: -120px;
-  background: rgba(0, 255, 170, 0.25);
-}
-.glow-2 {
-  bottom: -120px;
-  right: -100px;
-  background: rgba(0, 180, 255, 0.2);
-}
-
-/* ---------------- HEADER ---------------- */
 .eyebrow {
-  color: #72fdd6;
+  color: #8ab4ff;
   letter-spacing: 0.28em;
   font-size: 0.85rem;
   text-transform: uppercase;
 }
+
 .title {
   font-size: 2.6rem;
   font-weight: 800;
-  background: linear-gradient(90deg, #66ffd0, #a8fff4, #fffbe8);
+  background: linear-gradient(90deg, #4facfe, #00f2fe, #a18cd1);
   -webkit-background-clip: text;
   color: transparent;
 }
+
 .subtitle {
-  color: #a8dccb;
+  color: #b8c6ff;
   margin-top: 6px;
 }
 
-/* ---------------- GLASS MAIN CARD ---------------- */
 .glass-card {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
   padding: 28px;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(120, 150, 255, 0.3);
+  box-shadow: 0 0 40px rgba(0, 200, 255, 0.2);
 }
 
-/* ---------------- STEPPER ---------------- */
-.stepper {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  margin-bottom: 28px;
-}
-
-.step {
-  position: relative;
-  text-align: center;
-  flex: 1;
-}
-
-.circle {
-  width: 46px;
-  height: 46px;
-  margin: 0 auto;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #7fdeca;
-  transition: 0.3s;
-}
-.circle.active {
-  background: linear-gradient(90deg, #00d99a, #00ffd0);
-  color: #001c12;
-  font-weight: 900;
-  border: none;
-}
-
-.label {
-  margin-top: 6px;
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-.label.active {
-  opacity: 1;
-  color: #8fffe0;
-}
-
-.line {
-  position: absolute;
-  top: 22px;
-  left: calc(50% + 28px);
-  width: calc(100% - 56px);
-  height: 3px;
-  background: rgba(255, 255, 255, 0.1);
-}
-.line.active {
-  background: #00ffc3;
-}
-
-/* ---------------- STEP CONTENT ---------------- */
 .step-title {
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 16px;
-  color: #c8fff0;
-}
-
-/* network cards */
-.network-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 18px;
-}
-.network-card {
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 14px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  transition: 0.3s;
-  color: #bff6e5;
-}
-.network-card:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-.network-card.active {
-  border-color: #00ffc3;
-  background: rgba(0, 255, 200, 0.12);
-  color: #eafffa;
-}
-.net-logo {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 6px;
-}
-
-/* inputs */
-.input-label {
-  margin-top: 10px;
-  margin-bottom: 4px;
-  color: #a3e3ce;
-}
-.input-box {
-  width: 100%;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  color: #eafff4;
-}
-
-/* wallet box */
-.address-box {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 12px;
-  border-radius: 10px;
-  font-family: monospace;
-  word-break: break-word;
-  margin-bottom: 12px;
-}
-
-/* text */
-.info-text {
-  color: #bdf7e4;
-  margin-bottom: 14px;
-}
-.amount {
-  color: #39ffb2;
-}
-
-/* buttons */
-.btn-primary {
-  background: linear-gradient(90deg, #00d99a, #00ffcf);
-  color: #001d13;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: 700;
-  transition: 0.3s;
-}
-.btn-primary:hover {
-  transform: scale(1.02);
-}
-
-.btn-outline {
-  background: transparent;
-  border: 1px solid #00ffcf;
-  color: #00ffcf;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: 600;
-}
-
-/* note */
-.note {
-  font-size: 0.7rem;
-  opacity: 0.6;
-  margin-top: 8px;
-}
-
-.addfunds-wrapper {
-  background: linear-gradient(180deg, #061a15, #000b09);
-  color: #dff7e8;
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(18px);
-  padding: 28px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9ecbff;
 }
 
 .input-box {
@@ -464,33 +237,37 @@ const sendPayment = async () => {
   padding: 12px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(120, 150, 255, 0.3);
   color: #fff;
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #00d99a, #00ffd0);
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  color: #00152e;
   padding: 12px;
   border-radius: 14px;
   font-weight: 700;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
 }
 
 .wallet-info {
   margin-top: 8px;
   font-size: 0.8rem;
-  color: #7fffd4;
+  color: #7fdfff;
+}
+
+.info-text {
+  color: #b8c6ff;
 }
 
 .tx {
   font-family: monospace;
   font-size: 0.75rem;
   opacity: 0.7;
-}
-
-/* mobile fixes */
-@media (max-width: 650px) {
-  .network-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 </style>
