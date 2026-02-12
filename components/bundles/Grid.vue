@@ -116,8 +116,8 @@ onMounted(async () => {
   position: relative;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.03),
-    rgba(255, 255, 255, 0.02)
+    rgba(99, 102, 241, 0.08),
+    rgba(124, 58, 237, 0.06)
   );
   border-radius: 18px;
   padding: 18px;
@@ -126,8 +126,8 @@ onMounted(async () => {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(124, 58, 237, 0.25);
   will-change: transform;
 }
 
@@ -138,15 +138,15 @@ onMounted(async () => {
 }
 
 .badge {
-  background: linear-gradient(90deg, #06c78a, #00ffd0 70%);
-  color: #032b20;
+  background: linear-gradient(90deg, #6366f1, #7c3aed 70%);
+  color: #ffffff;
   font-weight: 800;
   padding: 6px 12px;
   border-radius: 12px;
 }
 
 .earn {
-  color: #bfeee0;
+  color: #c7d2fe;
   font-weight: 600;
 }
 
@@ -154,19 +154,19 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
-  color: #bfeee0;
+  color: #c7d2fe;
 }
 
 .progress-bg {
   height: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(124, 58, 237, 0.15);
   border-radius: 10px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00ffd0, #2af7e0);
+  background: linear-gradient(90deg, #6366f1, #7c3aed);
 }
 
 .card-foot {
@@ -185,13 +185,12 @@ onMounted(async () => {
 
 .btn-outline {
   background: transparent;
-  color: #7af3c7;
-  border: 1px solid rgba(122, 243, 199, 0.18);
+  color: #a5b4fc;
+  border: 1px solid rgba(165, 180, 252, 0.35);
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #00c78b, #00ffd0);
-  color: #00221a;
+  background: linear-gradient(90deg, #6366f1, #7c3aed);
+  color: #ffffff;
 }
 </style>
-
