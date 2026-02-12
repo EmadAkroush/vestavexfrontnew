@@ -194,34 +194,35 @@
         </div>
       </transition>
     </div>
-
     <!-- INVEST DIALOG -->
     <Dialog
       v-model:visible="visibleInvest"
       modal
       :header="'Invest in ' + (selectedBundle?.title || '')"
+      class="custom-dialog max-w-md w-full"
     >
-      <div class="space-y-3">
-        <label>Amount (USD)</label>
+      <div class="space-y-4">
+        <label class="text-[#C7D2FE] font-medium">Amount (USD)</label>
+
         <InputNumber
           v-model="investAmount"
           mode="currency"
           currency="USD"
           locale="en-US"
-          class="w-full"
+          class="w-full custom-input"
         />
       </div>
 
       <template #footer>
-        <div class="flex justify-end gap-3">
+        <div class="flex justify-end gap-3 w-full">
           <Button
             label="Cancel"
-            class="p-button-text"
+            class="cancel-btn"
             @click="visibleInvest = false"
           />
           <Button
             label="Confirm"
-            class="p-button-success"
+            class="confirm-btn"
             @click="confirmInvestment"
           />
         </div>
@@ -233,31 +234,42 @@
       v-model:visible="showModal"
       modal
       header="Plan Details"
-      class="max-w-lg w-full"
+      class="custom-dialog max-w-lg w-full"
     >
-      <div class="space-y-3">
-        <h3 class="text-xl font-bold text-green-700">{{ modalData.type }}</h3>
-        <p class="text-sm text-gray-600">
+      <div class="space-y-4">
+        <h3 class="text-xl font-bold text-[#C7D2FE]">
+          {{ modalData.type }}
+        </h3>
+
+        <p class="text-sm text-gray-400">
           Duration:
-          <span class="font-semibold"
-            >{{ modalData.start }} → {{ modalData.end }}</span
-          >
-        </p>
-        <p>
-          Invested Amount:
-          <span class="font-semibold text-green-700"
-            >${{ modalData.amount }}</span
-          >
-        </p>
-        <p>
-          Profit Rate:
-          <span class="font-semibold">{{ modalData.profit }}% / month</span>
-        </p>
-        <p>
-          Progress: <span class="font-semibold">{{ modalData.progress }}%</span>
+          <span class="font-semibold text-[#C7D2FE]">
+            {{ modalData.start }} → {{ modalData.end }}
+          </span>
         </p>
 
-        <ProgressBar :value="modalData.progress" class="mt-3" />
+        <p class="text-[#C7D2FE]">
+          Invested Amount:
+          <span class="font-semibold text-[#2563EB]">
+            ${{ modalData.amount }}
+          </span>
+        </p>
+
+        <p class="text-[#C7D2FE]">
+          Profit Rate:
+          <span class="font-semibold text-[#7C3AED]">
+            {{ modalData.profit }}% / month
+          </span>
+        </p>
+
+        <p class="text-[#C7D2FE]">
+          Progress:
+          <span class="font-semibold text-[#4F46E5]">
+            {{ modalData.progress }}%
+          </span>
+        </p>
+
+        <ProgressBar :value="modalData.progress" class="mt-3 custom-progress" />
       </div>
 
       <template #footer>
@@ -266,7 +278,7 @@
             @click="openInvestDialog(selectedBundle)"
             label="Reinvest"
             icon="mdi mdi-repeat"
-            class="p-button-success"
+            class="confirm-btn"
           />
         </div>
       </template>
@@ -473,7 +485,77 @@ const openPlanModal = (item) => {
 </script>
 
 <style lang="scss" scoped>
+
+/* ===== Dialog Background ===== */
+.custom-dialog :deep(.p-dialog) {
+  background: #0F172A;
+  border: 1px solid #4F46E5;
+  border-radius: 16px;
+}
+
+.custom-dialog :deep(.p-dialog-header) {
+  background: #0F172A;
+  color: #C7D2FE;
+  border-bottom: 1px solid #1E293B;
+}
+
+.custom-dialog :deep(.p-dialog-content) {
+  background: #0F172A;
+}
+
+.custom-dialog :deep(.p-dialog-footer) {
+  background: #0F172A;
+  border-top: 1px solid #1E293B;
+}
+
+/* ===== Input Styling ===== */
+.custom-input :deep(.p-inputtext) {
+  background: #1E293B;
+  border: 1px solid #4F46E5;
+  color: #C7D2FE;
+}
+
+.custom-input :deep(.p-inputtext:focus) {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+/* ===== Buttons ===== */
+.confirm-btn {
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  border: none;
+  color: white;
+}
+
+.confirm-btn:hover {
+  opacity: 0.9;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid #4F46E5;
+  color: #C7D2FE;
+}
+
+.cancel-btn:hover {
+  background: #1E293B;
+}
+
+/* ===== ProgressBar ===== */
+.custom-progress :deep(.p-progressbar) {
+  background: #1E293B;
+  border-radius: 8px;
+}
+
+.custom-progress :deep(.p-progressbar-value) {
+  background: linear-gradient(90deg, #2563EB, #7C3AED);
+  border-radius: 8px;
+}
+
+
+
 .portfolio {
+
   .stat-card {
     @apply flex items-center gap-4 p-5 rounded-xl transition-all;
     background: #1f2937;
