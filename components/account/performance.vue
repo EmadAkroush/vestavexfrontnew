@@ -2,38 +2,36 @@
   <div class="dashboard space-y-10 p-4 sm:p-8">
     <!-- ===== Header Section ===== -->
     <div class="text-center mb-6">
-      <h1 class="text-3xl font-bold text-green-700">
-        Welcome Back, Investor 👋
-      </h1>
-      <p class="text-gray-500 mt-2">
+      <h1 class="text-3xl font-bold text-white">Welcome Back, Investor 👋</h1>
+      <p class="text-gray-300 mt-2">
         Track your financial growth, portfolio, and VX rewards — all in one
         place.
       </p>
     </div>
-    <!-- ===== Stats Overview ===== -->
+    <!-- ===== Stats Overview (Modern Dark) ===== -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Total Balance -->
-      <div class="card-box">
-        <div class="icon-box bg-green-100 text-green-600">
+      <!-- Main Balance -->
+      <div class="card-box gradient-blue flex items-center gap-4">
+        <div class="icon-box bg-blue-600 text-white">
           <i class="mdi mdi-cash-multiple text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">Main Balance</p>
-          <h3 class="text-2xl font-bold text-green-700">
+          <p class="text-gray-200 text-sm">Main Balance</p>
+          <h3 class="text-2xl font-bold text-white">
             ${{ balances.mainBalance }}
           </h3>
         </div>
       </div>
 
       <!-- Profits Wallet -->
-      <div class="card-box flex flex-col justify-between">
-        <div class="flex flex-row">
-          <div class="icon-box bg-blue-100 text-blue-600">
+      <div class="card-box gradient-teal flex flex-col justify-between p-4">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="icon-box bg-teal-600 text-white">
             <i class="mdi mdi-chart-line text-3xl"></i>
           </div>
           <div>
-            <p class="text-gray-500 text-sm">Profits Balances</p>
-            <h3 class="text-2xl font-bold text-blue-700">
+            <p class="text-gray-200 text-sm">Profits Balances</p>
+            <h3 class="text-2xl font-bold text-white">
               ${{ balances.profitBalance }}
             </h3>
           </div>
@@ -41,21 +39,21 @@
         <Button
           label="Transfer to Main Balance"
           icon="mdi mdi-arrow-right-bold"
-          class=" p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          class="p-button-sm p-button-outlined border-white text-white w-full"
           @click="transferToMain('profit')"
           :loading="loadingTransfer === 'profit'"
         />
       </div>
 
       <!-- VX Balances -->
-      <div class="card-box flex flex-col justify-between">
-        <div class="flex flex-row">
-          <div class="icon-box bg-yellow-100 text-yellow-600">
+      <div class="card-box gradient-yellow flex flex-col justify-between p-4">
+        <div class="flex items-center gap-4 mb-3">
+          <div class="icon-box bg-yellow-600 text-white">
             <i class="mdi mdi-account-group text-3xl"></i>
           </div>
           <div>
-            <p class="text-gray-500 text-sm">VX Balances</p>
-            <h3 class="text-2xl font-bold text-yellow-700">
+            <p class="text-gray-200 text-sm">VX Balances</p>
+            <h3 class="text-2xl font-bold text-white">
               ${{ balances.referralBalance }}
             </h3>
           </div>
@@ -63,40 +61,45 @@
         <Button
           label="Transfer to Main Balance"
           icon="mdi mdi-arrow-right-bold"
-          class=" p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          class="p-button-sm p-button-outlined border-white text-white w-full"
           @click="transferToMain('referral')"
           :loading="loadingTransfer === 'referral'"
         />
       </div>
 
       <!-- VX Wallet -->
-      <div class="card-box">
-        <div class="icon-box bg-purple-100 text-purple-600">
+      <div class="card-box gradient-purple flex items-center gap-4">
+        <div class="icon-box bg-purple-600 text-white">
           <i class="mdi mdi-wallet-outline text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-500 text-sm">withdrawalTotal Balances</p>
-          <h3 class="text-2xl font-bold text-purple-700">
+          <p class="text-gray-200 text-sm">Withdrawal Total</p>
+          <h3 class="text-2xl font-bold text-white">
             ${{ balances.withdrawalTotalBalance }}
           </h3>
         </div>
       </div>
     </div>
 
-    <!-- ===== Charts Section ===== -->
 
+
+    <!-- ===== Charts Section ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Profits Balances -->
-      <Card class="shadow-md">
-        <template #title> Profits Balances</template>
+      <!-- Profits Chart -->
+      <Card class="shadow-md gradient-card">
+        <template #title class="text-white font-semibold">
+          Profits Balances</template
+        >
         <template #content>
           <Chart type="line" :data="profitChart" :options="lineOptions" />
         </template>
       </Card>
 
-      <!-- Profits Balances -->
-      <Card class="shadow-md">
-        <template #title> VX Balances</template>
+      <!-- VX Chart -->
+      <Card class="shadow-md gradient-card">
+        <template #title class="text-white font-semibold">
+          VX Balances</template
+        >
         <template #content>
           <Chart type="line" :data="vxChart" :options="lineOptions" />
         </template>
@@ -106,31 +109,33 @@
     <!-- ===== Referral & Activity Section ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <!-- Referral Overview -->
-      <Card class="shadow-md">
-        <template #title>Referral Overview</template>
+      <Card class="shadow-md gradient-card">
+        <template #title class="text-white font-semibold"
+          >Referral Overview</template
+        >
         <template #content>
           <div class="flex flex-col gap-4">
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Total Referrals</span>
-              <span class="font-semibold text-green-700">{{
+              <span class="text-gray-200">Total Referrals</span>
+              <span class="font-semibold text-white">{{
                 referral?.counts?.totalCount
               }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Total Invesstment</span>
-              <span class="font-semibold text-green-700"
+              <span class="text-gray-200">Total Investment</span>
+              <span class="font-semibold text-white"
                 >${{ referral?.volumes?.leftVolume }}</span
               >
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Left Volume</span>
-              <span class="font-semibold text-green-700"
+              <span class="text-gray-200">Left Volume</span>
+              <span class="font-semibold text-white"
                 >${{ referral?.volumes?.rightVolume }}</span
               >
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-500">Right Volume</span>
-              <span class="font-semibold text-green-700">$560</span>
+              <span class="text-gray-200">Right Volume</span>
+              <span class="font-semibold text-white">$560</span>
             </div>
 
             <Button
@@ -145,25 +150,24 @@
       </Card>
 
       <!-- Recent Activity -->
-      <Card class="shadow-md">
-        <template #title>Recent Activity</template>
+      <Card class="shadow-md gradient-card">
+        <template #title class="text-white font-semibold"
+          >Recent Activity</template
+        >
         <template #content>
-          <ul v-if="activities.length" class="divide-y divide-gray-200 text-sm">
+          <ul v-if="activities.length" class="divide-y divide-gray-700 text-sm">
             <li
               v-for="(item, index) in activities"
               :key="index"
-              class="py-3 flex justify-between items-center hover:bg-gray-50 px-2 rounded transition"
+              class="py-3 flex justify-between items-center hover:bg-gray-800/30 px-2 rounded transition"
             >
               <div class="flex items-center gap-3">
                 <i :class="`${item.icon} ${item.color} text-xl`"></i>
-                <span class="font-medium text-gray-700">
-                  {{ item.action }}
-                </span>
+                <span class="font-medium text-white">{{ item.action }}</span>
               </div>
-
-              <span class="text-gray-400 text-xs whitespace-nowrap">
-                {{ item.date }}
-              </span>
+              <span class="text-gray-400 text-xs whitespace-nowrap">{{
+                item.date
+              }}</span>
             </li>
           </ul>
 
@@ -473,20 +477,19 @@ watch(
 
 <style lang="scss" scoped>
 .dashboard {
-  background-color: #f9fbfc;
+ 
   .card-box {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: #fff;
     border-radius: 1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
   }
   .card-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
   }
   .icon-box {
     display: flex;
@@ -495,6 +498,32 @@ watch(
     width: 60px;
     height: 60px;
     border-radius: 50%;
+    color: white;
   }
+
+  /* Gradient Cards */
+  .gradient-blue {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  }
+  .gradient-teal {
+    background: linear-gradient(135deg, #14b8a6, #22d3ee);
+  }
+  .gradient-yellow {
+    background: linear-gradient(135deg, #facc15, #fde68a);
+  }
+  .gradient-purple {
+    background: linear-gradient(135deg, #8b5cf6, #c084fc);
+  }
+
+  .gradient-card {
+    background: linear-gradient(135deg, #1f1f2f, #2b2b3c);
+    border-radius: 1rem;
+    color: white;
+  }
+}
+
+/* Chart global overrides for white lines/text on dark background */
+canvas {
+  color: white !important;
 }
 </style>
