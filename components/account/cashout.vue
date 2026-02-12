@@ -1,5 +1,6 @@
 <template>
   <div class="cashout px-4 sm:px-16 py-10 max-w-3xl mx-auto space-y-8">
+    
     <!-- ===== Step Progress Bar ===== -->
     <div class="relative flex items-center justify-between mb-8">
       <div
@@ -8,52 +9,45 @@
         class="flex flex-col items-center relative"
       >
         <div
-          class="w-10 h-10 flex items-center justify-center rounded-full border-2 font-bold z-10 transition-all"
-          :class="
-            currentStep > index
-              ? 'bg-green-600 text-white border-green-600'
-              : currentStep === index
-                ? 'border-green-600 text-green-600 bg-white'
-                : 'border-gray-300 text-gray-400'
-          "
+          class="step-circle"
+          :class="{
+            active: currentStep > index,
+            current: currentStep === index
+          }"
         >
           {{ index + 1 }}
         </div>
+
         <span
           class="mt-2 text-xs sm:text-sm font-medium"
-          :class="currentStep >= index ? 'text-green-700' : 'text-gray-400'"
+          :class="currentStep >= index ? 'text-[#C7D2FE]' : 'text-gray-500'"
         >
           {{ stepItem.label }}
         </span>
 
         <div
           v-if="index < steps.length - 1"
-          class="absolute top-5 left-[50%] w-full h-[2px] bg-gray-300 z-0"
-          :class="{ 'bg-green-500': currentStep > index }"
+          class="step-line"
+          :class="{ activeLine: currentStep > index }"
         ></div>
       </div>
     </div>
 
-    <!-- ===== Step 1: Select Wallet ===== -->
+    <!-- ===== Step 1 ===== -->
     <transition name="fade">
       <div v-if="currentStep === 0">
-        <Card class="shadow-md">
-          <template #title>Select Wallet</template>
+        <Card class="custom-card">
+          <template #title>
+            <span class="card-title">Select Wallet</span>
+          </template>
           <template #content>
             <Dropdown
               v-model="selectedWallet"
               :options="wallets"
               optionLabel="label"
               placeholder="Choose your wallet"
-              class="w-full"
+              class="w-full custom-dropdown"
             />
-
-            <p v-if="selectedWallet" class="mt-3 text-sm text-gray-600">
-              <!-- Balance:
-              <span class="font-bold text-green-600">
-                ${{ selectedWallet.balance.toFixed(2) }}
-              </span> -->
-            </p>
           </template>
         </Card>
 
@@ -61,35 +55,31 @@
           <Button
             label="Next"
             icon="mdi mdi-arrow-right"
-            class="p-button-success px-6 py-2"
+            class="primary-btn px-6 py-2"
             :disabled="!selectedWallet || !walletAllowed"
             @click="nextStep"
           />
         </div>
-
-        <p v-if="!walletAllowed" class="text-red-400 text-sm text-center mt-3">
-          Please set your wallet address in your account settings before
-          withdrawing.
-        </p>
       </div>
     </transition>
 
-    <!-- ===== Step 2: Enter Amount ===== -->
+    <!-- ===== Step 2 ===== -->
     <transition name="fade">
       <div v-if="currentStep === 1">
-        <Card class="shadow-md">
-          <template #title>Enter Amount</template>
+        <Card class="custom-card">
+          <template #title>
+            <span class="card-title">Enter Amount</span>
+          </template>
           <template #content>
             <InputNumber
               v-model="amount"
               mode="currency"
               currency="USD"
               locale="en-US"
-              class="w-full"
+              class="w-full custom-input"
               :max="selectedWallet?.balance"
             />
-
-            <p class="text-xs text-gray-500 mt-2">
+            <p class="text-xs text-gray-400 mt-2">
               Min withdrawal: $50 | Fee: 5%
             </p>
           </template>
@@ -99,54 +89,34 @@
           <Button
             label="Back"
             icon="mdi mdi-arrow-left"
-            class="p-button-outlined"
+            class="outline-btn"
             @click="prevStep"
           />
           <Button
             label="Next"
             icon="mdi mdi-arrow-right"
-            class="p-button-success px-6 py-2"
-            :disabled="
-              !amount || amount < 50 || amount > selectedWallet.balance
-            "
+            class="primary-btn px-6 py-2"
+            :disabled="!amount || amount < 50 || amount > selectedWallet.balance"
             @click="nextStep"
           />
         </div>
       </div>
     </transition>
 
-    <!-- ===== Step 3: Withdrawal Method ===== -->
+    <!-- ===== Step 3 ===== -->
     <transition name="fade">
       <div v-if="currentStep === 2">
-        <Card class="shadow-md">
-          <template #title>Choose Withdrawal Method</template>
+        <Card class="custom-card">
+          <template #title>
+            <span class="card-title">Choose Withdrawal Method</span>
+          </template>
           <template #content>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                class="border p-4 rounded-md cursor-pointer flex items-center gap-2 transition-all"
-                :class="
-                  method === 'crypto'
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200'
-                "
-                @click="method = 'crypto'"
-              >
-                <i class="mdi mdi-bitcoin text-yellow-500 text-2xl"></i>
-                <span class="font-medium">Crypto</span>
-              </div>
-
-              <!-- <div
-                class="border p-4 rounded-md cursor-pointer flex items-center gap-2 transition-all"
-                :class="
-                  method === 'bank'
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200'
-                "
-                @click="method = 'bank'"
-              >
-                <i class="mdi mdi-bank-outline text-blue-500 text-2xl"></i>
-                <span class="font-medium">Bank Transfer</span>
-              </div> -->
+            <div class="method-box"
+              :class="{ selected: method === 'crypto' }"
+              @click="method = 'crypto'"
+            >
+              <i class="mdi mdi-bitcoin text-[#2563EB] text-2xl"></i>
+              <span>Crypto</span>
             </div>
 
             <div v-if="method === 'crypto'" class="mt-5">
@@ -155,53 +125,42 @@
                 :options="userWallets"
                 optionLabel="name"
                 placeholder="Select your crypto wallet"
-                class="w-full"
+                class="w-full custom-dropdown"
               />
             </div>
           </template>
         </Card>
 
         <div class="flex justify-between mt-6">
-          <Button
-            label="Back"
-            icon="mdi mdi-arrow-left"
-            class="p-button-outlined"
-            @click="prevStep"
-          />
+          <Button label="Back" icon="mdi mdi-arrow-left" class="outline-btn" @click="prevStep"/>
           <Button
             label="Confirm Cashout"
             icon="mdi mdi-check"
-            class="p-button-success px-6 py-2"
+            class="primary-btn px-6 py-2"
             :loading="loading"
-            :disabled="
-              !method || (method === 'crypto' && !selectedCryptoWallet)
-            "
+            :disabled="!method || (method === 'crypto' && !selectedCryptoWallet)"
             @click="completeCashout"
           />
         </div>
       </div>
     </transition>
 
-    <!-- ===== Step 4: Confirmation ===== -->
+    <!-- ===== Step 4 ===== -->
     <transition name="fade">
       <div v-if="currentStep === 3" class="text-center py-10">
-        <i
-          class="mdi mdi-check-circle-outline text-green-600 text-6xl mb-4"
-        ></i>
+        <i class="mdi mdi-check-circle-outline text-[#7C3AED] text-6xl mb-4"></i>
 
-        <h2 class="text-2xl font-bold text-green-700">
+        <h2 class="text-2xl font-bold text-[#C7D2FE]">
           Cashout Request Submitted
         </h2>
 
-        <p class="text-gray-600 mt-2">
+        <p class="text-gray-400 mt-2">
           Your withdrawal request is being processed.
         </p>
 
-        <div
-          class="mt-6 bg-white inline-block px-6 py-3 rounded-lg shadow-md border"
-        >
-          <p class="text-sm text-gray-500 mb-1">Transaction ID</p>
-          <p class="text-lg font-mono font-semibold text-green-700">
+        <div class="transaction-box">
+          <p class="text-sm text-gray-400 mb-1">Transaction ID</p>
+          <p class="text-lg font-mono font-semibold text-[#2563EB]">
             {{ transactionId }}
           </p>
         </div>
@@ -209,13 +168,14 @@
         <Button
           label="Back to Dashboard"
           icon="mdi mdi-view-dashboard"
-          class="mt-8 p-button-outlined"
+          class="outline-btn mt-8"
           @click="resetSteps"
         />
       </div>
     </transition>
   </div>
 </template>
+
 
 <script setup>
 import Card from "primevue/card";
@@ -323,15 +283,131 @@ const resetSteps = () => {
 
 <style lang="scss" scoped>
 .cashout {
-  background-color: #f9fbfc;
 
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.3s ease-in-out;
-  }
-  .fade-enter-from,
-  .fade-leave-to {
-    opacity: 0;
-  }
+  min-height: 100vh;
+  color: #C7D2FE;
+}
+
+/* Step */
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #4F46E5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #4F46E5;
+  background: #1E293B;
+  z-index: 10;
+}
+
+.step-circle.active {
+  background: linear-gradient(135deg,#2563EB,#7C3AED);
+  border: none;
+  color: white;
+}
+
+.step-circle.current {
+  border: 2px solid #2563EB;
+  color: #2563EB;
+}
+
+.step-line {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: #1E293B;
+  z-index: 0;
+}
+
+.step-line.activeLine {
+  background: #2563EB;
+}
+
+/* Cards */
+.custom-card {
+  background: #1E293B;
+  border: 1px solid #4F46E5;
+  border-radius: 16px;
+  color: #C7D2FE;
+}
+
+.card-title {
+  color: #C7D2FE;
+  font-weight: 600;
+}
+
+/* Buttons */
+.primary-btn {
+  background: linear-gradient(135deg,#2563EB,#7C3AED);
+  border: none;
+  color: white;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+}
+
+.outline-btn {
+  border: 1px solid #4F46E5;
+  background: transparent;
+  color: #C7D2FE;
+}
+
+
+.outline-btn:hover {
+  border: 1px solid #4F46E5;
+  background: #2563EB;
+  color: #C7D2FE;
+}
+
+/* Method box */
+.method-box {
+  border: 1px solid #4F46E5;
+  padding: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #0F172A;
+  transition: all 0.2s;
+}
+
+.method-box.selected {
+  background: linear-gradient(135deg,#2563EB,#7C3AED);
+  border: none;
+  color: white;
+}
+
+/* Transaction Box */
+.transaction-box {
+  margin-top: 24px;
+  background: #1E293B;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #4F46E5;
+}
+
+/* Inputs */
+.custom-input :deep(.p-inputtext),
+.custom-dropdown :deep(.p-inputtext) {
+  background: #0F172A;
+  border: 1px solid #4F46E5;
+  color: #C7D2FE;
+}
+
+/* Fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
