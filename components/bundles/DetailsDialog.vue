@@ -15,7 +15,7 @@
     <!-- CONTENT -->
     <div class="glass-content" v-if="bundle">
       <div class="info-row">
-        <i class="mdi mdi-cash text-green-400"></i>
+        <i class="mdi mdi-cash text-indigo-400"></i>
         <span class="label">Invest Range</span>
         <span class="value">
           {{ bundle.investedDown }} – {{ bundle.investedUp }}
@@ -23,19 +23,19 @@
       </div>
 
       <div class="info-row">
-        <i class="mdi mdi-bank-transfer text-green-400"></i>
+        <i class="mdi mdi-bank-transfer text-indigo-400"></i>
         <span class="label">Min Withdrawal</span>
         <span class="value">{{ bundle.minimumwithdrawal }}</span>
       </div>
 
       <div class="info-row">
-        <i class="mdi mdi-chart-line text-green-400"></i>
+        <i class="mdi mdi-chart-line text-indigo-400"></i>
         <span class="label">Monthly Return</span>
         <span class="value">{{ bundle.earn }}</span>
       </div>
 
       <div class="info-row">
-        <i class="mdi mdi-percent-outline text-green-400"></i>
+        <i class="mdi mdi-percent-outline text-indigo-400"></i>
         <span class="label">Max Cap</span>
         <span class="value">{{ bundle.maxcap }}%</span>
       </div>
@@ -108,22 +108,20 @@ function invest() {
 </script>
 
 <style scoped lang="scss">
-/* ---- GLASS CARD DIALOG ---- */
 .glass-dialog .p-dialog-content {
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(99, 102, 241, 0.08) !important;
   backdrop-filter: blur(22px);
   border-radius: 22px;
   padding: 0 !important;
 }
 
-/* HEADER */
 .glass-header {
   padding: 24px 20px 10px;
   text-align: center;
   background: linear-gradient(
     135deg,
-    rgba(0, 255, 190, 0.25),
-    rgba(0, 255, 130, 0.15)
+    rgba(99, 102, 241, 0.35),
+    rgba(139, 92, 246, 0.25)
   );
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 22px 22px 0 0;
@@ -131,16 +129,15 @@ function invest() {
 
 .glass-header h3 {
   font-size: 26px;
-  color: #00ffc3;
+  color: #818cf8;
   font-weight: 700;
 }
 
 .glass-header .subtitle {
-  color: #e0e0e0;
+  color: #c7d2fe;
   font-size: 14px;
 }
 
-/* CONTENT */
 .glass-content {
   padding: 22px;
 }
@@ -150,48 +147,46 @@ function invest() {
   grid-template-columns: 30px 1fr auto;
   align-items: center;
   padding: 12px 0;
-  color: #e6e6e6;
+  color: #e0e7ff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .info-row .label {
-  color: #bfbfbf;
+  color: #a5b4fc;
   font-size: 14px;
 }
 
 .info-row .value {
   font-weight: 600;
-  color: #00ffbf;
+  color: #8b5cf6;
 }
 
-/* Explanation Box */
 .explain-box {
   margin-top: 20px;
-  background: rgba(0, 255, 180, 0.06);
-  border: 1px solid rgba(0, 255, 180, 0.15);
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   padding: 16px;
   border-radius: 14px;
 }
 
 .explain-box h4 {
-  color: #00ffc3;
+  color: #a78bfa;
   margin-bottom: 6px;
 }
 
 .explain-box ul {
   margin: 8px 0;
   padding-left: 18px;
-  color: #dcdcdc;
+  color: #c7d2fe;
   font-size: 14px;
 }
 
-/* FOOTER */
 .dialog-footer {
   padding: 15px 20px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(99, 102, 241, 0.05);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0 0 22px 22px;
 }
