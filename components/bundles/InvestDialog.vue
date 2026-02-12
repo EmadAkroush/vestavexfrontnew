@@ -136,12 +136,12 @@ function confirm() {
 .label {
   font-size: 14px;
   font-weight: 600;
-  color: #c9f5e4;
+  color: #c7d2fe;
 }
 
 .hint {
   font-size: 12px;
-  color: #9adfc9;
+  color: #a5b4fc;
 }
 
 .footer {
