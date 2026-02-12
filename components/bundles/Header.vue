@@ -39,7 +39,7 @@ defineProps({
 }
 
 .eyebrow {
-  color: #7af3c7;
+  color: #a5b4fc;
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -50,7 +50,7 @@ defineProps({
   font-size: 2.25rem;
   line-height: 1.02;
   font-weight: 800;
-  background: linear-gradient(90deg, #66ffd0, #9ef7ff, #fff7ea);
+  background: linear-gradient(90deg, #6366f1, #7c3aed, #c4b5fd);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -61,7 +61,7 @@ defineProps({
 }
 
 .hero-sub {
-  color: #9adfc9;
+  color: #c7d2fe;
   max-width: 850px;
   margin: 0 auto;
 }
