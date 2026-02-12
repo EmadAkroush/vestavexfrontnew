@@ -1,8 +1,8 @@
 <template>
-  <div class="account-container min-h-screen bg-gray-50 flex flex-col">
+  <div class="account-container min-h-screen bg-gray-900 flex flex-col text-gray-100">
     <!-- Breadcrumb -->
-    <div class="px-6 sm:px-20 pt-6 text-sm text-gray-600">
-      <nuxt-link to="/" class="text-green-700 font-semibold hover:underline"
+    <div class="px-6 sm:px-20 pt-6 text-sm text-gray-400">
+      <nuxt-link to="/" class="text-blue-400 font-semibold hover:underline"
         >Home /</nuxt-link
       >
       <span> Account </span>
@@ -13,16 +13,16 @@
     >
       <!-- ===== Sidebar (Desktop) ===== -->
       <aside
-        class="hidden sm:flex sm:flex-col sm:col-span-3 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sticky top-8 h-fit"
+        class="hidden sm:flex sm:flex-col sm:col-span-3 rounded-2xl p-4 sticky top-8 h-fit glass-card"
       >
         <div class="text-center mb-6">
           <div
-            class="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-700 text-3xl font-bold"
+            class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg"
           >
             {{ loadingUser ? "..." : userInitials }}
           </div>
 
-          <h2 class="mt-3 font-semibold text-gray-800">
+          <h2 class="mt-3 font-semibold text-white">
             {{
               loadingUser
                 ? "Loading..."
@@ -30,21 +30,21 @@
             }}
           </h2>
 
-          <p class="text-xs text-gray-500">
+          <p class="text-xs text-gray-400">
             {{ loadingUser ? "" : user?.plan || "Smart Investment platform" }}
           </p>
         </div>
 
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-700">
           <div
             v-for="item in menuItems"
             :key="item.key"
             @click="setActive(item.key)"
-            class="flex items-center px-4 py-3 rounded-lg cursor-pointer transition-all"
+            class="flex items-center px-4 py-3 rounded-lg cursor-pointer transition-all glass-item"
             :class="{
-              'bg-green-50 text-green-700 font-semibold border-l-4 border-green-500 shadow-sm':
+              'bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg':
                 activeItem === item.key,
-              'text-gray-600 hover:bg-gray-100': activeItem !== item.key,
+              'text-gray-400 hover:bg-white/10': activeItem !== item.key,
             }"
           >
             <i :class="item.icon + ' text-xl mr-3'"></i>
@@ -52,7 +52,7 @@
           </div>
 
           <div
-            class="flex items-center px-4 py-3 text-red-500 cursor-pointer hover:bg-red-50 mt-2 rounded-lg"
+            class="flex items-center px-4 py-3 text-red-500 cursor-pointer hover:bg-red-700/40 mt-2 rounded-lg glass-item"
             @click="logout"
           >
             <i class="mdi mdi-logout text-xl mr-3"></i>
@@ -63,7 +63,7 @@
 
       <!-- ===== Main Content ===== -->
       <main
-        class="sm:col-span-9 bg-white rounded-2xl shadow-sm p-4 sm:p-6 relative overflow-hidden"
+        class="sm:col-span-9 rounded-2xl p-4 sm:p-6 relative overflow-hidden glass-card"
       >
         <transition name="fade-slide" mode="out-in">
           <component :is="currentComponent" :key="activeItem" />
@@ -73,13 +73,13 @@
 
     <!-- ===== Mobile Navigation ===== -->
     <nav
-      class="sm:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200 flex justify-around items-center py-2 shadow-[0_-2px_10px_rgba(0,0,0,0.08)] z-50"
+      class="sm:hidden fixed bottom-0 left-0 w-full rounded-t-2xl glass-card border-t border-gray-700 flex justify-around items-center py-2 shadow-lg z-50"
     >
       <div
         v-for="item in menuItems"
         :key="item.key"
-        class="flex flex-col items-center cursor-pointer text-gray-500 transition-all"
-        :class="{ 'text-green-700 font-semibold': activeItem === item.key }"
+        class="flex flex-col items-center cursor-pointer text-gray-400 transition-all"
+        :class="{ 'text-blue-400 font-semibold': activeItem === item.key }"
         @click="setActive(item.key)"
       >
         <i :class="item.icon" class="text-2xl mb-1"></i>
@@ -104,6 +104,7 @@ definePageMeta({ middleware: "auth" });
 const { authUser } = useAuth();
 const user = ref(null);
 const loadingUser = ref(true);
+
 // ==== Menu Items ====
 const menuItems = ref([
   { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
@@ -120,7 +121,7 @@ const activeItem = ref("performance");
 onMounted(async () => {
   try {
     const userId = authUser.value?.user?.id;
-    if (!userId) {
+   if (!userId) {
       toast.add({
         severity: "warn",
         summary: "Not Logged In",
@@ -130,15 +131,14 @@ onMounted(async () => {
       return;
     }
 
+
     user.value = await $fetch("/api/account/find", {
       method: "POST",
       body: { id: userId },
     });
-
-    console.log("user", user);
   } catch (err) {
     console.error("Profile load error:", err);
-    toast.add({
+       toast.add({
       severity: "error",
       summary: "Error",
       detail: "Failed to load user data.",
@@ -148,6 +148,7 @@ onMounted(async () => {
     loadingUser.value = false;
   }
 });
+
 const userInitials = computed(() => {
   if (!user.value) return "VX";
   const f = user.value.firstName?.[0] || "";
@@ -181,19 +182,15 @@ const currentComponent = computed(() => {
   }
 });
 
-
-
 const logout = async () => {
   try {
-    const res = await $fetch('/api/auth/logout', { method: 'POST' })
-   
-    
-    authUser.value = null
-    navigateTo('/')
+    await $fetch("/api/auth/logout", { method: "POST" });
+    authUser.value = null;
+    navigateTo("/");
   } catch (error) {
-    console.error('Logout failed:', error)
+    console.error("Logout failed:", error);
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -209,6 +206,22 @@ const logout = async () => {
   .fade-slide-leave-to {
     opacity: 0;
     transform: translateY(-10px);
+  }
+
+  /* Glassmorphism and hover effects */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .glass-item {
+    transition: all 0.3s ease;
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(3px);
+    }
   }
 }
 </style>
