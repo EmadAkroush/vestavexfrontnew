@@ -8,7 +8,7 @@
 
       <!-- RIGHT — IMAGE FULL AREA -->
       <div class="register-image">
-        <img src="/SL_0212121_40670_54.jpg" class="w-full h-full object-cover" />
+        <img src="/public/SL-0212121-40670-68.jpg" class="w-full h-full object-cover" />
       </div>
 
       <!-- LEFT — FORM CENTERED -->
