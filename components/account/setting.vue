@@ -1,9 +1,11 @@
 <template>
-  <div class="space-y-6 mx-auto">
-    <h2 class="text-xl font-bold mb-6">Account Settings</h2>
+  <div class="space-y-6 mx-auto" style="color: #c7d2fe">
+    <h2 class="text-xl font-bold mb-6" style="color: #c7d2fe">
+      Account Settings
+    </h2>
 
     <!-- Profile & Avatar -->
-    <Card class="shadow-md">
+    <Card class="shadow-md" style="background: #0f172a; color: #c7d2fe">
       <template #title>Profile Information</template>
       <template #content>
         <div class="flex flex-col md:flex-row items-center gap-6">
@@ -13,6 +15,7 @@
               :src="profile.avatar"
               class="w-24 h-24 rounded-full object-cover border mb-2"
               alt="Avatar"
+              style="border-color: #4f46e5"
             />
             <FileUpload
               mode="basic"
@@ -21,56 +24,101 @@
               customUpload
               @select="onAvatarUpload"
               class="p-button-sm"
+              :pt="{
+                chooseButton: {
+                  style: 'background:#2563EB;border:none;color:white;',
+                },
+              }"
             />
           </div>
 
           <!-- User Info -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
-        
             <div>
-              <label class="text-sm font-medium text-gray-600"
+              <label
+                class="text-sm font-medium text-gray-600"
+                style="color: #c7d2fe"
                 >First Name</label
               >
               <InputText
                 v-model="profile.firstName"
                 :placeholder="placeholders.firstName"
                 class="w-full mt-1"
+                style="
+                  background: #020617;
+                  color: #c7d2fe;
+                  border-color: #2563eb;
+                "
               />
             </div>
             <div>
-              <label class="text-sm font-medium text-gray-600">Last Name</label>
+              <label
+                class="text-sm font-medium text-gray-600"
+                style="color: #c7d2fe"
+                >Last Name</label
+              >
               <InputText
                 v-model="profile.lastName"
                 :placeholder="placeholders.lastName"
                 class="w-full mt-1"
+                style="
+                  background: #020617;
+                  color: #c7d2fe;
+                  border-color: #2563eb;
+                "
               />
             </div>
             <div>
-              <label class="text-sm font-medium text-gray-600">Phone</label>
+              <label
+                class="text-sm font-medium text-gray-600"
+                style="color: #c7d2fe"
+                >Phone</label
+              >
               <InputText
                 v-model="profile.phone"
                 :placeholder="placeholders.phone"
                 class="w-full mt-1"
+                style="
+                  background: #020617;
+                  color: #c7d2fe;
+                  border-color: #2563eb;
+                "
               />
             </div>
             <div>
-              <label class="text-sm font-medium text-gray-600">Email</label>
+              <label
+                class="text-sm font-medium text-gray-600"
+                style="color: #c7d2fe"
+                >Email</label
+              >
               <InputText
                 v-model="profile.email"
                 :placeholder="placeholders.email"
                 class="w-full mt-1"
                 readonly
+                style="
+                  background: #020617;
+                  color: #94a3b8;
+                  border-color: #2563eb;
+                "
               />
             </div>
 
             <div class="md:col-span-2">
-              <label class="text-sm font-medium text-gray-600"
+              <label
+                class="text-sm font-medium text-gray-600"
+                style="color: #c7d2fe"
                 >Wallet Address</label
               >
               <InputText
                 v-model="profile.wallet"
                 :placeholder="placeholders.wallet"
                 class="w-full mt-1"
+                style="
+                  background: #020617;
+                  color: #c7d2fe;
+                  border-color: #2563eb;
+                "
               />
             </div>
             <div class="flex flex-row items-center justify-end md:col-span-2">
@@ -80,12 +128,19 @@
                   label="Save Profile"
                   icon="pi pi-check"
                   class="p-button-sm"
+                  style="background: #2563eb; border: none; color: white"
                 />
               </div>
             </div>
 
-            <div class="md:col-span-2 border p-4">
-              <label class="text-sm font-medium text-gray-600">
+            <div
+              class="md:col-span-2 border p-4"
+              style="border-color: #4f46e5; background: #020617"
+            >
+              <label
+                class="text-sm font-medium text-gray-600"
+                style="color: #c7d2fe"
+              >
                 Leader / Referral Code
               </label>
 
@@ -94,11 +149,19 @@
                   v-model="profile.leaderCode"
                   placeholder="Enter leader VX code"
                   class="flex-1"
+                  style="
+                    background: #020617;
+                    color: #c7d2fe;
+                    border-color: #2563eb;
+                  "
                 />
               </div>
 
               <div class="mt-2">
-                <label class="text-sm font-medium text-gray-600 mb-1 block">
+                <label
+                  class="text-sm font-medium text-gray-600 mb-1 block"
+                  style="color: #c7d2fe"
+                >
                   Position
                 </label>
 
@@ -129,7 +192,7 @@
                 </div>
               </div>
 
-              <small class="text-gray-500">
+              <small class="text-gray-500" style="color: #94a3b8">
                 Enter the VX code of your leader to connect your account.
               </small>
               <div class="flex flex-row items-center justify-end">
@@ -138,6 +201,7 @@
                   icon="mdi mdi-account-arrow-up-outline"
                   class="p-button-sm p-button-success custombtn"
                   @click="connectLeader"
+                  style="background: #7c3aed; border: none; color: white"
                 />
               </div>
             </div>
@@ -147,29 +211,34 @@
     </Card>
 
     <!-- Security -->
-    <Card class="shadow-md">
+    <Card class="shadow-md" style="background: #0f172a; color: #c7d2fe">
       <template #title>Security</template>
       <template #content>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      
           <div>
-            <label class="text-sm font-medium text-gray-600"
+            <label
+              class="text-sm font-medium text-gray-600"
+              style="color: #c7d2fe"
               >New Password</label
             >
             <Password
               v-model="security.newPass"
               toggleMask
               class="w-full mt-1"
+              inputStyle="background:#020617;color:#C7D2FE;border-color:#2563EB;"
             />
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-600"
+            <label
+              class="text-sm font-medium text-gray-600"
+              style="color: #c7d2fe"
               >Confirm Password</label
             >
             <Password
               v-model="security.confirm"
               toggleMask
               class="w-full mt-1"
+              inputStyle="background:#020617;color:#C7D2FE;border-color:#2563EB;"
             />
           </div>
           <!-- <div class="flex items-center justify-between md:col-span-2">
@@ -186,6 +255,7 @@
             severity="warning"
             class="p-button-sm"
             @click="updatePassword"
+            style="background: #4f46e5; border: none; color: white"
           />
         </div>
       </template>
@@ -268,7 +338,6 @@ onMounted(async () => {
         phone: user.phone || "",
         email: user.email || "",
         wallet: user.wallet || "",
-     
       };
     }
 
@@ -463,8 +532,6 @@ async function updatePassword() {
     });
   }
 }
-
-
 
 const onAvatarUpload = (event) => {
   const file = event.files[0];
