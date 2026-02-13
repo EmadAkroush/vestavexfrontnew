@@ -14,11 +14,11 @@
       <!-- LEFT — FORM CENTERED -->
       <div class="flex items-center justify-center px-10 py-12 form-container">
         <div class="w-full max-w-md">
-          <h2 class="text-center text-3xl font-bold bg-gradient-to-r from-green-300 to-teal-400 bg-clip-text text-transparent mb-3">
+          <h2 class="text-center text-3xl font-bold bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent mb-3">
             Create Account
           </h2>
 
-          <p class="text-gray-300 text-center text-sm mb-6">
+          <p class="text-[#C7D2FE] text-center text-sm mb-6">
             Register to access your VXBUSINESS dashboard
           </p>
 
@@ -64,7 +64,7 @@
             <!-- Terms -->
             <div class="flex items-start gap-3">
               <input id="agree" type="checkbox" v-model="agree" class="mt-1" />
-              <label for="agree" class="text-sm text-gray-300">
+              <label for="agree" class="text-sm text-[#C7D2FE]">
                 I accept the Terms and Conditions.
               </label>
             </div>
@@ -85,11 +85,11 @@
 
               <div class="text-center mt-1 text-sm text-gray-400">
                 Already have an account?
-                <nuxt-link to="/login" class="text-green-300 font-semibold hover:underline ml-1">Login</nuxt-link>
+                <nuxt-link to="/login" class="text-[#4F46E5] font-semibold hover:underline ml-1">Login</nuxt-link>
                 •
-                <nuxt-link to="/forgot" class="text-green-300 font-semibold hover:underline ml-1">Forgot Password</nuxt-link>
+                <nuxt-link to="/forgot" class="text-[#4F46E5] font-semibold hover:underline ml-1">Forgot Password</nuxt-link>
                 •
-                <nuxt-link to="/verifyemail" class="text-green-300 font-semibold hover:underline ml-1">Verify Email</nuxt-link>
+                <nuxt-link to="/verifyemail" class="text-[#4F46E5] font-semibold hover:underline ml-1">Verify Email</nuxt-link>
               </div>
             </div>
           </div>
@@ -194,7 +194,7 @@ async function submit() {
 
 <style scoped lang="scss">
 .register-wrapper {
-  background: linear-gradient(180deg, #071114 0%, #02110c 60%, #04110e 100%);
+  background: linear-gradient(180deg, #0F172A 0%, #020617 60%, #030712 100%);
 }
 
 /* glow */
@@ -202,8 +202,8 @@ async function submit() {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 10%, rgba(0,255,180,0.12), transparent 18%),
-    radial-gradient(circle at 80% 80%, rgba(60,200,255,0.08), transparent 20%);
+    radial-gradient(circle at 20% 10%, rgba(79,70,229,0.25), transparent 18%),
+    radial-gradient(circle at 80% 80%, rgba(124,58,237,0.18), transparent 20%);
   filter: blur(70px);
   opacity: 0.7;
 }
@@ -212,10 +212,10 @@ async function submit() {
 .glass-container {
   display: grid;
   grid-template-columns: 1fr; /* mobile */
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(199, 210, 254, 0.1);
   backdrop-filter: blur(18px);
-  box-shadow: 0 0 25px rgba(0,255,200,0.05);
+  box-shadow: 0 0 25px rgba(79,70,229,0.08);
 }
 
 @media (min-width: 768px) {
@@ -234,37 +234,37 @@ async function submit() {
     display: block;
     width: 100%;
     height: 100%;
-    background: rgba(255,255,255,0.03);
+    background: rgba(15,23,42,0.4);
   }
 }
 
 /* INPUTS */
 .login-label {
-  color: #c9efe4;
+  color: #C7D2FE;
   font-size: 13px;
   margin-bottom: 6px;
 }
 
 .login-input {
   width: 100%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(199,210,254,0.2);
   padding: 10px 12px;
   border-radius: 12px;
-  color: #e6fff7;
+  color: #C7D2FE;
   transition: 0.25s;
 }
 
 .login-input:focus {
-  border-color: #00ffbf;
-  box-shadow: 0 0 12px rgba(0,255,200,0.18);
+  border-color: #4F46E5;
+  box-shadow: 0 0 12px rgba(79,70,229,0.25);
 }
 
 .login-btn {
   width: 100%;
   padding: 12px 0;
-  background: linear-gradient(90deg, #00c78b, #00ffd0);
-  color: #00221a;
+  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
+  color: white;
   border-radius: 14px;
   font-weight: 700;
 }
