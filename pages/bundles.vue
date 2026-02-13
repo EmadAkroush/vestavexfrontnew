@@ -57,7 +57,9 @@
 
         <div class="explain-box">
           <h4>📌 Max Cap 300%</h4>
-          <p>The maximum earning limit for each bundle includes the total of:</p>
+          <p>
+            The maximum earning limit for each bundle includes the total of:
+          </p>
           <ul>
             <li>✔ Monthly returns from the bundle</li>
             <li>✔ Network earnings (Binary Income)</li>
@@ -75,11 +77,17 @@
           <Button
             label="Close"
             class="p-button-text"
+            style="color: #94a3ff"
             @click="visibleDetails = false"
           />
           <Button
             label="Invest Now"
             class="p-button-success"
+            style="
+              background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+              border: none;
+              color: #020617;
+            "
             @click="openInvestDialog(selectedBundle)"
           />
         </div>
@@ -108,11 +116,17 @@
           <Button
             label="Cancel"
             class="p-button-text"
+            style="color: #94a3ff"
             @click="visibleInvest = false"
           />
           <Button
             label="Confirm"
             class="p-button-success"
+            style="
+              background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+              border: none;
+              color: #020617;
+            "
             @click="confirmInvestment"
           />
         </div>
@@ -218,7 +232,6 @@ async function confirmInvestment() {
     visibleInvest.value = false;
     investAmount.value = null;
     selectedPayment.value = null;
-
   } catch (e) {
     toast.add({
       severity: "error",
@@ -335,12 +348,20 @@ async function confirmInvestment() {
 .glow-left {
   left: -8%;
   top: -6%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.25), transparent 40%);
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.25),
+    transparent 40%
+  );
 }
 .glow-right {
   right: -6%;
   bottom: -8%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent 40%);
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.25),
+    transparent 40%
+  );
 }
 
 .card-body .row span {
