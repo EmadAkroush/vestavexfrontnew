@@ -4,7 +4,7 @@
     v-model:visible="localVisible"
     :modal="true"
     :closable="true"
-    class="max-w-2xl w-full"
+    class="max-w-2xl w-full vx-dialog"
   >
 
     <div v-if="node">
@@ -12,18 +12,18 @@
       <div class="flex flex-col md:flex-row gap-4 mb-6 items-center">
         <img
           :src="node.data?.image"
-          class="w-24 h-24 rounded-full shadow-md border border-gray-200"
+          class="w-24 h-24 rounded-full shadow-md border border-indigo-500"
           :alt="node.data?.name"
         />
 
         <div class="flex flex-col text-center md:text-left">
-          <div class="font-bold text-xl">
+          <div class="font-bold text-xl text-indigo-400">
             {{ node.data?.name || "—" }}
           </div>
    
-          <div class="text-sm mt-1">
+          <div class="text-sm mt-1 text-indigo-500">
             VX Code:
-            <span class="font-semibold">
+            <span class="font-semibold text-indigo-300">
               {{ node.data?.vxCode || "—" }}
             </span>
           </div>
@@ -60,14 +60,14 @@
         <Button
           label="Copy VX Code"
           icon="mdi mdi-content-copy"
-          class="p-button-sm p-button-outlined"
+          class="p-button-sm p-button-outlined vx-btn-outline"
           @click="emit('copy', node.data?.vxCode)"
         />
 
         <Button
           label="Close"
           icon="mdi mdi-close"
-          class="p-button-secondary p-button-sm"
+          class="p-button-secondary p-button-sm vx-btn-secondary"
           @click="localVisible = false"
         />
       </div>
@@ -110,20 +110,20 @@ const StatCard = defineComponent({
   },
   setup(props) {
     return () =>
-      h("div", { class: "bg-slate-50 rounded-lg p-4 shadow-sm" }, [
+      h("div", { class: "stat-card" }, [
         h(
           "div",
-          { class: "text-xs uppercase text-gray-500 mb-1" },
+          { class: "stat-title" },
           props.title
         ),
         h(
           "div",
-          { class: "text-lg font-semibold" },
+          { class: "stat-value" },
           `$${(props.value || 0).toLocaleString("en-US")}`
         ),
         h(
           "div",
-          { class: "text-xs text-gray-500" },
+          { class: "stat-count" },
           `Members: ${(props.count || 0).toLocaleString("en-US")}`
         ),
       ]);
@@ -138,20 +138,88 @@ const StatSimple = defineComponent({
   },
   setup(props) {
     return () =>
-      h("div", { class: "bg-slate-50 rounded-lg p-4 shadow-sm" }, [
+      h("div", { class: "stat-card" }, [
         h(
           "div",
-          { class: "text-xs uppercase text-gray-500 mb-1" },
+          { class: "stat-title" },
           props.title
         ),
         h(
           "div",
-          { class: "text-lg font-semibold" },
+          { class: "stat-value" },
           `$${(props.value || 0).toLocaleString("en-US")}`
         ),
       ]);
   },
 });
-
-
 </script>
+
+<style scoped>
+/* ===== Dialog Dark Theme ===== */
+:deep(.vx-dialog .p-dialog) {
+  background: #0F172A !important;
+  border: 1px solid #4F46E5;
+  border-radius: 18px;
+}
+
+:deep(.vx-dialog .p-dialog-header) {
+  background: linear-gradient(90deg, #2563EB, #4F46E5);
+  color: white !important;
+  border-bottom: 1px solid #4F46E5;
+}
+
+:deep(.vx-dialog .p-dialog-content) {
+  background: #020617 !important;
+  color: #C7D2FE !important;
+}
+
+/* ===== Stat Cards ===== */
+.stat-card {
+  background: linear-gradient(135deg, #020617, #0F172A);
+  border: 1px solid #4F46E5;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.15);
+}
+
+.stat-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #7C3AED;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #C7D2FE;
+}
+
+.stat-count {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+/* ===== Buttons ===== */
+.vx-btn-outline {
+  border-color: #4F46E5 !important;
+  color: #C7D2FE !important;
+}
+
+.vx-btn-outline:hover {
+  background: #4F46E5 !important;
+  color: white !important;
+}
+
+.vx-btn-secondary {
+  background: #1E1B4B !important;
+  border: 1px solid #4F46E5 !important;
+  color: #C7D2FE !important;
+}
+
+.vx-btn-secondary:hover {
+  background: #4F46E5 !important;
+  color: white !important;
+}
+</style>
