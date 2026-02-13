@@ -9,13 +9,13 @@
     <div class="glass-card w-full max-w-md mx-auto px-8 py-10 relative z-10">
       <!-- Title -->
       <h2
-        class="text-center text-3xl font-bold bg-gradient-to-r from-green-300 to-teal-400 bg-clip-text text-transparent mb-6"
+        class="text-center text-3xl font-bold bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent mb-6"
       >
         User Login
       </h2>
 
       <!-- Subtitle -->
-      <p class="text-gray-300 text-center text-sm mb-8">
+      <p class="text-[#C7D2FE] text-center text-sm mb-8">
         Sign in to access your VXBUSINESS account
       </p>
 
@@ -63,12 +63,12 @@
         <div class="flex items-center justify-between text-sm mt-4">
           <nuxt-link
             to="/register"
-            class="text-green-300 hover:text-green-200 transition"
+            class="text-[#4F46E5] hover:text-[#7C3AED] transition"
             >Create Account</nuxt-link
           >
           <nuxt-link
             to="/forgot-password"
-            class="text-green-300 hover:text-green-200 transition"
+            class="text-[#4F46E5] hover:text-[#7C3AED] transition"
             >Forgot Password?</nuxt-link
           >
         </div>
@@ -78,10 +78,11 @@
     <Toast />
   </section>
 </template>
+
 <style scoped lang="scss">
 /* BACKGROUND */
 .login-wrapper {
-  background: linear-gradient(180deg, #071114 0%, #02110c 100%);
+  background: linear-gradient(180deg, #0F172A 0%, #020617 100%);
 }
 
 /* GLOW */
@@ -90,28 +91,28 @@
   inset: 0;
   background: radial-gradient(
       circle at 30% 20%,
-      rgba(0, 255, 180, 0.18),
+      rgba(79, 70, 229, 0.25),
       transparent 50%
     ),
-    radial-gradient(circle at 80% 80%, rgba(0, 200, 255, 0.15), transparent 55%);
+    radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.22), transparent 55%);
   filter: blur(65px);
   opacity: 0.6;
 }
 
 /* GLASS CARD */
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(199, 210, 254, 0.12);
   backdrop-filter: blur(18px);
   border-radius: 24px;
-  box-shadow: 0 0 25px rgba(0, 255, 200, 0.08),
-    inset 0 0 20px rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 25px rgba(79, 70, 229, 0.12),
+    inset 0 0 20px rgba(255, 255, 255, 0.03);
 }
 
 /* LABEL */
 .login-label {
   display: block;
-  color: #b8eee0;
+  color: #C7D2FE;
   font-size: 14px;
   margin-bottom: 6px;
 }
@@ -119,17 +120,17 @@
 /* INPUT */
 .login-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(199, 210, 254, 0.2);
   padding: 12px;
   border-radius: 14px;
-  color: white;
+  color: #C7D2FE;
   outline: none;
   transition: 0.3s;
 
   &:focus {
-    border-color: #00ffbf;
-    box-shadow: 0 0 12px rgba(0, 255, 200, 0.25);
+    border-color: #4F46E5;
+    box-shadow: 0 0 12px rgba(79, 70, 229, 0.35);
   }
 }
 
@@ -137,8 +138,8 @@
 .login-btn {
   width: 100%;
   padding: 12px 0;
-  background: linear-gradient(90deg, #00c78b, #00ffd0);
-  color: #00221a;
+  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
+  color: white;
   border-radius: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -147,7 +148,7 @@
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 255, 200, 0.35);
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.45);
   }
 
   &:disabled {
@@ -164,6 +165,7 @@
   }
 }
 </style>
+
 <script setup>
 definePageMeta({
   middleware: "guest",
