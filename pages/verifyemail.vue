@@ -1,7 +1,7 @@
 <template>
-  <section class="min-h-screen flex items-center justify-center bg-[#02110c] relative">
+  <section class="min-h-screen flex items-center justify-center bg-[#020617] relative">
 
-    <div class="absolute inset-0 opacity-30 bg-gradient-to-br from-green-400/20 to-teal-400/10"></div>
+    <div class="absolute inset-0 opacity-30 bg-gradient-to-br from-blue-400/20 to-purple-500/10"></div>
 
     <div class="glass p-8 w-full max-w-md rounded-2xl relative z-10 text-center text-white">
       <h2 class="text-2xl font-bold mb-2">Verify Your Email</h2>
@@ -109,32 +109,48 @@ async function verify() {
 
 <style scoped>
 .glass {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(20, 25, 45, 0.55);
+  border: 1px solid rgba(120, 150, 255, 0.25);
   backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(80, 120, 255, 0.15);
 }
 .verify-btn {
   width: 100%;
-  background: linear-gradient(90deg, #00c78b, #00ffd0);
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
   padding: 12px;
-  color: #00281d;
+  color: #020617;
   border-radius: 14px;
   font-weight: bold;
+  transition: 0.3s;
+}
+.verify-btn:hover {
+  box-shadow: 0 0 18px rgba(99, 102, 241, 0.45);
+  transform: translateY(-1px);
 }
 .close-btn {
   width: 100%;
   padding: 10px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(120, 150, 255, 0.25);
+  color: #e0e7ff;
+  transition: 0.3s;
+}
+.close-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
 }
 .token-input {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(30, 40, 80, 0.55);
+  border: 1px solid rgba(120, 150, 255, 0.3);
   color: white;
+  outline: none;
+  transition: 0.3s;
+}
+.token-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
 }
 </style>
