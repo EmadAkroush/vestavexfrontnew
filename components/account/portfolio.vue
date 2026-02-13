@@ -87,11 +87,7 @@
                   <span>Progress</span>
                   <span>{{ item.progress }}%</span>
                 </div>
-                <ProgressBar
-                  :value="item.progress"
-                  :style="{ backgroundColor: '#1F2937', height: '8px' }"
-                  :class="'progress-bar-gradient'"
-                />
+               <ProgressBar :value="modalData.progress" class="mt-3 custom-progress" />
               </div>
             </div>
           </template>
@@ -101,13 +97,19 @@
               <Button
                 label="Details"
                 icon="mdi mdi-eye-outline"
-                class="p-button-sm p-button-outlined text-white border-white"
+                class="p-button-sm p-button-outlined"
+                style="color: #60a5fa; border-color: #60a5fa"
                 @click="openPlanModal(item)"
               />
               <Button
                 label="Renew"
                 icon="mdi mdi-refresh"
                 class="p-button-sm p-button-success"
+                style="
+                  background: linear-gradient(90deg, #3b82f6, #6366f1);
+                  border: none;
+                  color: #ffffff;
+                "
                 @click="openInvestDialog(selectedBundle)"
               />
             </div>
@@ -270,6 +272,8 @@
         </p>
 
         <ProgressBar :value="modalData.progress" class="mt-3 custom-progress" />
+
+        
       </div>
 
       <template #footer>
@@ -485,44 +489,46 @@ const openPlanModal = (item) => {
 </script>
 
 <style lang="scss" scoped>
-
 /* ===== Dialog Background ===== */
+
+
+
 .custom-dialog :deep(.p-dialog) {
-  background: #0F172A;
-  border: 1px solid #4F46E5;
+  background: #0f172a;
+  border: 1px solid #4f46e5;
   border-radius: 16px;
 }
 
 .custom-dialog :deep(.p-dialog-header) {
-  background: #0F172A;
-  color: #C7D2FE;
-  border-bottom: 1px solid #1E293B;
+  background: #0f172a;
+  color: #c7d2fe;
+  border-bottom: 1px solid #1e293b;
 }
 
 .custom-dialog :deep(.p-dialog-content) {
-  background: #0F172A;
+  background: #0f172a;
 }
 
 .custom-dialog :deep(.p-dialog-footer) {
-  background: #0F172A;
-  border-top: 1px solid #1E293B;
+  background: #0f172a;
+  border-top: 1px solid #1e293b;
 }
 
 /* ===== Input Styling ===== */
 .custom-input :deep(.p-inputtext) {
-  background: #1E293B;
-  border: 1px solid #4F46E5;
-  color: #C7D2FE;
+  background: #1e293b;
+  border: 1px solid #4f46e5;
+  color: #c7d2fe;
 }
 
 .custom-input :deep(.p-inputtext:focus) {
-  border-color: #2563EB;
+  border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
 }
 
 /* ===== Buttons ===== */
 .confirm-btn {
-  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
   border: none;
   color: white;
 }
@@ -533,29 +539,26 @@ const openPlanModal = (item) => {
 
 .cancel-btn {
   background: transparent;
-  border: 1px solid #4F46E5;
-  color: #C7D2FE;
+  border: 1px solid #4f46e5;
+  color: #c7d2fe;
 }
 
 .cancel-btn:hover {
-  background: #1E293B;
+  background: #1e293b;
 }
 
 /* ===== ProgressBar ===== */
 .custom-progress :deep(.p-progressbar) {
-  background: #1E293B;
+  background: #1e293b;
   border-radius: 8px;
 }
 
 .custom-progress :deep(.p-progressbar-value) {
-  background: linear-gradient(90deg, #2563EB, #7C3AED);
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
   border-radius: 8px;
 }
 
-
-
 .portfolio {
-
   .stat-card {
     @apply flex items-center gap-4 p-5 rounded-xl transition-all;
     background: #1f2937;
@@ -589,5 +592,7 @@ const openPlanModal = (item) => {
   .progress-bar-gradient .p-progressbar-value {
     background: #2563eb !important;
   }
+
 }
+
 </style>
