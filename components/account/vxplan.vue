@@ -1,7 +1,6 @@
 <template>
-  <div class="">
+  <div class="vx-plan-page">
     <!-- Header / Actions -->
-
     <VxPlanHeaderActions
       @zoom-in="zoomIn"
       @zoom-out="zoomOut"
@@ -20,23 +19,24 @@
       :vxcCount="vxcCount"
     />
 
-    <!-- Chart Container with Pan & Zoom -->
-    <div class="my-2">
+    <!-- Zoom Buttons -->
+    <div class="my-2 flex gap-2">
       <Button
         icon="mdi mdi-magnify-minus"
-        class="p-button-rounded mr-2"
+        class="zoom-btn"
         @click="zoomOut"
       />
       <Button
         icon="mdi mdi-magnify-plus"
-        class="p-button-rounded"
+        class="zoom-btn"
         @click="zoomIn"
       />
     </div>
+
+    <!-- Chart Container -->
     <div
       ref="chartWrapper"
-      class="relative overflow-auto bg-white shadow rounded p-4 touch-pan-y touch-pan-x"
-      style="width: 100%; height: 80vh"
+      class="chart-wrapper"
       @wheel.prevent="handleWheel"
       @mousedown="startPan"
       @mousemove="doPan"
@@ -53,42 +53,48 @@
           transform: `translate(${translate.x}px, ${translate.y}px) scale(${zoom})`,
         }"
       >
-      
         <OrganizationChart
           v-model:selectionKeys="selection"
           :value="data"
           collapsible
           selectionMode="multiple"
         >
+          <!-- Person Node -->
           <template #person="slotProps">
-            <div
-              class="flex flex-col items-center text-center p-2 border border-gray-200 rounded-lg bg-slate-50 shadow-sm hover:shadow-md"
-            >
+            <div class="node-card">
               <img
                 :alt="slotProps.node.data.name"
                 :src="slotProps.node.data.image"
-                class="mb-2 w-14 h-14 rounded-full object-cover"
+                class="node-avatar"
               />
-              <div class="font-semibold">{{ slotProps.node.data.name }}</div>
-              <div class="text-xs text-gray-500">
+
+              <div class="node-name">
+                {{ slotProps.node.data.name }}
+              </div>
+
+              <div class="node-email">
                 {{ slotProps.node.data.title }}
               </div>
-              <div class="mt-2 flex gap-1">
+
+              <div class="node-actions">
                 <Button
                   icon="mdi mdi-content-copy"
-                  class="p-button-sm"
+                  class="node-btn"
                   @click="copyCode(slotProps.node.data.vxCode)"
                 />
                 <Button
                   icon="mdi mdi-information-outline"
-                  class="p-button-sm"
+                  class="node-btn"
                   @click="openNodeDetails(slotProps.node)"
                 />
               </div>
             </div>
           </template>
+
           <template #default="slotProps">
-            <div class="p-2 font-medium">{{ slotProps.node.label }}</div>
+            <div class="default-node">
+              {{ slotProps.node.label }}
+            </div>
           </template>
         </OrganizationChart>
       </div>
@@ -103,6 +109,7 @@
     <Toast />
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -389,11 +396,105 @@ onMounted(async () => {
 });
 </script>
 <style scoped>
-.p-organizationchart .p-organizationchart-node {
-  border-radius: 8px;
-  cursor: grab;
+.vx-plan-page {
+
+  min-height: 100vh;
+  padding: 20px;
 }
-.p-organizationchart .p-organizationchart-node:active {
-  cursor: grabbing;
+
+/* Chart Wrapper */
+.chart-wrapper {
+  width: 100%;
+  height: 80vh;
+  overflow: auto;
+  background: linear-gradient(135deg, #0F172A, #020617);
+  border: 1px solid #4F46E5;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(79, 70, 229, 0.15);
+}
+
+/* Node Card */
+.node-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #020617;
+  border: 1px solid #4F46E5;
+  border-radius: 14px;
+  padding: 12px;
+  transition: all 0.2s ease;
+  color: #C7D2FE;
+}
+
+.node-card:hover {
+  background: #4F46E5;
+  transform: translateY(-2px);
+}
+
+/* Avatar */
+.node-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  object-fit: cover;
+  margin-bottom: 6px;
+  border: 2px solid #4F46E5;
+}
+
+/* Texts */
+.node-name {
+  font-weight: 600;
+  color: #C7D2FE;
+}
+
+.node-email {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+/* Actions */
+.node-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.node-btn {
+  background: rgba(79, 70, 229, 0.15) !important;
+  border: none !important;
+  color: #C7D2FE !important;
+  border-radius: 10px !important;
+}
+
+.node-btn:hover {
+  background: #4F46E5 !important;
+  color: white !important;
+}
+
+/* Zoom Buttons */
+.zoom-btn {
+  background: #4F46E5 !important;
+  border: none !important;
+  color: white !important;
+}
+
+.zoom-btn:hover {
+  background: #7C3AED !important;
+}
+
+/* Default Node */
+.default-node {
+  padding: 6px;
+  font-weight: 500;
+  color: #C7D2FE;
+}
+
+/* Organization Chart Lines */
+::v-deep(.p-organizationchart-line-down),
+::v-deep(.p-organizationchart-line-left),
+::v-deep(.p-organizationchart-line-right) {
+  border-color: #4F46E5 !important;
 }
 </style>
