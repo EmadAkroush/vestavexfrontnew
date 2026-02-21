@@ -112,6 +112,146 @@
         </div>
       </div>
     </section>
+
+    <!-- PARTNERSHIP SLIDER -->
+    <section class="relative py-20 bg-[#0b0f1a] overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2
+          class="feature-title text-center text-3xl sm:text-3xl font-extrabold mb-16 tracking-tight"
+        >
+          Our Partnership
+        </h2>
+
+        <div class="partner-slider">
+          <div class="partner-track">
+            <a
+              href="https://app.uniswap.org"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/uniswap-uni-logo.png"
+                alt="Uniswap"
+              />
+            </a>
+
+            <a
+              href="https://swap.transit.finance"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://assets.coingecko.com/coins/images/33969/large/transit.png"
+                alt="Transit Swap"
+              />
+            </a>
+
+            <a
+              href="https://pancakeswap.finance"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/pancakeswap-cake-logo.png"
+                alt="PancakeSwap"
+              />
+            </a>
+
+            <a
+              href="https://app.pendle.finance"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/pendle-pendle-logo.png"
+                alt="Pendle"
+              />
+            </a>
+
+            <a
+              href="https://dapp.tptool.pro/StakeVault"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
+                alt="ETH 2.0"
+              />
+            </a>
+
+            <a
+              href="https://stake.lido.fi"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/lido-dao-ldo-logo.png"
+                alt="Lido"
+              />
+            </a>
+
+            <!-- duplicate for smooth infinite slider -->
+            <a
+              href="https://app.uniswap.org"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/uniswap-uni-logo.png"
+                alt="Uniswap"
+              />
+            </a>
+            <a
+              href="https://swap.transit.finance"
+              target="_blank"
+              class="partner-item"
+            >
+              <img src="/public/images.jpeg" alt="Transit Swap" />
+            </a>
+            <a
+              href="https://pancakeswap.finance"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/pancakeswap-cake-logo.png"
+                alt="PancakeSwap"
+              />
+            </a>
+            <a
+              href="https://app.pendle.finance"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/pendle-pendle-logo.png"
+                alt="Pendle"
+              />
+            </a>
+            <a
+              href="https://dapp.tptool.pro/StakeVault"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
+                alt="ETH 2.0"
+              />
+            </a>
+            <a
+              href="https://stake.lido.fi"
+              target="_blank"
+              class="partner-item"
+            >
+              <img
+                src="https://cryptologos.cc/logos/lido-dao-ldo-logo.png"
+                alt="Lido"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -402,5 +542,49 @@ const features = [
 
 .animate-floating {
   animation: floating 4s ease-in-out infinite;
+}
+
+.partner-slider {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+.partner-track {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  width: max-content;
+  animation: scrollPartners 28s linear infinite;
+}
+
+.partner-item img {
+  width: 140px;
+  height: 60px;
+  object-fit: contain;
+  filter: brightness(0.9) grayscale(0.1);
+  opacity: 0.85;
+  transition: 0.3s ease;
+}
+
+.partner-item:hover img {
+  filter: brightness(1.2) grayscale(0);
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+@keyframes scrollPartners {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 </style>
