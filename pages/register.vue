@@ -143,8 +143,8 @@ function validate() {
     errorsFront.value.push("Please enter a valid email address.");
   }
 
-  if (form.cellphone && !/^09\d{9}$/.test(form.cellphone)) {
-    errorsFront.value.push("Phone number must be 11 digits starting with 09.");
+  if (!form.referral.trim()) {
+    errorsFront.value.push("Referral code is required.");
   }
 
   if (!form.password || form.password.length < 6) {
