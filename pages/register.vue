@@ -1,20 +1,26 @@
 <template>
-  <section class="register-wrapper min-h-screen flex items-center justify-center relative overflow-hidden">
+  <section
+    class="register-wrapper min-h-screen flex items-center justify-center relative overflow-hidden"
+  >
     <!-- BG Gradient + Glow -->
     <div class="absolute inset-0 register-glow" />
 
     <!-- Two-Column FULL WIDTH -->
     <div class="glass-container w-full min-h-screen relative z-10">
-
       <!-- RIGHT — IMAGE FULL AREA -->
       <div class="register-image">
-        <img src="/public/SL-0212121-40670-68.jpg" class="w-full h-full object-cover" />
+        <img
+          src="/public/SL-0212121-40670-68.jpg"
+          class="w-full h-full object-cover"
+        />
       </div>
 
       <!-- LEFT — FORM CENTERED -->
       <div class="flex items-center justify-center px-10 py-12 form-container">
         <div class="w-full max-w-md">
-          <h2 class="text-center text-3xl font-bold bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent mb-3">
+          <h2
+            class="text-center text-3xl font-bold bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent mb-3"
+          >
             Create Account
           </h2>
 
@@ -27,37 +33,72 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="login-label">First Name</label>
-                <input v-model="form.firstName" type="text" class="login-input" placeholder="John" />
+                <input
+                  v-model="form.firstName"
+                  type="text"
+                  class="login-input"
+                  placeholder="John"
+                />
               </div>
               <div>
                 <label class="login-label">Last Name</label>
-                <input v-model="form.lastName" type="text" class="login-input" placeholder="Doe" />
+                <input
+                  v-model="form.lastName"
+                  type="text"
+                  class="login-input"
+                  placeholder="Doe"
+                />
               </div>
             </div>
 
             <div>
               <label class="login-label">Email</label>
-              <input v-model="form.email" type="email" class="login-input" placeholder="you@example.com" />
+              <input
+                v-model="form.email"
+                type="email"
+                class="login-input"
+                placeholder="you@example.com"
+              />
             </div>
 
             <div>
               <label class="login-label">Phone (optional)</label>
-              <input v-model="form.cellphone" type="text" class="login-input" placeholder="09xxxxxxxxx" />
+              <input
+                v-model="form.cellphone"
+                type="text"
+                class="login-input"
+                placeholder="09xxxxxxxxx"
+              />
             </div>
 
             <div>
-              <label class="login-label">Referral Code (optional)</label>
-              <input v-model="form.referral" type="text" class="login-input" placeholder="Referral code" />
+              <label class="login-label">Referral Code</label>
+              <input
+                v-model="form.referral"
+                type="text"
+                class="login-input"
+                placeholder="Referral code"
+                required
+              />
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="login-label">Password</label>
-                <input v-model="form.password" type="password" class="login-input" placeholder="Minimum 6 characters" />
+                <input
+                  v-model="form.password"
+                  type="password"
+                  class="login-input"
+                  placeholder="Minimum 6 characters"
+                />
               </div>
               <div>
                 <label class="login-label">Confirm Password</label>
-                <input v-model="form.c_password" type="password" class="login-input" placeholder="Confirm password" />
+                <input
+                  v-model="form.c_password"
+                  type="password"
+                  class="login-input"
+                  placeholder="Confirm password"
+                />
               </div>
             </div>
 
@@ -70,7 +111,10 @@
             </div>
 
             <!-- Errors -->
-            <div v-if="errorsFront.length" class="text-red-400 text-sm leading-relaxed">
+            <div
+              v-if="errorsFront.length"
+              class="text-red-400 text-sm leading-relaxed"
+            >
               <ul>
                 <li v-for="(e, i) in errorsFront" :key="i">• {{ e }}</li>
               </ul>
@@ -85,17 +129,28 @@
 
               <div class="text-center mt-1 text-sm text-gray-400">
                 Already have an account?
-                <nuxt-link to="/login" class="text-[#4F46E5] font-semibold hover:underline ml-1">Login</nuxt-link>
+                <nuxt-link
+                  to="/login"
+                  class="text-[#4F46E5] font-semibold hover:underline ml-1"
+                  >Login</nuxt-link
+                >
                 •
-                <nuxt-link to="/forgot" class="text-[#4F46E5] font-semibold hover:underline ml-1">Forgot Password</nuxt-link>
+                <nuxt-link
+                  to="/forgot"
+                  class="text-[#4F46E5] font-semibold hover:underline ml-1"
+                  >Forgot Password</nuxt-link
+                >
                 •
-                <nuxt-link to="/verifyemail" class="text-[#4F46E5] font-semibold hover:underline ml-1">Verify Email</nuxt-link>
+                <nuxt-link
+                  to="/verifyemail"
+                  class="text-[#4F46E5] font-semibold hover:underline ml-1"
+                  >Verify Email</nuxt-link
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
 
     <Toast />
@@ -136,8 +191,10 @@ onMounted(() => {
 function validate() {
   errorsFront.value = [];
 
-  if (!form.firstName.trim()) errorsFront.value.push("Please enter a valid first name.");
-  if (!form.lastName.trim()) errorsFront.value.push("Please enter a valid last name.");
+  if (!form.firstName.trim())
+    errorsFront.value.push("Please enter a valid first name.");
+  if (!form.lastName.trim())
+    errorsFront.value.push("Please enter a valid last name.");
 
   if (!/^[\w.+-]+@[\w-]+\.[\w.-]+$/.test(form.email)) {
     errorsFront.value.push("Please enter a valid email address.");
@@ -183,7 +240,6 @@ async function submit() {
     setTimeout(() => {
       router.push("/verifyemail");
     }, 400);
-
   } catch (err) {
     errorsFront.value = [err?.data?.message || "Registration error"];
   } finally {
@@ -194,7 +250,7 @@ async function submit() {
 
 <style scoped lang="scss">
 .register-wrapper {
-  background: linear-gradient(180deg, #0F172A 0%, #020617 60%, #030712 100%);
+  background: linear-gradient(180deg, #0f172a 0%, #020617 60%, #030712 100%);
 }
 
 /* glow */
@@ -202,8 +258,16 @@ async function submit() {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 10%, rgba(79,70,229,0.25), transparent 18%),
-    radial-gradient(circle at 80% 80%, rgba(124,58,237,0.18), transparent 20%);
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(79, 70, 229, 0.25),
+      transparent 18%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(124, 58, 237, 0.18),
+      transparent 20%
+    );
   filter: blur(70px);
   opacity: 0.7;
 }
@@ -215,7 +279,7 @@ async function submit() {
   background: rgba(15, 23, 42, 0.75);
   border: 1px solid rgba(199, 210, 254, 0.1);
   backdrop-filter: blur(18px);
-  box-shadow: 0 0 25px rgba(79,70,229,0.08);
+  box-shadow: 0 0 25px rgba(79, 70, 229, 0.08);
 }
 
 @media (min-width: 768px) {
@@ -234,36 +298,36 @@ async function submit() {
     display: block;
     width: 100%;
     height: 100%;
-    background: rgba(15,23,42,0.4);
+    background: rgba(15, 23, 42, 0.4);
   }
 }
 
 /* INPUTS */
 .login-label {
-  color: #C7D2FE;
+  color: #c7d2fe;
   font-size: 13px;
   margin-bottom: 6px;
 }
 
 .login-input {
   width: 100%;
-  background: rgba(15,23,42,0.9);
-  border: 1px solid rgba(199,210,254,0.2);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(199, 210, 254, 0.2);
   padding: 10px 12px;
   border-radius: 12px;
-  color: #C7D2FE;
+  color: #c7d2fe;
   transition: 0.25s;
 }
 
 .login-input:focus {
-  border-color: #4F46E5;
-  box-shadow: 0 0 12px rgba(79,70,229,0.25);
+  border-color: #4f46e5;
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.25);
 }
 
 .login-btn {
   width: 100%;
   padding: 12px 0;
-  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
+  background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
   color: white;
   border-radius: 14px;
   font-weight: 700;
