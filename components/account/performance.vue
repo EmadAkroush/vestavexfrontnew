@@ -18,7 +18,7 @@
         <div>
           <p class="text-gray-200 text-sm">Main Balance</p>
           <h3 class="text-2xl font-bold text-white">
-            ${{ balances.mainBalance }}
+            ${{ format2(balances.mainBalance) }}
           </h3>
         </div>
       </div>
@@ -32,7 +32,7 @@
           <div>
             <p class="text-gray-200 text-sm">Profits Balances</p>
             <h3 class="text-2xl font-bold text-white">
-              ${{ balances.profitBalance }}
+              ${{ format2(balances.profitBalance) }}
             </h3>
           </div>
         </div>
@@ -54,7 +54,7 @@
           <div>
             <p class="text-gray-200 text-sm">VX Balances</p>
             <h3 class="text-2xl font-bold text-white">
-              ${{ balances.referralBalance }}
+              ${{ format2(balances.referralBalance) }}
             </h3>
           </div>
         </div>
@@ -75,13 +75,11 @@
         <div>
           <p class="text-gray-200 text-sm">Withdrawal Total</p>
           <h3 class="text-2xl font-bold text-white">
-            ${{ balances.withdrawalTotalBalance }}
+            ${{ format2(balances.withdrawalTotalBalance) }}
           </h3>
         </div>
       </div>
     </div>
-
-
 
     <!-- ===== Charts Section ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -124,18 +122,20 @@
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Total Investment</span>
               <span class="font-semibold text-white"
-                >${{ referral?.volumes?.leftVolume }}</span
+                >${{ format2(referral?.volumes?.leftVolume) }}</span
               >
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Left Volume</span>
               <span class="font-semibold text-white"
-                >${{ referral?.volumes?.rightVolume }}</span
+                >${{ format2(referral?.volumes?.rightVolume) }}</span
               >
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Right Volume</span>
-              <span class="font-semibold text-white">$560</span>
+              <span class="font-semibold text-white"
+                >${{ format2(560) }}</span
+              >
             </div>
 
             <Button
@@ -188,6 +188,10 @@ import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 const { authUser } = useAuth();
 const inviteLoading = ref(false);
+
+
+// ✅ formatter for 2 decimal places
+const format2 = (val) => Number(val || 0).toFixed(2);
 
 // ✅ Reactive states
 const balances = ref({
