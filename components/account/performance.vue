@@ -24,7 +24,7 @@
       </div>
 
       <!-- Profits Wallet -->
-      <div class="card-box gradient-teal flex flex-col justify-between p-4">
+      <div class="card-boxs gradient-teal flex flex-col justify-between items-stretch ">
         <div class="flex items-center gap-4 mb-3">
           <div class="icon-box bg-teal-600 text-white">
             <i class="mdi mdi-chart-line text-3xl"></i>
@@ -46,7 +46,7 @@
       </div>
 
       <!-- VX Balances -->
-      <div class="card-box gradient-yellow flex flex-col justify-between p-4">
+      <div class="card-boxs gradient-yellow flex flex-col justify-between items-stretch ">
         <div class="flex items-center gap-4 mb-3">
           <div class="icon-box bg-yellow-600 text-white">
             <i class="mdi mdi-account-group text-3xl"></i>
@@ -487,6 +487,23 @@ watch(
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
   }
+
+    .card-boxs {
+    display: flex;
+   align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+
+
+
+
+
+
   .card-box:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
