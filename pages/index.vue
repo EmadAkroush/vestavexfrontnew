@@ -57,8 +57,9 @@
       </div>
 
       <!-- 🔥 FLOATING ILLUSTRATION -->
-      <div class="absolute bottom-[-60px] sm:bottom-[-80px] animate-floating">
-      </div>
+      <div
+        class="absolute bottom-[-60px] sm:bottom-[-80px] animate-floating"
+      ></div>
     </section>
 
     <!-- FEATURE SECTION -->
@@ -161,7 +162,7 @@ function initThreeBG(container) {
     cubes.push(cube);
   }
 
-  const light = new THREE.PointLight(0x7C3AED, 7);
+  const light = new THREE.PointLight(0x7c3aed, 7);
   light.position.set(2, 2, 3);
   scene.add(light);
 
@@ -188,16 +189,16 @@ const features = [
       "Our unique combination of technology and trading strategies delivers consistent passive income to investors.",
   },
   {
-    title: "VX Plan System",
+    title: "Trading Automation",
     icon: "mdi mdi-family-tree",
     description:
-      "Earn through your network with our binary VX Plan — unlock up to 10x rewards based on your investment.",
+      "Precision-driven algorithms.Dynamic risk control.Real-time execution for consistent performance.",
   },
   {
-    title: "Bundles & Packages",
+    title: "Staking Solutions",
     icon: "mdi mdi-package-variant-closed",
     description:
-      "Choose from flexible investment bundles with monthly yields from 3% up to 8%.",
+      "Secure, high-performance staking infrastructure Optimized allocation for sustainable yield Balanced liquidity and risk management Transparent tracking with consistent rewards.",
   },
   {
     title: "Secure Wallet",
@@ -240,11 +241,8 @@ const features = [
   position: absolute;
   width: 200%;
   height: 200%;
-  background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.12) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
   background-size: 40px 40px;
   animation: moveSquares 12s linear infinite;
@@ -286,9 +284,15 @@ const features = [
 }
 
 @keyframes moveGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .gradient-animate {
@@ -297,24 +301,38 @@ const features = [
 }
 
 .feature-title {
-  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
+  background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: titleGradient 6s ease infinite, floatTitle 4s ease-in-out infinite;
+  animation:
+    titleGradient 6s ease infinite,
+    floatTitle 4s ease-in-out infinite;
   text-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
 }
 
 @keyframes titleGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes floatTitle {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .home {
@@ -326,11 +344,11 @@ const features = [
   }
 
   .p-button-success {
-    background: linear-gradient(135deg, #2563EB, #7C3AED) !important;
+    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
     border: none;
   }
   .p-button-success:hover {
-    background: linear-gradient(135deg, #1E40AF, #6D28D9) !important;
+    background: linear-gradient(135deg, #1e40af, #6d28d9) !important;
   }
 
   .Htext {
@@ -371,9 +389,15 @@ const features = [
 }
 
 @keyframes floating {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .animate-floating {
