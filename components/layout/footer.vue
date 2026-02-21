@@ -21,12 +21,12 @@
         </p>
 
         <!-- Social icons -->
-        <div class="flex items-center gap-4 mt-5">
+        <!-- <div class="flex items-center gap-4 mt-5">
           <a href="#" class="footer-icon"><i class="mdi mdi-telegram"></i></a>
           <a href="#" class="footer-icon"><i class="mdi mdi-twitter"></i></a>
           <a href="#" class="footer-icon"><i class="mdi mdi-linkedin"></i></a>
           <a href="#" class="footer-icon"><i class="mdi mdi-youtube"></i></a>
-        </div>
+        </div> -->
       </div>
 
       <!-- Quick links -->
@@ -34,10 +34,10 @@
         <h3 class="footer-title">Quick Links</h3>
         <ul class="footer-list">
           <li><nuxt-link to="/" class="footer-link">Home</nuxt-link></li>
-          <li><nuxt-link to="/bundles" class="footer-link">Bundles</nuxt-link></li>
+          <li><nuxt-link to="/abouteus" class="footer-link">About Us</nuxt-link></li>
           <!-- <li><nuxt-link to="/addfunds" class="footer-link">Add Funds</nuxt-link></li>
           <li><nuxt-link to="/vxplan" class="footer-link">VX Plan</nuxt-link></li> -->
-          <li><nuxt-link to="/support" class="footer-link">Support</nuxt-link></li>
+          <!-- <li><nuxt-link to="/support" class="footer-link">Support</nuxt-link></li> -->
         </ul>
       </div>
 
@@ -54,21 +54,21 @@
 
       <!-- Contact -->
       <div>
-        <h3 class="footer-title">Contact Us</h3>
+        <!-- <h3 class="footer-title">Contact Us</h3>
         <ul class="footer-list space-y-4">
           <li class="footer-contact">
             <i class="mdi mdi-email-outline text-blue-400 text-xl"></i>
             <a href="mailto:support@VXBUSINESS.com">support@VXBUSINESS.com</a>
           </li>
-          <!-- <li class="footer-contact">
+          <li class="footer-contact">
             <i class="mdi mdi-map-marker text-blue-400 text-xl"></i>
             <span>London, UK</span>
           </li>
           <li class="footer-contact">
             <i class="mdi mdi-phone text-blue-400 text-xl"></i>
             <a href="tel:+447712345678">+44 7712 345678</a>
-          </li> -->
-        </ul>
+          </li>
+        </ul> -->
       </div>
     </div>
 
