@@ -23,7 +23,7 @@
       <div class="space-y-5">
         <!-- Email -->
         <div>
-          <label class="login-label">Email</label>
+          <label class="login-label">Email Or VxCode</label>
           <input
             v-model="formData.email"
             type="email"
@@ -182,9 +182,9 @@ const formData = reactive({
 function validateForm() {
   errorsfront.value = [];
 
-  if (!formData.email.includes("@")) {
-    errorsfront.value.push("Email is not valid.");
-  }
+  // if (!formData.email.includes("@")) {
+  //   errorsfront.value.push("Email is not valid.");
+  // }
 
   if (formData.password.length < 6) {
     errorsfront.value.push("Password must be at least 6 characters.");
@@ -215,6 +215,7 @@ async function login() {
       : ["Login failed. Please try again."];
   } finally {
     loading.value = false;
+     window.location.reload();
   }
 }
 </script>
