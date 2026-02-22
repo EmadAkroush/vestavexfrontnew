@@ -2,7 +2,8 @@
   <div class="dashboard space-y-10 p-4 sm:p-8">
     <!-- ===== Header Section ===== -->
     <div class="text-center mb-6">
-      <h1 class="text-3xl font-bold text-white">Welcome Back, Investor 👋</h1>
+      <h1 class="text-3xl font-bold text-white">Welcome Back,  {{ authUser?.user?.firstName }} 👋</h1>
+     
       <p class="text-gray-300 mt-2">
         Track your financial growth, portfolio, and VX rewards — all in one
         place.
