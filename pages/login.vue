@@ -202,15 +202,19 @@ async function login() {
       method: "POST",
       body: formData,
     });
-
+    console.log("fgfgfg", user);
+    
+    // Set user in auth composable/store if available
+    const { authUser } = useAuth();
     authUser.value = user;
+    
+    await navigateTo("/account");
   } catch (error) {
-    errorsfront.value = Object.values(
-      error?.data?.data 
-    ).flat();
+    errorsfront.value = error?.data?.data 
+      ? Object.values(error.data.data).flat() 
+      : ["Login failed. Please try again."];
   } finally {
     loading.value = false;
-    window.location.reload();
   }
 }
 </script>
