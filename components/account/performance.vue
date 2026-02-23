@@ -1,15 +1,18 @@
 <template>
-  <div class="dashboard space-y-10 p-4 sm:p-8">
+  <div class="dashboard space-y-10 p-2 sm:p-8">
     <!-- ===== Header Section ===== -->
     <div class="text-center mb-6">
-      <h1 class="text-3xl font-bold text-white">Welcome Back,  {{ authUser?.user?.firstName }} 👋</h1>
-     
+      <h1 class="text-3xl font-bold text-white">
+        Welcome Back, {{ authUser?.user?.firstName }} 👋
+      </h1>
+
       <p class="text-gray-300 mt-2">
         Track your financial growth, portfolio, and VX rewards — all in one
         place.
       </p>
     </div>
     <!-- ===== Stats Overview (Modern Dark) ===== -->
+    <div v-if="startP">Start: {{ formattedStartP }}</div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Main Balance -->
       <div class="card-box gradient-blue flex items-center gap-4">
@@ -24,8 +27,36 @@
         </div>
       </div>
 
+      <!-- Max Cap Balance -->
+      <div class="card-box gradient-indigo flex items-center gap-4">
+        <div class="icon-box bg-indigo-600 text-white">
+          <i class="mdi mdi-trending-up text-3xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-200 text-sm">Max Cap Balance</p>
+          <h3 class="text-2xl font-bold text-white">
+            ${{ format2(balances.maxCapBalance) }}
+          </h3>
+        </div>
+      </div>
+
+            <!-- VX Wallet -->
+      <div class="card-box gradient-purple flex items-center gap-4">
+        <div class="icon-box bg-purple-600 text-white">
+          <i class="mdi mdi-wallet-outline text-3xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-200 text-sm">Withdrawal Total</p>
+          <h3 class="text-2xl font-bold text-white">
+            ${{ format2(balances.withdrawalTotalBalance) }}
+          </h3>
+        </div>
+      </div>
+
       <!-- Profits Wallet -->
-      <div class="card-boxs gradient-teal flex flex-col justify-between items-stretch ">
+      <div
+        class="card-boxs gradient-teal flex flex-col justify-between items-stretch"
+      >
         <div class="flex items-center gap-4 mb-3">
           <div class="icon-box bg-teal-600 text-white">
             <i class="mdi mdi-chart-line text-3xl"></i>
@@ -47,7 +78,9 @@
       </div>
 
       <!-- VX Balances -->
-      <div class="card-boxs gradient-yellow flex flex-col justify-between items-stretch ">
+      <div
+        class="card-boxs gradient-yellow flex flex-col justify-between items-stretch"
+      >
         <div class="flex items-center gap-4 mb-3">
           <div class="icon-box bg-yellow-600 text-white">
             <i class="mdi mdi-account-group text-3xl"></i>
@@ -68,18 +101,7 @@
         />
       </div>
 
-      <!-- VX Wallet -->
-      <div class="card-box gradient-purple flex items-center gap-4">
-        <div class="icon-box bg-purple-600 text-white">
-          <i class="mdi mdi-wallet-outline text-3xl"></i>
-        </div>
-        <div>
-          <p class="text-gray-200 text-sm">Withdrawal Total</p>
-          <h3 class="text-2xl font-bold text-white">
-            ${{ format2(balances.withdrawalTotalBalance) }}
-          </h3>
-        </div>
-      </div>
+
     </div>
 
     <!-- ===== Charts Section ===== -->
@@ -134,9 +156,7 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Right Volume</span>
-              <span class="font-semibold text-white"
-                >${{ format2(560) }}</span
-              >
+              <span class="font-semibold text-white">${{ format2(560) }}</span>
             </div>
 
             <Button
@@ -190,7 +210,6 @@ import { useToast } from "primevue/usetoast";
 const { authUser } = useAuth();
 const inviteLoading = ref(false);
 
-
 // ✅ formatter for 2 decimal places
 const format2 = (val) => Number(val || 0).toFixed(2);
 
@@ -216,10 +235,23 @@ const vxCode = ref();
 
 const toast = useToast();
 const activities = ref([]);
+const startP = ref();
 
 /* ======================
    ✅ API Calls (Backend)
    ====================== */
+
+const formattedStartP = computed(() => {
+  if (!startP.value) return "";
+
+  const date = new Date(startP.value);
+
+  // اگر میلادی می‌خوای:
+  return date.toLocaleDateString("en-GB"); // 22/12/2025
+
+  // اگر شمسی می‌خوای:
+  // return date.toLocaleDateString("fa-IR"); // ۱۴۰۴/۱۰/۰۱
+});
 
 async function handleInvite() {
   // ⛔ اکانت فعال نیست
@@ -405,6 +437,31 @@ async function loadReferralTree() {
   }
 }
 
+onMounted(async () => {
+  try {
+    if (!authUser.value?.user?.id) return;
+
+    const res = await $fetch("/api/investments/my", {
+      method: "POST",
+      body: {
+        userId: authUser.value.user.id,
+      },
+    });
+    console.log("dddd", res);
+    startP.value = res[0].startDate;
+    // 🔁 Map backend data to UI format
+  } catch (e) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load investments",
+      life: 3000,
+    });
+  } finally {
+    loading.value = false;
+  }
+});
+
 const lineOptions = {
   plugins: {
     legend: { display: false },
@@ -482,7 +539,6 @@ watch(
 
 <style lang="scss" scoped>
 .dashboard {
- 
   .card-box {
     display: flex;
     align-items: center;
@@ -493,21 +549,15 @@ watch(
     transition: all 0.3s ease;
   }
 
-    .card-boxs {
+  .card-boxs {
     display: flex;
-   align-items: stretch;
+    align-items: stretch;
     gap: 1rem;
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
   }
-
-
-
-
-
-
 
   .card-box:hover {
     transform: translateY(-5px);
@@ -541,6 +591,9 @@ watch(
     background: linear-gradient(135deg, #1f1f2f, #2b2b3c);
     border-radius: 1rem;
     color: white;
+  }
+  .gradient-indigo {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
   }
 }
 
