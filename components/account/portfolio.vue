@@ -87,7 +87,10 @@
                   <span>Progress</span>
                   <span>{{ item.progress }}%</span>
                 </div>
-               <ProgressBar :value="modalData.progress" class="mt-3 custom-progress" />
+                <ProgressBar
+                  :value="modalData.progress"
+                  class="mt-3 custom-progress"
+                />
               </div>
             </div>
           </template>
@@ -196,7 +199,6 @@
         </div>
       </transition>
     </div>
-    <!-- INVEST DIALOG -->
     <Dialog
       v-model:visible="visibleInvest"
       modal
@@ -206,13 +208,38 @@
       <div class="space-y-4">
         <label class="text-[#C7D2FE] font-medium">Amount (USD)</label>
 
-        <InputNumber
-          v-model="investAmount"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-          class="w-full custom-input"
-        />
+        <!-- Input + MAX Button -->
+        <div class="flex gap-2 items-center">
+          <InputNumber
+            v-model="investAmount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            class="w-full custom-input"
+            :min="0"
+            :max="balances.mainBalance"
+          />
+
+          <Button
+            label="MAX"
+            class="max-btn"
+            @click="setMaxAmount"
+            :disabled="!balances.mainBalance"
+          />
+        </div>
+
+        <!-- Balance Display -->
+        <div class="flex justify-between text-sm mt-2">
+          <span class="text-gray-400">Available Balance:</span>
+          <span
+            class="font-semibold"
+            :class="
+              balances.mainBalance > 0 ? 'text-green-400' : 'text-red-400'
+            "
+          >
+            ${{ balances.mainBalance?.toLocaleString() }}
+          </span>
+        </div>
       </div>
 
       <template #footer>
@@ -225,6 +252,7 @@
           <Button
             label="Confirm"
             class="confirm-btn"
+            :disabled="!investAmount || investAmount > balances.mainBalance"
             @click="confirmInvestment"
           />
         </div>
@@ -239,41 +267,39 @@
       class="custom-dialog max-w-lg w-full"
     >
       <div class="space-y-4">
-        <h3 class="text-xl font-bold text-[#C7D2FE]">
+        <h3 class="text-xl font-bold text-gray-900">
           {{ modalData.type }}
         </h3>
 
-        <p class="text-sm text-gray-400">
+        <p class="text-sm text-gray-700 font-medium">
           Duration:
-          <span class="font-semibold text-[#C7D2FE]">
+          <span class="font-semibold text-gray-900">
             {{ modalData.start }} → {{ modalData.end }}
           </span>
         </p>
 
-        <p class="text-[#C7D2FE]">
+        <p class="text-gray-800 font-medium">
           Invested Amount:
-          <span class="font-semibold text-[#2563EB]">
+          <span class="font-semibold text-blue-600">
             ${{ modalData.amount }}
           </span>
         </p>
 
-        <p class="text-[#C7D2FE]">
+        <p class="text-gray-800 font-medium">
           Profit Rate:
-          <span class="font-semibold text-[#7C3AED]">
+          <span class="font-semibold text-purple-600">
             {{ modalData.profit }}% / month
           </span>
         </p>
 
-        <p class="text-[#C7D2FE]">
+        <p class="text-gray-800 font-medium">
           Progress:
-          <span class="font-semibold text-[#4F46E5]">
+          <span class="font-semibold text-indigo-600">
             {{ modalData.progress }}%
           </span>
         </p>
 
         <ProgressBar :value="modalData.progress" class="mt-3 custom-progress" />
-
-        
       </div>
 
       <template #footer>
@@ -309,6 +335,38 @@ const loading = ref(true);
 const selectedBundle = ref(null);
 const visibleInvest = ref(false);
 const investAmount = ref(null);
+
+const balances = ref({
+  mainBalance: 0,
+  maxCapBalance: 0,
+  withdrawalTotalBalance: 0,
+  profitBalance: 0,
+  referralBalance: 0,
+  bonusBalance: 0,
+});
+
+function setMaxAmount() {
+  investAmount.value = balances.value.mainBalance || 0;
+}
+
+async function fetchBalances() {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) return;
+    const res = await $fetch("/api/balances", {
+      method: "POST",
+      body: { userId },
+    });
+    balances.value = res;
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error loading balances",
+      detail: error?.data?.message || "Failed to fetch balances",
+      life: 4000,
+    });
+  }
+}
 
 function openInvestDialog(item) {
   console.log("ITEM from grid:", item);
@@ -486,12 +544,29 @@ const openPlanModal = (item) => {
   modalData.value = item;
   showModal.value = true;
 };
+
+onMounted(() => {
+  if (authUser?.value?.user?.id) {
+    fetchBalances();
+  }
+});
 </script>
 
 <style lang="scss" scoped>
 /* ===== Dialog Background ===== */
 
+.max-btn {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  color: white;
+  font-size: 12px;
+  padding: 6px 12px;
+  height: 38px;
+}
 
+.max-btn:hover {
+  opacity: 0.9;
+}
 
 .custom-dialog :deep(.p-dialog) {
   background: #0f172a;
@@ -592,7 +667,5 @@ const openPlanModal = (item) => {
   .progress-bar-gradient .p-progressbar-value {
     background: #2563eb !important;
   }
-
 }
-
 </style>

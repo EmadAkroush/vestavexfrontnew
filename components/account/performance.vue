@@ -222,6 +222,8 @@ const balances = ref({
   referralBalance: 0,
   bonusBalance: 0,
 });
+
+
 const profitChart = ref({
   labels: null,
   datasets: [],
