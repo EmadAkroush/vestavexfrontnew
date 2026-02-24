@@ -100,15 +100,36 @@
       modal
       :header="'Invest in ' + (selectedBundle?.title || '')"
     >
-      <div class="space-y-3">
+      <div class="space-y-4">
         <label>Amount (USD)</label>
-        <InputNumber
-          v-model="investAmount"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-          class="w-full"
-        />
+
+        <!-- Input + Max button -->
+        <div class="flex gap-2 items-center">
+          <InputNumber
+            v-model="investAmount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            class="w-full"
+            :min="0"
+            :max="balances.mainBalance"
+          />
+
+          <Button
+            label="Max"
+            class="p-button-sm"
+            style="background: #8b5cf6; border: none; color: white"
+            @click="setMaxAmount"
+          />
+        </div>
+
+        <!-- Balance display -->
+        <div class="text-sm text-indigo-500 mt-2 flex justify-between">
+          <span>Available Balance:</span>
+          <span class="font-semibold text-indigo-700">
+            ${{ balances.mainBalance?.toLocaleString() }}
+          </span>
+        </div>
       </div>
 
       <template #footer>
@@ -150,6 +171,38 @@ const loading = ref(true);
 
 const { authUser } = useAuth();
 const router = useRouter();
+
+const balances = ref({
+  mainBalance: 0,
+  maxCapBalance: 0,
+  withdrawalTotalBalance: 0,
+  profitBalance: 0,
+  referralBalance: 0,
+  bonusBalance: 0,
+});
+
+function setMaxAmount() {
+  investAmount.value = balances.value.mainBalance || 0;
+}
+
+async function fetchBalances() {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) return;
+    const res = await $fetch("/api/balances", {
+      method: "POST",
+      body: { userId },
+    });
+    balances.value = res;
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error loading balances",
+      detail: error?.data?.message || "Failed to fetch balances",
+      life: 4000,
+    });
+  }
+}
 
 onMounted(async () => {
   try {
@@ -241,6 +294,12 @@ async function confirmInvestment() {
     });
   }
 }
+
+onMounted(() => {
+  if (authUser?.value?.user?.id) {
+    fetchBalances();
+  }
+});
 </script>
 
 <style scoped lang="scss">
