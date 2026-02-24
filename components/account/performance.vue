@@ -40,7 +40,7 @@
         </div>
       </div>
 
-            <!-- VX Wallet -->
+      <!-- VX Wallet -->
       <div class="card-box gradient-purple flex items-center gap-4">
         <div class="icon-box bg-purple-600 text-white">
           <i class="mdi mdi-wallet-outline text-3xl"></i>
@@ -73,6 +73,7 @@
           icon="mdi mdi-arrow-right-bold"
           class="p-button-sm p-button-outlined border-white text-white w-full"
           @click="transferToMain('profit')"
+          :disabled="!canTransferProfit"
           :loading="loadingTransfer === 'profit'"
         />
       </div>
@@ -97,10 +98,10 @@
           icon="mdi mdi-arrow-right-bold"
           class="p-button-sm p-button-outlined border-white text-white w-full"
           @click="transferToMain('referral')"
+          :disabled="!canTransferReferral"
           :loading="loadingTransfer === 'referral'"
         />
       </div>
-
 
     </div>
 
@@ -209,6 +210,9 @@ import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 const { authUser } = useAuth();
 const inviteLoading = ref(false);
+
+const canTransferProfit = computed(() => balances.value.profitBalance > 0);
+const canTransferReferral = computed(() => balances.value.referralBalance > 0);
 
 // ✅ formatter for 2 decimal places
 const format2 = (val) => Number(val || 0).toFixed(2);
