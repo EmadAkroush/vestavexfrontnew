@@ -20,7 +20,7 @@
           <i class="mdi mdi-cash-multiple text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-200 text-sm">Main Balance</p>
+          <p class="text-gray-200 text-sm"> Main Wallet</p>
           <h3 class="text-2xl font-bold text-white">
             ${{ format2(balances.mainBalance) }}
           </h3>
@@ -62,7 +62,7 @@
             <i class="mdi mdi-chart-line text-3xl"></i>
           </div>
           <div>
-            <p class="text-gray-200 text-sm">Profits Balances</p>
+            <p class="text-gray-200 text-sm">Profits Wallet</p>
             <h3 class="text-2xl font-bold text-white">
               ${{ format2(balances.profitBalance) }}
             </h3>
@@ -86,7 +86,7 @@
             <i class="mdi mdi-account-group text-3xl"></i>
           </div>
           <div>
-            <p class="text-gray-200 text-sm">VX Balances</p>
+            <p class="text-gray-200 text-sm">VX Wallet</p>
             <h3 class="text-2xl font-bold text-white">
               ${{ format2(balances.referralBalance) }}
             </h3>
@@ -109,7 +109,7 @@
       <!-- Profits Chart -->
       <Card class="shadow-md gradient-card">
         <template #title class="text-white font-semibold">
-          Profits Balances</template
+          Profit MaxCap</template
         >
         <template #content>
           <Chart type="line" :data="profitChart" :options="lineOptions" />
@@ -119,7 +119,7 @@
       <!-- VX Chart -->
       <Card class="shadow-md gradient-card">
         <template #title class="text-white font-semibold">
-          VX Balances</template
+          VX Plan MaxCap</template
         >
         <template #content>
           <Chart type="line" :data="vxChart" :options="lineOptions" />
