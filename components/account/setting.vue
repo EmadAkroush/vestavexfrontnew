@@ -283,7 +283,7 @@ const toast = useToast();
 const { authUser } = useAuth();
 
 const profile = ref({
-  username: "",
+
   firstName: "",
   lastName: "",
   phone: "",
@@ -454,7 +454,6 @@ const saveProfile = async () => {
       method: "POST",
       body: {
         userId,
-        username: profile.value.username,
         firstName: profile.value.firstName,
         lastName: profile.value.lastName,
         phone: profile.value.phone,
