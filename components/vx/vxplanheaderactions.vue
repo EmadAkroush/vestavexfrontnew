@@ -12,22 +12,7 @@
 
     <!-- Actions -->
     <div class="flex items-center gap-3 flex-wrap">
-      <Button
-        icon="mdi mdi-magnify-minus"
-        class="p-button-rounded vx-btn-circle"
-        @click="$emit('zoom-out')"
-      />
-      <Button
-        icon="mdi mdi-magnify-plus"
-        class="p-button-rounded vx-btn-circle"
-        @click="$emit('zoom-in')"
-      />
-      <Button
-        icon="mdi mdi-restore"
-        class="p-button-rounded vx-btn-circle"
-        @click="$emit('reset-zoom')"
-      />
-
+   
       <Button
         label="Activate VX Code ($5)"
         icon="mdi mdi-key"

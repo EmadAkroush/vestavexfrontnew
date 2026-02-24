@@ -21,15 +21,13 @@
 
     <!-- Zoom Buttons -->
     <div class="my-2 flex gap-2">
+      <Button icon="mdi mdi-magnify-minus" class="zoom-btn" @click="zoomOut" />
+      <Button icon="mdi mdi-magnify-plus" class="zoom-btn" @click="zoomIn" />
+
       <Button
-        icon="mdi mdi-magnify-minus"
+        icon="mdi mdi-restore"
         class="zoom-btn"
-        @click="zoomOut"
-      />
-      <Button
-        icon="mdi mdi-magnify-plus"
-        class="zoom-btn"
-        @click="zoomIn"
+        @click="resetZoom"
       />
     </div>
 
@@ -109,7 +107,6 @@
     <Toast />
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -397,7 +394,6 @@ onMounted(async () => {
 </script>
 <style scoped>
 .vx-plan-page {
-
   min-height: 100vh;
   padding: 20px;
 }
@@ -407,8 +403,8 @@ onMounted(async () => {
   width: 100%;
   height: 80vh;
   overflow: auto;
-  background: linear-gradient(135deg, #0F172A, #020617);
-  border: 1px solid #4F46E5;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  border: 1px solid #4f46e5;
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 20px 60px rgba(79, 70, 229, 0.15);
@@ -421,15 +417,15 @@ onMounted(async () => {
   align-items: center;
   text-align: center;
   background: #020617;
-  border: 1px solid #4F46E5;
+  border: 1px solid #4f46e5;
   border-radius: 14px;
   padding: 12px;
   transition: all 0.2s ease;
-  color: #C7D2FE;
+  color: #c7d2fe;
 }
 
 .node-card:hover {
-  background: #4F46E5;
+  background: #4f46e5;
   transform: translateY(-2px);
 }
 
@@ -440,18 +436,18 @@ onMounted(async () => {
   border-radius: 999px;
   object-fit: cover;
   margin-bottom: 6px;
-  border: 2px solid #4F46E5;
+  border: 2px solid #4f46e5;
 }
 
 /* Texts */
 .node-name {
   font-weight: 600;
-  color: #C7D2FE;
+  color: #c7d2fe;
 }
 
 .node-email {
   font-size: 12px;
-  color: #94A3B8;
+  color: #94a3b8;
 }
 
 /* Actions */
@@ -464,37 +460,37 @@ onMounted(async () => {
 .node-btn {
   background: rgba(79, 70, 229, 0.15) !important;
   border: none !important;
-  color: #C7D2FE !important;
+  color: #c7d2fe !important;
   border-radius: 10px !important;
 }
 
 .node-btn:hover {
-  background: #4F46E5 !important;
+  background: #4f46e5 !important;
   color: white !important;
 }
 
 /* Zoom Buttons */
 .zoom-btn {
-  background: #4F46E5 !important;
+  background: #4f46e5 !important;
   border: none !important;
   color: white !important;
 }
 
 .zoom-btn:hover {
-  background: #7C3AED !important;
+  background: #7c3aed !important;
 }
 
 /* Default Node */
 .default-node {
   padding: 6px;
   font-weight: 500;
-  color: #C7D2FE;
+  color: #c7d2fe;
 }
 
 /* Organization Chart Lines */
 ::v-deep(.p-organizationchart-line-down),
 ::v-deep(.p-organizationchart-line-left),
 ::v-deep(.p-organizationchart-line-right) {
-  border-color: #4F46E5 !important;
+  border-color: #4f46e5 !important;
 }
 </style>
