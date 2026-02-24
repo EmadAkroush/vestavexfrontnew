@@ -1,10 +1,13 @@
 <template>
   <div class="vx-plan-page">
     <!-- Header / Actions -->
+
     <VxPlanHeaderActions
       @zoom-in="zoomIn"
       @zoom-out="zoomOut"
       @reset-zoom="resetZoom"
+      :isVxActive="isVxActive"
+      :vxCode="vxCode"
       @activate="onActivateClick"
     />
 
@@ -24,11 +27,7 @@
       <Button icon="mdi mdi-magnify-minus" class="zoom-btn" @click="zoomOut" />
       <Button icon="mdi mdi-magnify-plus" class="zoom-btn" @click="zoomIn" />
 
-      <Button
-        icon="mdi mdi-restore"
-        class="zoom-btn"
-        @click="resetZoom"
-      />
+      <Button icon="mdi mdi-restore" class="zoom-btn" @click="resetZoom" />
     </div>
 
     <!-- Chart Container -->
@@ -151,6 +150,9 @@ const flushOut = ref(0);
 const vxcCount = ref(0);
 const accountCapacity = ref(0);
 
+const isVxActive = ref(false);
+const vxCode = ref("");
+
 /* =========================
    COMPUTED
 ========================= */
@@ -158,6 +160,49 @@ const accountCapacity = ref(0);
 /* =========================
    API CALLS
 ========================= */
+
+// 🟢 Load current user data from backend
+onMounted(async () => {
+  try {
+   
+
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Not Logged In",
+        detail: "Please log in to view your account.",
+        life: 3000,
+      });
+      return;
+    }
+
+    const user = await $fetch("/api/account/find", {
+      method: "POST",
+      body: { id: userId },
+    });
+
+    console.log("user", user);
+    if (user) {
+      isVxActive.value = user.activeVxCode;
+      vxCode.value = user.vxCode || "";
+    }
+
+  
+  } catch (err) {
+    console.error("Profile load error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load user data.",
+      life: 4000,
+    });
+  } finally {
+
+  }
+});
+
+
 
 function mapNode(node) {
   if (!node) return null;

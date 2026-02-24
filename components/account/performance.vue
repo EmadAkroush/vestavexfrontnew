@@ -163,7 +163,7 @@
             <Button
               label="Invite More"
               icon="mdi mdi-account-plus-outline"
-              class="p-button-success mt-2"
+              class="invite mt-2"
               :loading="inviteLoading"
               @click="handleInvite"
             />
@@ -606,5 +606,22 @@ watch(
 /* Chart global overrides for white lines/text on dark background */
 canvas {
   color: white !important;
+}
+
+.vx-btn-activate:hover {
+  background: linear-gradient(90deg, #4f46e5, #7c3aed) !important;
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.45);
+}
+
+.invite {
+  background: linear-gradient(90deg, #2563eb, #4f46e5) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.invite:hover {
+  background: linear-gradient(90deg, #4f46e5, #7c3aed) !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
 }
 </style>
