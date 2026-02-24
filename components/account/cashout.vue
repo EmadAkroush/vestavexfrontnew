@@ -54,7 +54,7 @@
                 currency="USD"
                 locale="en-US"
                 class="w-full custom-input"
-                :max="balances.withdrawalTotalBalance"
+                :max="balances.mainBalance"
                 :disabled="!walletAllowed"
               />
 
@@ -62,7 +62,7 @@
                 label="MAX"
                 class="max-btn"
                 @click="setMaxAmount"
-                :disabled="!walletAllowed || !balances.withdrawalTotalBalance"
+                :disabled="!walletAllowed || !balances.mainBalance"
               />
             </div>
 
@@ -70,7 +70,7 @@
             <div class="flex justify-between text-xs mt-2">
               <span class="text-gray-400">Available Balance:</span>
               <span class="text-green-400 font-semibold">
-                ${{ balances.withdrawalTotalBalance?.toLocaleString() }}
+                ${{ balances.mainBalance?.toLocaleString() }}
               </span>
             </div>
 
@@ -89,7 +89,7 @@
               !walletAllowed ||
               !amount ||
               amount < 50 ||
-              amount > balances.withdrawalTotalBalance
+              amount > balances.mainBalance
             "
             @click="nextStep"
           />
@@ -99,7 +99,7 @@
 
  
 
-    <!-- ===== Step 3 ===== -->
+    <!-- ===== Step 2 ===== -->
     <transition name="fade">
       <div v-if="currentStep === 1">
         <Card class="custom-card">
@@ -116,15 +116,7 @@
               <span>Crypto</span>
             </div>
 
-            <div v-if="method === 'crypto'" class="mt-5">
-              <Dropdown
-                v-model="selectedCryptoWallet"
-                :options="userWallets"
-                optionLabel="name"
-                placeholder="Select your crypto wallet"
-                class="w-full custom-dropdown"
-              />
-            </div>
+           
           </template>
         </Card>
 
@@ -140,9 +132,7 @@
             icon="mdi mdi-check"
             class="primary-btn px-6 py-2"
             :loading="loading"
-            :disabled="
-              !method || (method === 'crypto' && !selectedCryptoWallet)
-            "
+            :disabled="!method"
             @click="completeCashout"
           />
         </div>
@@ -215,7 +205,7 @@ const walletAllowed = ref(false); // 🟢 ولت اجازه برداشت
 
 
 function setMaxAmount() {
-  amount.value = balances.value.withdrawalTotalBalance || 0;
+  amount.value = balances.value.mainBalance || 0;
 }
 
 const userWallets = [{ name: "main Wallet - TRC20", network: "TRON" }];
