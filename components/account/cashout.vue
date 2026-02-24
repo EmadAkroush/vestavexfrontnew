@@ -186,6 +186,17 @@ import { ref, onMounted, computed } from "vue";
 
 const { authUser } = useAuth();
 
+// ✅ Reactive states
+const balances = ref({
+  mainBalance: 0,
+  maxCapBalance: 0,
+  withdrawalTotalBalance: 0,
+  profitBalance: 0,
+  referralBalance: 0,
+  bonusBalance: 0,
+});
+
+
 /* ===== State ===== */
 const currentStep = ref(0);
 const selectedWallet = ref(null);
@@ -246,6 +257,27 @@ onMounted(async () => {
 });
 
 
+async function fetchBalances() {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) return;
+    const res = await $fetch("/api/balances", {
+      method: "POST",
+      body: { userId },
+    });
+    balances.value = res;
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error loading balances",
+      detail: error?.data?.message || "Failed to fetch balances",
+      life: 4000,
+    });
+  }
+}
+
+
+
 /* ===== Submit Withdrawal ===== */
 const completeCashout = async () => {
   try {
@@ -279,6 +311,18 @@ const resetSteps = () => {
   selectedCryptoWallet.value = null;
   transactionId.value = "";
 };
+
+onMounted(() => {
+  if (authUser?.value?.user?.id) {
+    fetchBalances();
+
+  }
+});
+
+
+
+
+
 </script>
 
 <style lang="scss" scoped>
