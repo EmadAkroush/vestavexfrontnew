@@ -14,12 +14,7 @@
     <!-- Summary cards -->
     <VXPlanSummary
       :root="root"
-      :totalTeamVolume="totalTeamVolume"
-      :totalTeamCount="totalTeamCount"
-      :accountCapacity="accountCapacity"
-      :usedCapacity="usedCapacity"
-      :flushOut="flushOut"
-      :vxcCount="vxcCount"
+      :userInfo="userinfo"
     />
 
     <!-- Zoom Buttons -->
@@ -117,9 +112,18 @@ import VxPlanHeaderActions from "@/components/vx/vxplanheaderactions.vue";
 import VXPlanSummary from "@/components/vx/vxplansummary.vue";
 import VXNodeDetailsDialog from "@/components/vx/shownodedetails.vue";
 
+const userinfo = ref();
+
 /* =========================
    SAFE DEFAULT TREE
 ========================= */
+
+
+
+
+
+
+
 const emptyTree = {
   key: "root",
   type: "person",
@@ -141,14 +145,8 @@ const selection = ref({});
 
 const showNodeDetails = ref(false);
 const selectedNode = ref(null);
-
-const totalTeamVolume = ref(0);
-const totalTeamCount = ref(0);
 const accountBalance = ref(0);
-const usedCapacity = ref(0);
-const flushOut = ref(0);
-const vxcCount = ref(0);
-const accountCapacity = ref(0);
+
 
 const isVxActive = ref(false);
 const vxCode = ref("");
@@ -182,10 +180,13 @@ onMounted(async () => {
       body: { id: userId },
     });
 
+ 
+
     console.log("user", user);
     if (user) {
       isVxActive.value = user.activeVxCode;
       vxCode.value = user.vxCode || "";
+      userinfo.value = user
     }
 
   
@@ -276,24 +277,7 @@ async function loadReferralTree() {
   }
 }
 
-async function loadStats() {
-  try {
-    const res = await $fetch("/api/referrals/stats", {
-      method: "POST",
-      body: { userId },
-    });
 
-    totalTeamVolume.value = res.totalTeamVolume;
-    totalTeamCount.value = res.totalMembers;
-    usedCapacity.value = res.usedCapacity;
-    flushOut.value = res.flushOut;
-    vxcCount.value = res.vxc;
-    accountBalance.value = res.baseInvestment;
-    accountCapacity.value = res.accountCapacity;
-  } catch (e) {
-    console.error(e);
-  }
-}
 
 /* =========================
    NODE DETAILS
@@ -440,7 +424,7 @@ onMounted(async () => {
 <style scoped>
 .vx-plan-page {
   min-height: 100vh;
-  padding: 20px;
+  padding: 0px;
 }
 
 /* Chart Wrapper */
