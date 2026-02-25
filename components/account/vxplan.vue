@@ -65,7 +65,7 @@
               </div>
 
               <div class="node-email">
-                {{ slotProps.node.data.title }}
+                {{ slotProps.node.data.vxCode }}
               </div>
 
               <div class="node-actions">
