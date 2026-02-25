@@ -7,7 +7,7 @@
       <!-- LOGO -->
       <div class="flex items-center gap-3">
         <img
-          src="/logo.PNG"
+          src="/IMG_0053.PNG"
           class="w-11 h-11 rounded-xl shadow-lg ring-1 ring-blue-400/40"
         />
         <span class="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-violet-500 text-transparent bg-clip-text tracking-wide">
