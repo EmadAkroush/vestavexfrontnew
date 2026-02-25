@@ -10,7 +10,7 @@
       <template #content>
         <div class="flex flex-col md:flex-row items-center gap-6">
           <!-- Avatar Upload -->
-          <div class="flex flex-col items-center">
+          <!-- <div class="flex flex-col items-center">
             <img
               :src="profile.avatar"
               class="w-24 h-24 rounded-full object-cover border mb-2"
@@ -30,7 +30,7 @@
                 },
               }"
             />
-          </div>
+          </div> -->
 
           <!-- User Info -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
@@ -133,7 +133,7 @@
               </div>
             </div>
 
-            <div
+            <!-- <div
               class="md:col-span-2 border p-4"
               style="border-color: #4f46e5; background: #020617"
             >
@@ -166,7 +166,7 @@
                 </label>
 
                 <div class="flex gap-6 green-600">
-                  <!-- LEFT -->
+                
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
@@ -178,7 +178,7 @@
                     <span>Left</span>
                   </label>
 
-                  <!-- RIGHT -->
+           
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
@@ -204,7 +204,7 @@
                   style="background: #7c3aed; border: none; color: white"
                 />
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </template>
@@ -283,7 +283,6 @@ const toast = useToast();
 const { authUser } = useAuth();
 
 const profile = ref({
-
   firstName: "",
   lastName: "",
   phone: "",
@@ -300,6 +299,7 @@ const placeholders = ref({
   phone: "Loading...",
   email: "Loading...",
   wallet: "Loading...",
+
 });
 
 const security = ref({
@@ -348,6 +348,7 @@ onMounted(async () => {
       phone: user.phone || "Enter phone number",
       email: user.email || "Enter email",
       wallet: user.wallet || "Enter wallet address",
+    
     };
   } catch (err) {
     console.error("Profile load error:", err);
