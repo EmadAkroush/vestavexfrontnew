@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <!-- Flush Out -->
+    <!--  VX cycle -->
     <div
       class="bg-white shadow rounded p-4"
       style="background: #0f172a; color: #c7d2fe"
@@ -82,7 +82,7 @@
       </div>
 
       <div class="text-sm text-gray-600" style="color: #c7d2fe">
-        <!-- Cycles:   {{ root }} -->
+        Cycles:   {{ userInfo?.vxCycle }}
       </div>
     </div>
 
