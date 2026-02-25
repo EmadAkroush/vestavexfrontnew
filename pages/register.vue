@@ -74,7 +74,7 @@
             <div>
               <label class="login-label">Referral Code</label>
               <input
-                v-model="form.referral"
+                v-model="form.referrerCode"
                 type="text"
                 class="login-input"
                 placeholder="Referral code"
@@ -177,14 +177,14 @@ const form = reactive({
   lastName: "",
   email: "",
   cellphone: "",
-  referral: "",
+  referrerCode: "",
   password: "",
   c_password: "",
 });
 
 onMounted(() => {
   if (route.query.ref) {
-    form.referral = String(route.query.ref);
+    form.referrerCode = String(route.query.ref);
   }
 });
 
@@ -200,7 +200,7 @@ function validate() {
     errorsFront.value.push("Please enter a valid email address.");
   }
 
-  if (!form.referral.trim()) {
+  if (!form.referrerCode.trim()) {
     errorsFront.value.push("Referral code is required.");
   }
 
@@ -241,7 +241,7 @@ async function submit() {
       router.push("/verifyemail");
     }, 400);
   } catch (err) {
-    errorsFront.value = [err?.data?.message || "Registration error"];
+    errorsFront.value = [err?.data?.data?.message || "Registration error"];
   } finally {
     loading.value = false;
   }
