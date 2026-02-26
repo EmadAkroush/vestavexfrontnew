@@ -67,7 +67,7 @@
                 v-model="form.cellphone"
                 type="text"
                 class="login-input"
-                placeholder="09xxxxxxxxx"
+                placeholder="xxxxxxxxx"
               />
             </div>
 
@@ -81,24 +81,41 @@
                 required
               />
             </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="login-label">Password</label>
-                <input
-                  v-model="form.password"
-                  type="password"
-                  class="login-input"
-                  placeholder="Minimum 6 characters"
-                />
+                <div class="password-wrapper">
+                  <InputText
+                    v-model="form.password"
+                    :type="showPassword ? 'text' : 'password'"
+                    placeholder="Password"
+                    class="auth-input"
+                  />
+                  <i
+                    :class="showPassword ? 'mdi mdi-eye-off' : 'mdi mdi-eye'"
+                    class="toggle-eye"
+                    @click="showPassword = !showPassword"
+                  ></i>
+                </div>
               </div>
               <div>
                 <label class="login-label">Confirm Password</label>
-                <input
-                  v-model="form.c_password"
-                  type="password"
-                  class="login-input"
-                  placeholder="Confirm password"
-                />
+                <div class="password-wrapper">
+                  <InputText
+                    v-model="form.c_password"
+                    :type="showPasswordconform ? 'text' : 'password'"
+                    placeholder="Confirm password"
+                    class="auth-input"
+                  />
+                  <i
+                    :class="
+                      showPasswordconform ? 'mdi mdi-eye-off' : 'mdi mdi-eye'
+                    "
+                    class="toggle-eye"
+                    @click="showPasswordconform = !showPasswordconform"
+                  ></i>
+                </div>
               </div>
             </div>
 
@@ -163,6 +180,9 @@ definePageMeta({ middleware: "guest" });
 import { reactive, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+
+const showPassword = ref(false);
+const showPasswordconform = ref(false);
 
 const router = useRouter();
 const route = useRoute();
@@ -249,6 +269,44 @@ async function submit() {
 </script>
 
 <style scoped lang="scss">
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .auth-input {
+  padding-right: 40px;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ccc;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.toggle-eye:hover {
+  color: #00c6ae;
+}
+
+.auth-input {
+  width: 100%;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 10px 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.auth-input:focus {
+  border-color: #00c6ae;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .register-wrapper {
   background: linear-gradient(180deg, #0f172a 0%, #020617 60%, #030712 100%);
 }
@@ -306,7 +364,6 @@ async function submit() {
 .login-label {
   color: #c7d2fe;
   font-size: 13px;
-  margin-bottom: 6px;
 }
 
 .login-input {
