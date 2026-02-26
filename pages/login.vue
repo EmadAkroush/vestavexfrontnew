@@ -28,19 +28,23 @@
             v-model="formData.email"
             type="email"
             placeholder="example@mail.com"
-            class="login-input"
+            class="auth-input"
           />
         </div>
 
-        <!-- Password -->
-        <div>
-          <label class="login-label">Password</label>
-          <input
+      
+        <div class="password-wrapper mb-4">
+          <InputText
             v-model="formData.password"
-            type="password"
-            placeholder="Enter password"
-            class="login-input"
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            class="auth-input"
           />
+          <i
+            :class="showPassword ? 'mdi mdi-eye-off' : 'mdi mdi-eye'"
+            class="toggle-eye"
+            @click="showPassword = !showPassword"
+          ></i>
         </div>
 
         <!-- Errors -->
@@ -81,20 +85,64 @@
 
 <style scoped lang="scss">
 /* BACKGROUND */
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .auth-input {
+  padding-right: 40px;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ccc;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.toggle-eye:hover {
+  color: #00c6ae;
+}
+
+.auth-input {
+  width: 100%;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 10px 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.auth-input:focus {
+  border-color: #00c6ae;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .login-wrapper {
-  background: linear-gradient(180deg, #0F172A 0%, #020617 100%);
+  background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
 }
 
 /* GLOW */
 .login-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 30% 20%,
       rgba(79, 70, 229, 0.25),
       transparent 50%
     ),
-    radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.22), transparent 55%);
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(124, 58, 237, 0.22),
+      transparent 55%
+    );
   filter: blur(65px);
   opacity: 0.6;
 }
@@ -105,14 +153,15 @@
   border: 1px solid rgba(199, 210, 254, 0.12);
   backdrop-filter: blur(18px);
   border-radius: 24px;
-  box-shadow: 0 0 25px rgba(79, 70, 229, 0.12),
+  box-shadow:
+    0 0 25px rgba(79, 70, 229, 0.12),
     inset 0 0 20px rgba(255, 255, 255, 0.03);
 }
 
 /* LABEL */
 .login-label {
   display: block;
-  color: #C7D2FE;
+  color: #c7d2fe;
   font-size: 14px;
   margin-bottom: 6px;
 }
@@ -124,12 +173,12 @@
   border: 1px solid rgba(199, 210, 254, 0.2);
   padding: 12px;
   border-radius: 14px;
-  color: #C7D2FE;
+  color: #c7d2fe;
   outline: none;
   transition: 0.3s;
 
   &:focus {
-    border-color: #4F46E5;
+    border-color: #4f46e5;
     box-shadow: 0 0 12px rgba(79, 70, 229, 0.35);
   }
 }
@@ -138,7 +187,7 @@
 .login-btn {
   width: 100%;
   padding: 12px 0;
-  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
+  background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
   color: white;
   border-radius: 16px;
   font-weight: bold;
@@ -173,6 +222,7 @@ definePageMeta({
 
 const loading = ref(false);
 const errorsfront = ref([]);
+const showPassword = ref(false);
 
 const formData = reactive({
   email: "",
@@ -203,19 +253,19 @@ async function login() {
       body: formData,
     });
     console.log("fgfgfg", user);
-    
+
     // Set user in auth composable/store if available
     const { authUser } = useAuth();
     authUser.value = user;
-    
+
     await navigateTo("/account");
   } catch (error) {
-    errorsfront.value = error?.data?.data 
-      ? Object.values(error.data.data).flat() 
+    errorsfront.value = error?.data?.data
+      ? Object.values(error.data.data).flat()
       : ["Login failed. Please try again."];
   } finally {
     loading.value = false;
-     window.location.reload();
+    window.location.reload();
   }
 }
 </script>
