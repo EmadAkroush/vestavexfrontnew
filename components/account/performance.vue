@@ -27,6 +27,32 @@
         </div>
       </div>
 
+      <!-- Total Balance -->
+      <div class="card-box gradient-blue flex items-center gap-4">
+        <div class="icon-box bg-blue-600 text-white">
+          <i class="mdi mdi-cash-multiple text-3xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-200 text-sm">Total Balance</p>
+          <h3 class="text-2xl font-bold text-white">
+            ${{ format2(balances.totalBalance) }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- Total Income  -->
+      <div class="card-box gradient-blue flex items-center gap-4">
+        <div class="icon-box bg-blue-600 text-white">
+          <i class="mdi mdi-cash-multiple text-3xl"></i>
+        </div>
+        <div>
+          <p class="text-gray-200 text-sm">Total Income</p>
+          <h3 class="text-2xl font-bold text-white">
+            ${{ format2(balances.totalIncome) }}
+          </h3>
+        </div>
+      </div>
+
       <!-- Max Cap Balance -->
       <div class="card-box gradient-indigo flex items-center gap-4">
         <div class="icon-box bg-indigo-600 text-white">
@@ -216,10 +242,6 @@ const inviteLoading = ref(false);
 const canTransferProfit = computed(() => balances.value.profitBalance > 0);
 const canTransferReferral = computed(() => balances.value.referralBalance > 0);
 
-
-
-
-
 // ✅ formatter for 2 decimal places
 const format2 = (val) => Number(val || 0).toFixed(2);
 
@@ -231,8 +253,9 @@ const balances = ref({
   profitBalance: 0,
   referralBalance: 0,
   bonusBalance: 0,
+  totalBalance: 0,
+  totalIncome: 0,
 });
-
 
 const maxCapChart = ref({
   labels: null,
@@ -243,7 +266,6 @@ const profitChart = ref({
   labels: null,
   datasets: [],
 });
-
 
 const vxChart = ref({
   labels: null,
@@ -259,7 +281,6 @@ const startP = ref();
 /* ======================
    ✅ API Calls (Backend)
    ====================== */
-
 
 function updateMaxCapChart() {
   const maxCap = Number(balances.value.maxCapBalance || 0);
@@ -302,10 +323,6 @@ const barOptions = {
     },
   },
 };
-
-
-
-
 
 const formattedStartP = computed(() => {
   if (!startP.value) return "";
@@ -591,7 +608,7 @@ onMounted(() => {
     fetchVXChart();
     loadReferralTree();
     fetchRecentActivities(); // ✅
-    updateMaxCapChart()
+    updateMaxCapChart();
   }
 });
 
@@ -602,7 +619,7 @@ watch(
       fetchBalances();
       fetchRecentActivities();
     }
-  }
+  },
 );
 
 // also recompute the bar chart whenever balances change
@@ -611,7 +628,7 @@ watch(
   () => {
     updateMaxCapChart();
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 
