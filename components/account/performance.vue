@@ -106,23 +106,23 @@
 
     <!-- ===== Charts Section ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Profits Chart -->
+      <!-- VX Chart -->
       <Card class="shadow-md gradient-card">
         <template #title class="text-white font-semibold">
           Profit MaxCap</template
         >
         <template #content>
-          <Chart type="line" :data="profitChart" :options="lineOptions" />
+          <Chart type="line" :data="vxChart" :options="lineOptions" />
         </template>
       </Card>
 
-      <!-- VX Chart -->
+      <!--   Vx Plan MaxCap -->
       <Card class="shadow-md gradient-card">
         <template #title class="text-white font-semibold">
-          VX Plan MaxCap</template
-        >
+          Vx Plan MaxCap
+        </template>
         <template #content>
-          <Chart type="line" :data="vxChart" :options="lineOptions" />
+          <Chart type="bar" :data="maxCapChart" :options="barOptions" />
         </template>
       </Card>
     </div>
@@ -216,6 +216,10 @@ const inviteLoading = ref(false);
 const canTransferProfit = computed(() => balances.value.profitBalance > 0);
 const canTransferReferral = computed(() => balances.value.referralBalance > 0);
 
+
+
+
+
 // ✅ formatter for 2 decimal places
 const format2 = (val) => Number(val || 0).toFixed(2);
 
@@ -229,10 +233,18 @@ const balances = ref({
   bonusBalance: 0,
 });
 
+
+const maxCapChart = ref({
+  labels: null,
+  datasets: [],
+});
+
 const profitChart = ref({
   labels: null,
   datasets: [],
 });
+
+
 const vxChart = ref({
   labels: null,
   datasets: [],
@@ -247,6 +259,51 @@ const startP = ref();
 /* ======================
    ✅ API Calls (Backend)
    ====================== */
+
+
+function updateMaxCapChart() {
+  const maxCap = Number(balances.value.maxCapBalance || 0);
+  const withdrawn = Number(balances.value.withdrawalTotalBalance || 0);
+
+  const percent = maxCap > 0 ? ((withdrawn / maxCap) * 100).toFixed(2) : 0;
+
+  maxCapChart.value = {
+    labels: ["MaxCap Usage"],
+    datasets: [
+      {
+        label: `${percent}% Used`,
+        data: [percent],
+        backgroundColor: ["#7C3AED"],
+        borderRadius: 12,
+        barThickness: 50,
+      },
+    ],
+  };
+}
+
+const barOptions = {
+  plugins: {
+    legend: {
+      labels: { color: "#fff" },
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 100,
+      ticks: { color: "#e5e7eb" },
+      grid: { color: "rgba(255,255,255,0.05)" },
+    },
+    x: {
+      ticks: { color: "#e5e7eb" },
+      grid: { display: false },
+    },
+  },
+};
+
+
+
+
 
 const formattedStartP = computed(() => {
   if (!startP.value) return "";
@@ -363,6 +420,8 @@ async function fetchBalances() {
       body: { userId },
     });
     balances.value = res;
+   
+  
   } catch (error) {
     toast.add({
       severity: "error",
@@ -530,6 +589,7 @@ onMounted(() => {
     fetchVXChart();
     loadReferralTree();
     fetchRecentActivities(); // ✅
+    updateMaxCapChart()
   }
 });
 
