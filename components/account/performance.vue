@@ -46,7 +46,7 @@
           label="Transfer to Main Balance"
           icon="mdi mdi-arrow-right-bold"
           class="p-button-sm p-button-outlined border-white text-white w-full"
-          @click="transferToMain('profit')"
+          @click="transferToMain('total')"
           :disabled="!canTransferTotalBalance"
           :loading="loadingTransfer === 'profit'"
         />
@@ -236,7 +236,6 @@ const { authUser } = useAuth();
 const inviteLoading = ref(false);
 
 const canTransferTotalBalance = computed(() => balances.value.totalBalance > 0);
-
 
 // ✅ formatter for 2 decimal places
 const format2 = (val) => Number(val || 0).toFixed(2);
@@ -565,6 +564,7 @@ async function transferToMain(type) {
     let endpoint = "";
     if (type === "profit") endpoint = "/api/activity/transferprofit";
     else if (type === "referral") endpoint = "/api/activity/transferreferral";
+    else if (type === "total") endpoint = "/api/activity/transfertotal";
     else if (type === "bonus") endpoint = "/api/activity/transferbonus";
 
     const res = await $fetch(endpoint, {
