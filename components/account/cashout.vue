@@ -75,7 +75,7 @@
             </div>
 
             <p class="text-xs text-gray-400 mt-2">
-              Min withdrawal: $50 | Fee: 5%
+              Min withdrawal: $30 | Fee: 7%
             </p>
           </template>
         </Card>
@@ -88,7 +88,7 @@
             :disabled="
               !walletAllowed ||
               !amount ||
-              amount < 50 ||
+              amount < 30 ||
               amount > balances.mainBalance
             "
             @click="nextStep"
