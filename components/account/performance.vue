@@ -20,7 +20,7 @@
           <i class="mdi mdi-cash-multiple text-3xl"></i>
         </div>
         <div>
-          <p class="text-gray-200 text-sm"> Main Wallet</p>
+          <p class="text-gray-200 text-sm">Main Wallet</p>
           <h3 class="text-2xl font-bold text-white">
             ${{ format2(balances.mainBalance) }}
           </h3>
@@ -102,7 +102,6 @@
           :loading="loadingTransfer === 'referral'"
         />
       </div>
-
     </div>
 
     <!-- ===== Charts Section ===== -->
@@ -139,6 +138,7 @@
           <div class="flex flex-col gap-4">
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Total Referrals</span>
+
               <span class="font-semibold text-white">{{
                 referral?.counts?.totalCount
               }}</span>
@@ -146,18 +146,20 @@
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Total Investment</span>
               <span class="font-semibold text-white"
-                >${{ format2(referral?.volumes?.leftVolume) }}</span
+                >${{ format2(referral?.volumes?.totalTeamVolume) }}</span
               >
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Left Volume</span>
               <span class="font-semibold text-white"
-                >${{ format2(referral?.volumes?.rightVolume) }}</span
+                >${{ format2(referral?.volumes?.leftVolume) }}</span
               >
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-200">Right Volume</span>
-              <span class="font-semibold text-white">${{ format2(560) }}</span>
+              <span class="font-semibold text-white"
+                >${{ format2(referral?.volumes?.rightVolume) }}</span
+              >
             </div>
 
             <Button
@@ -226,7 +228,6 @@ const balances = ref({
   referralBalance: 0,
   bonusBalance: 0,
 });
-
 
 const profitChart = ref({
   labels: null,
