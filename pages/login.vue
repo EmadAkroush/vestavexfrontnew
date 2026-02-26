@@ -67,7 +67,7 @@
             >Create Account</nuxt-link
           >
           <nuxt-link
-            to="/forgot-password"
+            to="/forgotpassword"
             class="text-[#4F46E5] hover:text-[#7C3AED] transition"
             >Forgot Password?</nuxt-link
           >

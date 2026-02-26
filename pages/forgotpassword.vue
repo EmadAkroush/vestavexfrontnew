@@ -1,14 +1,20 @@
 <template>
   <div
-    class="finalxcard-forgot min-h-screen bg-[#0a1325] flex flex-col items-center justify-center relative overflow-hidden px-6"
+    class="finalxcard-forgot min-h-screen bg-[#0F172A] flex flex-col items-center justify-center relative overflow-hidden px-6"
   >
-    <div class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"></div>
+    <!-- Background Gradient Layer -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0F172A] via-[#111827] to-[#020617] opacity-95"></div>
 
+    <!-- Glow Orbs -->
+    <div class="absolute w-[420px] h-[420px] bg-[#2563EB]/20 blur-[140px] -top-24 -left-24 rounded-full"></div>
+    <div class="absolute w-[360px] h-[360px] bg-[#7C3AED]/20 blur-[150px] bottom-0 right-0 rounded-full"></div>
+
+    <!-- Card -->
     <div
-      class="relative z-10 glass-card p-10 rounded-2xl w-full max-w-md shadow-[0_0_30px_rgba(0,0,0,0.5)] text-center"
+      class="relative z-10 glass-card p-10 rounded-2xl w-full max-w-md shadow-[0_0_40px_rgba(0,0,0,0.7)] text-center"
     >
       <h1 class="text-3xl font-bold text-white mb-6">
-        <span class="text-[#00c6ae]">forgot</span> Password
+        <span class="gradient-text">Forgot</span> Password
       </h1>
 
       <!-- Error Alert -->
@@ -35,18 +41,14 @@
       </div>
 
       <!-- Step 2 — Verify Token -->
-      <div v-if="step === 2" class="space-y-4">
-   
+      <div v-if="step === 2" class="space-y-4 text-[#C7D2FE] text-sm">
         A new password link has been sent to your email.
-      
       </div>
-
- 
 
       <!-- Back to login -->
       <nuxt-link
-        to="/auth"
-        class="block text-sm mt-6 text-[#00c6ae] hover:underline"
+        to="/login"
+        class="block text-sm mt-6 text-[#C7D2FE] hover:text-white transition"
       >
         ← Back to login
       </nuxt-link>
@@ -71,7 +73,6 @@ const loading = ref(false)
 const errors = ref([])
 const toast = useToast()
 
-// === Request password reset ===
 async function requestReset() {
   errors.value = []
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
@@ -95,7 +96,6 @@ async function requestReset() {
   }
 }
 
-// === Verify token ===
 async function verifyTokenHandler() {
   errors.value = []
   if (!token.value) {
@@ -119,7 +119,6 @@ async function verifyTokenHandler() {
   }
 }
 
-// === Reset password ===
 async function resetPassword() {
   errors.value = []
   if (password.value.length < 6)
@@ -148,7 +147,6 @@ async function resetPassword() {
   }
 }
 
-// === Resend reset link ===
 async function resendResetLink() {
   try {
     await $fetch('/api/auth/resend-reset', { method: 'POST', body: { email: email.value } })
@@ -174,48 +172,67 @@ async function resendResetLink() {
   color: #fff;
 }
 
+/* Glass Card */
 .glass-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(199, 210, 254, 0.12);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 0 40px rgba(79, 70, 229, 0.15),
+    inset 0 0 25px rgba(255, 255, 255, 0.03);
 }
 
+/* Gradient Title */
+.gradient-text {
+  background: linear-gradient(90deg, #2563EB, #4F46E5, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Input */
 .auth-input {
   width: 100%;
-  border-radius: 50px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(199, 210, 254, 0.05);
+  border: 1px solid rgba(199, 210, 254, 0.15);
+  color: #e0e7ff;
+  padding: 12px 18px;
   outline: none;
   transition: 0.3s;
 }
+.auth-input::placeholder {
+  color: rgba(199, 210, 254, 0.5);
+}
 .auth-input:focus {
-  border-color: #00c6ae;
-  background: rgba(255, 255, 255, 0.1);
+  border-color: #4F46E5;
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.35);
+  background: rgba(79, 70, 229, 0.08);
 }
 
+/* Button */
 .finalxcard-btn {
-  background: linear-gradient(90deg, #00c6ae, #f4b000);
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
   border: none;
-  border-radius: 50px;
-  color: #0a1325;
+  border-radius: 999px;
+  color: #fff;
   font-weight: 600;
-  padding: 10px;
-  transition: all 0.3s;
+  padding: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
 }
 .finalxcard-btn:hover {
-  transform: scale(1.05);
-  filter: brightness(1.1);
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(124, 58, 237, 0.45);
 }
 
+/* Alert */
 .alert {
-  background: rgba(255, 0, 0, 0.1);
-  border-left: 3px solid #f87171;
+  background: rgba(220, 38, 38, 0.08);
+  border-left: 3px solid #ef4444;
   padding: 10px;
   border-radius: 8px;
   font-size: 14px;
+  color: #fecaca;
 }
 
 @media (max-width: 480px) {
