@@ -28,16 +28,28 @@
       </div>
 
       <!-- Total Balance -->
-      <div class="card-box gradient-blue flex items-center gap-4">
-        <div class="icon-box bg-blue-600 text-white">
-          <i class="mdi mdi-cash-multiple text-3xl"></i>
+      <div
+        class="card-boxs gradient-teal flex flex-col justify-between items-stretch"
+      >
+        <div class="flex items-center gap-4 mb-3">
+          <div class="icon-box bg-teal-600 text-white">
+            <i class="mdi mdi-chart-line text-3xl"></i>
+          </div>
+          <div>
+            <p class="text-gray-200 text-sm">Total Balance</p>
+            <h3 class="text-2xl font-bold text-white">
+              ${{ format2(balances.totalBalance) }}
+            </h3>
+          </div>
         </div>
-        <div>
-          <p class="text-gray-200 text-sm">Total Balance</p>
-          <h3 class="text-2xl font-bold text-white">
-            ${{ format2(balances.totalBalance) }}
-          </h3>
-        </div>
+        <Button
+          label="Transfer to Main Balance"
+          icon="mdi mdi-arrow-right-bold"
+          class="p-button-sm p-button-outlined border-white text-white w-full"
+          @click="transferToMain('profit')"
+          :disabled="!canTransferTotalBalance"
+          :loading="loadingTransfer === 'profit'"
+        />
       </div>
 
       <!-- Total Income  -->
@@ -94,14 +106,6 @@
             </h3>
           </div>
         </div>
-        <Button
-          label="Transfer to Main Balance"
-          icon="mdi mdi-arrow-right-bold"
-          class="p-button-sm p-button-outlined border-white text-white w-full"
-          @click="transferToMain('profit')"
-          :disabled="!canTransferProfit"
-          :loading="loadingTransfer === 'profit'"
-        />
       </div>
 
       <!-- VX Balances -->
@@ -119,14 +123,6 @@
             </h3>
           </div>
         </div>
-        <Button
-          label="Transfer to Main Balance"
-          icon="mdi mdi-arrow-right-bold"
-          class="p-button-sm p-button-outlined border-white text-white w-full"
-          @click="transferToMain('referral')"
-          :disabled="!canTransferReferral"
-          :loading="loadingTransfer === 'referral'"
-        />
       </div>
     </div>
 
@@ -239,8 +235,8 @@ import { useToast } from "primevue/usetoast";
 const { authUser } = useAuth();
 const inviteLoading = ref(false);
 
-const canTransferProfit = computed(() => balances.value.profitBalance > 0);
-const canTransferReferral = computed(() => balances.value.referralBalance > 0);
+const canTransferTotalBalance = computed(() => balances.value.totalBalance > 0);
+
 
 // ✅ formatter for 2 decimal places
 const format2 = (val) => Number(val || 0).toFixed(2);
