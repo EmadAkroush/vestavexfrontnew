@@ -265,7 +265,9 @@ function updateMaxCapChart() {
   const maxCap = Number(balances.value.maxCapBalance || 0);
   const withdrawn = Number(balances.value.withdrawalTotalBalance || 0);
 
-  const percent = maxCap > 0 ? ((withdrawn / maxCap) * 100).toFixed(2) : 0;
+  // ensure the percentage is a number, not a string
+  const percent =
+    maxCap > 0 ? Number(((withdrawn / maxCap) * 100).toFixed(2)) : 0;
 
   maxCapChart.value = {
     labels: ["MaxCap Usage"],
@@ -420,8 +422,8 @@ async function fetchBalances() {
       body: { userId },
     });
     balances.value = res;
-   
-  
+    // update chart right after we get new numbers
+    updateMaxCapChart();
   } catch (error) {
     toast.add({
       severity: "error",
@@ -596,11 +598,20 @@ onMounted(() => {
 watch(
   () => authUser.value,
   (newVal) => {
-    if (newVal?.user?.id) fetchBalances();
+    if (newVal?.user?.id) {
+      fetchBalances();
+      fetchRecentActivities();
+    }
+  }
+);
+
+// also recompute the bar chart whenever balances change
+watch(
+  balances,
+  () => {
+    updateMaxCapChart();
   },
-  (val) => {
-    if (val?.user?.id) fetchRecentActivities();
-  },
+  { deep: true }
 );
 </script>
 
