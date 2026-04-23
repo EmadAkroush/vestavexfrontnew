@@ -7,15 +7,14 @@ export default defineNuxtConfig({
     "@/assets/styles/tailwind.css",
     "@/assets/styles/base.css",
     "@mdi/font/css/materialdesignicons.min.css",
-    'primevue/resources/primevue.min.css',
-    'primevue/resources/themes/saga-blue/theme.css'
+    "primevue/resources/primevue.min.css",
+    "primevue/resources/themes/saga-blue/theme.css",
   ],
 
   build: {
-  transpile: ['primevue'],
-},
+    transpile: ["primevue"],
+  },
 
-  
   primevue: {
     options: { theme: "none" },
   },
@@ -35,6 +34,14 @@ export default defineNuxtConfig({
           rel: "icon",
           type: "image/x-icon",
           href: "./IMG_0053.PNG",
+        },
+      ],
+      // ✅ اضافه شد: اسکریپت Google reCAPTCHA
+      script: [
+        {
+          src: "https://www.google.com/recaptcha/api.js",
+          async: true,
+          defer: true,
         },
       ],
     },

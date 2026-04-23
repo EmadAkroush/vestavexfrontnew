@@ -6,16 +6,15 @@ export default defineEventHandler(async (event) => {
   try {
     const data = await $fetch(`${apiBase}/auth/login`, {
       method: "POST",
-      credentials: 'include', // 🔥 بدون این، کوکی‌ها منتقل نمی‌شن
+      credentials: "include", // 🔥 بدون این، کوکی‌ها منتقل نمی‌شن
       body: body,
       headers: {
         Accept: "application/json",
       },
     });
 
+    console.log("data" ,  data);
 
-
-    
     setCookie(event, "accessToken", data.accessToken, {
       httpOnly: true,
       secure: false,
@@ -32,10 +31,9 @@ export default defineEventHandler(async (event) => {
       path: "/",
     });
 
- 
-
     return data;
   } catch (error) {
+        console.log("error" ,  error);
     return error;
   }
 });

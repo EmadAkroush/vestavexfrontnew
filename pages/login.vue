@@ -7,6 +7,7 @@
 
     <!-- Glass Card -->
     <div class="glass-card w-full max-w-md mx-auto px-8 py-10 relative z-10">
+      <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
       <!-- Title -->
       <h2
         class="text-center text-3xl font-bold bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] bg-clip-text text-transparent mb-6"
@@ -32,7 +33,6 @@
           />
         </div>
 
-      
         <div class="password-wrapper mb-4">
           <InputText
             v-model="formData.password"
@@ -56,7 +56,7 @@
             <li v-for="(e, i) in errorsfront" :key="i">• {{ e }}</li>
           </ul>
         </div>
-
+        <div id="recaptcha-login" class="g-recaptcha flex justify-center mt-2 z-20"></div>
         <!-- Login button -->
         <button class="login-btn" :disabled="loading" @click="login">
           <span v-if="!loading">Login</span>
@@ -220,6 +220,80 @@ definePageMeta({
   middleware: "guest",
 });
 
+// reCAPTCHA state
+const recaptchaWidgetId = ref(null);
+const recaptchaToken = ref("");
+
+// 🟢 Read ref query param (like ?ref=FO-991189)
+onMounted(() => {
+  // render reCAPTCHA widget when mounted (if grecaptcha is available)
+  // Using site key that was previously present in your code.
+  // If you want to change the key, replace the string below.
+  const SITE_KEY = "6Lcq2XksAAAAAC7Oh8J6tBiqvT23twQYSaOxSyoF";
+
+  const tryRender1 = () => {
+    if (typeof window !== "undefined" && window.grecaptcha) {
+      // avoid double render
+      if (recaptchaWidgetId.value !== null) return;
+
+      try {
+        // render the visible checkbox widget into the container
+        recaptchaWidgetId.value = window.grecaptcha.render("recaptcha-login", {
+          sitekey: SITE_KEY,
+          callback: (token) => {
+            recaptchaToken.value = token;
+          },
+          "expired-callback": () => {
+            recaptchaToken.value = "";
+            window.grecaptcha.reset(recaptchaWidgetId.value);
+          },
+          "error-callback": () => {
+            recaptchaToken.value = "";
+            window.grecaptcha.reset(recaptchaWidgetId.value);
+          },
+        });
+      } catch (e) {
+        // render might fail if container not in DOM yet
+        console.warn("reCAPTCHA render error:", e);
+      }
+    } else {
+      // grecaptcha not ready yet — try again shortly
+      setTimeout(tryRender1, 500);
+    }
+  };
+
+  tryRender1();
+});
+
+// if user switches to register tab after mounted, ensure widget is rendered
+
+// attempt to render (if not already)
+// setTimeout(() => {
+//   if (
+//     recaptchaWidgetId.value === null &&
+//     typeof window !== "undefined" &&
+//     window.grecaptcha
+//   ) {
+//     try {
+//       // use same SITE_KEY as above
+//       recaptchaWidgetId.value = window.grecaptcha.render("recaptcha-register", {
+//         sitekey: "6Lcq2XksAAAAAC7Oh8J6tBiqvT23twQYSaOxSyoF",
+//         callback: (token) => {
+//           recaptchaToken.value = token;
+//         },
+//         "expired-callback": () => {
+//           recaptchaToken.value = "";
+//         },
+//         "error-callback": () => {
+//           recaptchaToken.value = "";
+//         },
+//       });
+//     } catch (e) {
+//       // ignore
+//     }
+//   }
+// }, 300);
+
 const loading = ref(false);
 const errorsfront = ref([]);
 const showPassword = ref(false);
@@ -239,20 +313,24 @@ function validateForm() {
   if (formData.password.length < 6) {
     errorsfront.value.push("Password must be at least 6 characters.");
   }
-
+  if (!recaptchaToken.value) {
+    errorsfront.value.push("Please complete the reCAPTCHA to continue.");
+  }
   return errorsfront.value.length === 0;
 }
 
 async function login() {
   if (!validateForm()) return;
 
+
+  
   try {
     loading.value = true;
     const user = await $fetch("/api/auth/login", {
       method: "POST",
-      body: formData,
+      body: { ...formData  , recaptchaToken: recaptchaToken.value },
     });
-    console.log("fgfgfg", user);
+    // console.log("fgfgfg", user);
 
     // Set user in auth composable/store if available
     const { authUser } = useAuth();
@@ -260,6 +338,8 @@ async function login() {
 
     await navigateTo("/account");
   } catch (error) {
+    console.log("hhh" ,error );
+    
     errorsfront.value = error?.data?.data
       ? Object.values(error.data.data).flat()
       : ["Login failed. Please try again."];
